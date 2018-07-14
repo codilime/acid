@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Zuul Dashboard{% endblock %}</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='bootstrap-4.1.1-dist/css/bootstrap.min.css') }}">
+</head>
+<body>
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Dashboard</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('status.show_status') }}">Status</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('builds.show_builds') }}">Builds</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+{% endblock %}
+
+<div class="container-fluid">
+    {% block content %}{% endblock %}
+</div>
+<script
+    src="{{ url_for('static', filename='bootstrap-4.1.1-dist/js/bootstrap.min.js') }}"></script>
+</body>
+</html>
