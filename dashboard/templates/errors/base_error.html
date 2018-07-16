@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %} Error - Zuul Dashboard {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="alert alert-danger m-3" role="alert">
+        <h4 class="alert-heading">{% block heading %}{% endblock %}</h4>
+        <hr>
+        <p>{% block messege %}{% endblock %}</p>
+    </div>
+</div>
+{% endblock %}

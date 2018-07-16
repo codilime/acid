@@ -1,0 +1,12 @@
+.hover-row { background: #fff; }
+.hover-row:hover { background: #f5f5f5; }
+
+.build-table {
+    padding: 0.75em;
+    border-top: 1px solid #dee2e6;
+}
+
+.table-head {
+    border-bottom: 2px solid #dee2e6;
+    font-weight: bolder;
+}

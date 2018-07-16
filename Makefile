@@ -31,7 +31,7 @@ lint: ## check style with flake8
 	flake8
 
 test: ## run tests
-	pytest tests/
+	SETTINGS_PATH=settings.conf FLASK_ENV=testing FLASK_APP=app.py TESTING=1 pytest tests/
 
 coverage: ## check code coverage quickly with the default Python
 	coverage erase
