@@ -15,6 +15,7 @@ def connect():
     try:
         db.bind(provider=config['database']['provider'],
                 host=os.getenv('DBHOST', config['database']['host']),
+                port=os.getenv('DBPORT', config['database']['port']),
                 user=os.getenv('DBUSER', config['database']['user']),
                 passwd=os.getenv('DBPASSWORD', config['database']['password']),
                 db=os.getenv('DBNAME', config['database']['name']))

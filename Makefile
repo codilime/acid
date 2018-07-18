@@ -44,4 +44,4 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs html
 
 serve: ## run flask server in development mode
-	SETTINGS_PATH=settings.conf FLASK_ENV=development FLASK_APP=app.py flask run --port 3000
+	SETTINGS_PATH=settings.yml FLASK_ENV=development FLASK_APP=app.py flask run --port 3000
