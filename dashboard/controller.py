@@ -37,10 +37,10 @@ def show_status():
 @builds.route('/builds/<int:page>', methods=['GET'])
 @db_session
 def show_builds_history(page=1):
-    per_page = config['BUILDSET'].getint('per_page')
-    pipeline = config['DEFAULT']['pipeline']
-    page_links = config['BUILDSET'].getint('page_links')
-    buildset_log_url = config['BUILDSET']['log_url']
+    per_page = config['buildset']['per_page']
+    pipeline = config['default']['pipeline']
+    page_links = config['buildset']['page_links']
+    buildset_log_url = config['buildset']['log_url']
 
     db.connect()
     buildsets = BuildSetsHistory(pipeline, per_page)

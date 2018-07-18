@@ -13,11 +13,11 @@ db = Database()
 
 def connect():
     try:
-        db.bind(provider=config['DATABASE']['provider'],
-                host=os.getenv('DBHOST', config['DATABASE']['host']),
-                user=os.getenv('DBUSER', config['DATABASE']['user']),
-                passwd=os.getenv('DBPASSWORD', config['DATABASE']['password']),
-                db=os.getenv('DBNAME', config['DATABASE']['name']))
+        db.bind(provider=config['database']['provider'],
+                host=os.getenv('DBHOST', config['database']['host']),
+                user=os.getenv('DBUSER', config['database']['user']),
+                passwd=os.getenv('DBPASSWORD', config['database']['password']),
+                db=os.getenv('DBNAME', config['database']['name']))
         db.generate_mapping()
     except TypeError:
         # Database object was already bound to provider

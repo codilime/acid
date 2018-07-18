@@ -1,0 +1,11 @@
+---
+default:
+  pipeline: 'test-pipeline'
+database:
+  provider: 'sqlite'
+  filename: ':memory:'
+  name: 'zuul'
+buildset:
+  per_page: 20
+  page_links: 4
+  log_url: 'http://logs.opencontrail.org'
