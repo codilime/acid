@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import namedtuple
 
-from accepts import accepts
-
 from dashboard.model import ZuulBuildSet
 from dashboard.exceptions import PageOutOfRange
 
@@ -31,7 +29,6 @@ class BuildSetsHistory:
         return ZuulBuildSet.get_for_pipeline(self.pipeline)
 
 
-@accepts(int, int, int, int)
 def pagination(number_of_buildsets, page, per_page, page_links):
     if number_of_buildsets < 0 or page < 1 or per_page < 1 or page_links < 0:
         raise ValueError

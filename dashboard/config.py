@@ -7,13 +7,14 @@ import yaml
 class Config:
     """App config abstraction.
 
-    Config object is an wrapper around dictionary produced by YAML parser.
+    Config object is a wrapper around dictionary produced by YAML parser.
     It's main goal is to provide separation between config file format
     and config object interface.
-    Second goal is to provide a way to load more then one config if needed.
+    Second goal is to provide a way to load more than one config if needed.
     Can be easily extend to provide more format files
     by overloading _load() method.
     """
+
     def __init__(self, file_path):
         if not isinstance(file_path, (str, os.PathLike, bytes)):
             raise TypeError(f'expected str, bytes or os.PathLike object, '

@@ -1,6 +1,7 @@
 ---
 default:
   pipeline: 'test-pipeline'
+  users_file: 'tests/static/test_users.yml'
 database:
   provider: 'sqlite'
   filename: ':memory:'

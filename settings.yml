@@ -1,6 +1,7 @@
 ---
 default:
   pipeline: 'periodic-nightly'
+  users_file: 'users.yml'
 database:
   provider: 'mysql'
   host: '127.0.0.1'
