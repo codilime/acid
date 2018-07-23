@@ -1,0 +1,14 @@
+{
+    "trigger_event_queue": {
+        "length": 0
+    },
+    "zuul_version": "2.5.3.dev1607",
+    "pipelines": [],
+    "management_event_queue": {
+        "length": 0
+    },
+    "result_event_queue": {
+        "length": 0
+    },
+    "last_reconfigured": 1531730590000
+}

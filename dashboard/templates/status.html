@@ -1,8 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row">
-    <div class="col-12 text-center">
-        <h1>ZUUL STATUS</h1>
+    <div class="mb-2 text-center">
+        <h1>Zuul status <small>{{ pipename }}</small></h1>
     </div>
-</div>
+
+    <h2 class="mb-5">Total amount of queues in pipeline: {{ queues | length }}</h2>
+
+    {% if queues | length > 0 %}
+        {% for queue in queues %}
+            {% if queue | length > 0 %}
+                {% include 'partials/status_list.html' %}
+            {% else %}
+                <div class="mt-5">
+                    <h4>Queue: {{ queue.name }}</h4>
+                </div>
+                <div class="accordion">
+                <div class="card">
+                    <div class="card-header" id="heading"></div>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info m-3" role="alert">
+            Currently there are no buildsets in this pipeline.
+        </div>
+    {% endif %}
 {% endblock %}

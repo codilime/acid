@@ -1,0 +1,19 @@
+{
+    "trigger_event_queue": {
+        "length": 0
+    },
+    "zuul_version": "2.5.3.dev1607",
+    "pipelines": [
+        {
+            "name": "check",
+            "description": "Newly uploaded patchsets enter this pipeline to receive an\ninitial +/-1 Verified vote.\n"
+        }
+    ],
+    "management_event_queue": {
+        "length": 0
+    },
+    "result_event_queue": {
+        "length": 0
+    },
+    "last_reconfigured": 1531730590000
+}

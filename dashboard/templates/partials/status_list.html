@@ -1,0 +1,70 @@
+{% from "macros.html" import show_yes_no, show_object_or_na, buildset_progress, job_progress, buildset_status with context %}
+{% block content %}
+    <h4 class="mt-2 mb-2">Queue: {{ queue.name }}</h4>
+    {% for buildset in queue.buildsets %}
+        <div class="accordion">
+            <div class="card">
+                <div class="card-header" id="heading{{ buildset.ref }}">
+                        <button class="btn" type="button" data-toggle="collapse" data-target="#collapse{{ buildset.ref }}">
+                            {{ buildset.name }}
+                        </button>
+                        Zuul ref: {{ buildset.ref }}
+                        <a href="{{ buildset.review_url }}">{{ buildset.buildset_id }}</a>
+                        <div class="progress big-progress mt-1 mb-1">
+                            {{ buildset_progress(buildset) }}
+                        </div>
+                        <h6>
+                            Status: {{ buildset_status(buildset) }}
+                            Elapsed time: {{ buildset.elapsed_time }}
+                            Remaining time: {{ show_object_or_na(buildset.remaining_time) }}
+                            Start time: {{ show_object_or_na(buildset.start_datetime) }}
+                            Enqueue time: {{ buildset.enqueue }}
+                            Owner: {{ buildset.owner.name }} {{ buildset.owner.email }}
+                        </h6>
+                </div>
+                <div id="collapse{{ buildset.ref }}" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Job name</th>
+                                    <th scope="col">Worker</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Start time</th>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col">Remaining</th>
+                                    <th scope="col">Canceled</th>
+                                    <th scope="col">Voting</th>
+                                    <th scope="col">Retry</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for job in buildset.jobs %}
+                                <tr class="hidden">
+                                    <td>
+                                        <a href="{{ job.log_url }}">{{ job.name }}</a>
+                                    </td>
+                                    <td>{{ job.worker.name }}</td>
+                                    <td class="progress-col">
+                                        <div class="progress bg-grey">
+                                            {{ job_progress(job) }}
+                                        </div>
+                                    </td>
+                                    <td>{{ show_object_or_na(job.time_tracker.start_to_datetime) }}</td>
+                                    <td>{{ show_object_or_na(job.time_tracker.elapsed_to_time) }}</td>
+                                    <td>{{ show_object_or_na(job.time_tracker.remaining_to_time) }}</td>
+                                    <td>{{ show_yes_no(job.cancelled) }}</td>
+                                    <td>{{ show_yes_no(job.voting) }}</td>
+                                    <td>{{ show_yes_no(job.retry) }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

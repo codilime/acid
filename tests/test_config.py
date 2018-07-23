@@ -27,10 +27,10 @@ class TestConfig(unittest.TestCase):
         self.assertIn('default', config)
         self.assertTrue(hasattr(config, 'get'))
 
-        config['default']['pipeline'] = 'test-pipeline'
+        config['default']['pipename'] = 'test-pipeline'
         config['default']['users_file'] = 'test_admins.yml'
         self.assertDictEqual(config['default'],
-                             {'pipeline': 'test-pipeline',
+                             {'pipename': 'test-pipeline',
                               'users_file': 'test_admins.yml'})
 
     def test_config_raises_when_try_to_set_new_section(self):

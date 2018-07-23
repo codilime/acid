@@ -1,0 +1,51 @@
+{
+    "trigger_event_queue": {
+        "length": 0
+    },
+    "zuul_version": "2.5.3.dev1607",
+    "pipelines": [
+        {
+            "change_queues": [
+                {
+                    "window": 50,
+                    "name": "contrail-vnc",
+                    "heads": []
+                },
+                {
+                    "window": 20,
+                    "name": "contrail-ci",
+                    "heads": []
+                },
+                {
+                    "window": 20,
+                    "name": "Juniper/contrail-infra-doc",
+                    "heads": []
+                },
+                {
+                    "window": 20,
+                    "name": "Juniper/contrail-dev-env",
+                    "heads": []
+                },
+                {
+                    "window": 20,
+                    "name": "Juniper/contrail-third-party-packages",
+                    "heads": []
+                },
+                {
+                    "window": 24,
+                    "name": "Juniper/contrail",
+                    "heads": []
+                }
+            ],
+            "name": "gate",
+            "description": "Changes that have been approved by core developers are enqueued in order in this pipeline,\nand if they pass CI tests, will be merged.\n"
+        }
+    ],
+    "management_event_queue": {
+        "length": 0
+    },
+    "result_event_queue": {
+        "length": 0
+    },
+    "last_reconfigured": 1531730590000
+}

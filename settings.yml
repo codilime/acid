@@ -1,6 +1,6 @@
 ---
 default:
-  pipeline: 'periodic-nightly'
+  pipename: 'periodic-nightly'
   users_file: 'users.yml'
 database:
   provider: 'mysql'
@@ -13,3 +13,6 @@ buildset:
   per_page: 20
   page_links: 4
   log_url: 'http://logs.opencontrail.org'
+zuul:
+  url: 'http://zuulv3.opencontrail.org/'
+  status_endpoint: 'status.json'

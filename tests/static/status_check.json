@@ -1,0 +1,1236 @@
+{
+    "trigger_event_queue": {
+        "length": 0
+    },
+    "zuul_version": "2.5.3.dev1607",
+    "pipelines": [
+        {
+            "change_queues": [
+                {
+                    "window": 0,
+                    "name": "Juniper/contrail-controller",
+                    "heads": [
+                        [
+                            {
+                                "url": "https://review.opencontrail.org/44563",
+                                "owner": {
+                                    "username": "sjeevaraj",
+                                    "email": "sjeevaraj@juniper.net",
+                                    "name": "Sridevi"
+                                },
+                                "jobs": [
+                                    {
+                                        "url": "static/stream.html?uuid=d1648ea9f5474acc84a324f67bf6197f&logfile=console.log",
+                                        "start_time": 1531899494.784918,
+                                        "dependencies": [],
+                                        "elapsed_time": 1622373,
+                                        "uuid": "d1648ea9f5474acc84a324f67bf6197f",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "http://logs.opencontrail.org/63/44563/11/check/contrail-vnc-build-unittest-ubuntu-trusty/d1648ea/",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 0,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/d1648ea9f5474acc84a324f67bf6197f",
+                                        "end_time": 1531901117.1583197,
+                                        "estimated_time": 6150.1,
+                                        "result": "FAILURE",
+                                        "name": "contrail-vnc-build-unittest-ubuntu-trusty",
+                                        "pipeline": "check",
+                                        "execute_time": 1531899420.1964839
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=8a7d9324ae4a43d0b23c5e6797c78a73&logfile=console.log",
+                                        "start_time": 1531899616.080451,
+                                        "dependencies": [],
+                                        "elapsed_time": 1738002,
+                                        "uuid": "8a7d9324ae4a43d0b23c5e6797c78a73",
+                                        "retry": false,
+                                        "voting": false,
+                                        "report_url": "http://logs.opencontrail.org/63/44563/11/check/contrail-vnc-unittest-centos7/8a7d932/",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 0,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/8a7d9324ae4a43d0b23c5e6797c78a73",
+                                        "end_time": 1531901354.0828524,
+                                        "estimated_time": 3116.2,
+                                        "result": "FAILURE",
+                                        "name": "contrail-vnc-unittest-centos7",
+                                        "pipeline": "check",
+                                        "execute_time": 1531899421.0305254
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=1a8c0228644d4f01bdedc2c1c616fabc&logfile=console.log",
+                                        "start_time": 1531899622.6807926,
+                                        "dependencies": [],
+                                        "elapsed_time": 3170931,
+                                        "uuid": "1a8c0228644d4f01bdedc2c1c616fabc",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "http://logs.opencontrail.org/63/44563/11/check/contrail-vnc-build-package-centos74/1a8c022/",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 0,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/1a8c0228644d4f01bdedc2c1c616fabc",
+                                        "end_time": 1531902793.612765,
+                                        "estimated_time": 4036.3,
+                                        "result": "SUCCESS",
+                                        "name": "contrail-vnc-build-package-centos74",
+                                        "pipeline": "check",
+                                        "execute_time": 1531899426.012499
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=cae59b1535d14cbfbe5f81cdc0a79768&logfile=console.log",
+                                        "start_time": 1531905037.5079129,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": 2457334,
+                                        "uuid": "cae59b1535d14cbfbe5f81cdc0a79768",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "http://logs.opencontrail.org/63/44563/11/check/contrail-vnc-build-containers-centos7-ocata/cae59b1/",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 0,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/cae59b1535d14cbfbe5f81cdc0a79768",
+                                        "end_time": 1531907494.8429096,
+                                        "estimated_time": 2510.4,
+                                        "result": "SUCCESS",
+                                        "name": "contrail-vnc-build-containers-centos7-ocata",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904882.1948123
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=fc71dcc46f564447987aae9d018c0366&logfile=console.log",
+                                        "start_time": 1531902972.5200832,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": 677030,
+                                        "uuid": "fc71dcc46f564447987aae9d018c0366",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "http://logs.opencontrail.org/63/44563/11/check/contrail-vnc-build-test-containers/fc71dcc/",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 0,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/fc71dcc46f564447987aae9d018c0366",
+                                        "end_time": 1531903649.5509958,
+                                        "estimated_time": 703.4,
+                                        "result": "SUCCESS",
+                                        "name": "contrail-vnc-build-test-containers",
+                                        "pipeline": "check",
+                                        "execute_time": 1531902879.3592947
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=263d5a15687c413385e4c5a4c2698b58&logfile=console.log",
+                                        "start_time": 1531907636.5329392,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": 134528,
+                                        "uuid": "263d5a15687c413385e4c5a4c2698b58",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/263d5a15687c413385e4c5a4c2698b58",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 1812372,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/263d5a15687c413385e4c5a4c2698b58",
+                                        "end_time": null,
+                                        "estimated_time": 1946.9,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-kolla-ocata",
+                                        "pipeline": "check",
+                                        "execute_time": 1531907587.170191
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=0608ca0cd76749ec9dea1e0f6fe3d593&logfile=console.log",
+                                        "start_time": 1531907617.9607255,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": 153100,
+                                        "uuid": "0608ca0cd76749ec9dea1e0f6fe3d593",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/0608ca0cd76749ec9dea1e0f6fe3d593",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 727200,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/0608ca0cd76749ec9dea1e0f6fe3d593",
+                                        "end_time": null,
+                                        "estimated_time": 880.3,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-k8s",
+                                        "pipeline": "check",
+                                        "execute_time": 1531907575.4433682
+                                    }
+                                ],
+                                "item_ahead": null,
+                                "live": true,
+                                "remaining_time": 1812372,
+                                "failing_reasons": [
+                                    "at least one job failed"
+                                ],
+                                "items_behind": [],
+                                "project": "Juniper/contrail-controller",
+                                "id": "44563,11",
+                                "active": true,
+                                "zuul_ref": "Z7f51f872bd0041aebf8f612809136fc9",
+                                "enqueue_time": 1531897896979
+                            }
+                        ]
+                    ]
+                },
+                {
+                    "window": 0,
+                    "name": "Juniper/contrail-test",
+                    "heads": [
+                        [
+                            {
+                                "url": "https://review.opencontrail.org/44700",
+                                "owner": {
+                                    "username": "san",
+                                    "email": "sandipd@juniper.net",
+                                    "name": "Sandip Dey"
+                                },
+                                "jobs": [
+                                    {
+                                        "url": "static/stream.html?uuid=2256b3d41b704970ac3d0df73a45d714&logfile=console.log",
+                                        "start_time": 1531899660.156922,
+                                        "dependencies": [],
+                                        "elapsed_time": 4381524,
+                                        "uuid": "2256b3d41b704970ac3d0df73a45d714",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "http://logs.opencontrail.org/00/44700/1/check/contrail-vnc-build-package-centos74/2256b3d/",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 0,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/2256b3d41b704970ac3d0df73a45d714",
+                                        "end_time": 1531904041.6818452,
+                                        "estimated_time": 3735.3,
+                                        "result": "SUCCESS",
+                                        "name": "contrail-vnc-build-package-centos74",
+                                        "pipeline": "check",
+                                        "execute_time": 1531899464.5399127
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=d45f7556aa8d43a9a49f1401d8ce984e&logfile=console.log",
+                                        "start_time": 1531905025.4829862,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": 2495272,
+                                        "uuid": "d45f7556aa8d43a9a49f1401d8ce984e",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "http://logs.opencontrail.org/00/44700/1/check/contrail-vnc-build-containers-centos7-ocata/d45f755/",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 0,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/d45f7556aa8d43a9a49f1401d8ce984e",
+                                        "end_time": 1531907520.7559018,
+                                        "estimated_time": 2601.2,
+                                        "result": "SUCCESS",
+                                        "name": "contrail-vnc-build-containers-centos7-ocata",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904894.8348372
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=a3217019a13f4d25bd059c3c8601cb17&logfile=console.log",
+                                        "start_time": 1531904996.031512,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": 714218,
+                                        "uuid": "a3217019a13f4d25bd059c3c8601cb17",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "http://logs.opencontrail.org/00/44700/1/check/contrail-vnc-build-test-containers/a321701/",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 0,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/a3217019a13f4d25bd059c3c8601cb17",
+                                        "end_time": 1531905710.2498024,
+                                        "estimated_time": 671.3,
+                                        "result": "SUCCESS",
+                                        "name": "contrail-vnc-build-test-containers",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904907.1395051
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=01a154d2ab0d4862b7e30e44c0a8a931&logfile=console.log",
+                                        "start_time": 1531907637.3803823,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": 133681,
+                                        "uuid": "01a154d2ab0d4862b7e30e44c0a8a931",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/01a154d2ab0d4862b7e30e44c0a8a931",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 1787919,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/01a154d2ab0d4862b7e30e44c0a8a931",
+                                        "end_time": null,
+                                        "estimated_time": 1921.6,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-kolla-ocata",
+                                        "pipeline": "check",
+                                        "execute_time": 1531907598.6792965
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=14afd91354ac475da5c5a08b0b429d20&logfile=console.log",
+                                        "start_time": 1531907660.5886638,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": 110473,
+                                        "uuid": "14afd91354ac475da5c5a08b0b429d20",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/14afd91354ac475da5c5a08b0b429d20",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 841027,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/14afd91354ac475da5c5a08b0b429d20",
+                                        "end_time": null,
+                                        "estimated_time": 951.5,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-k8s",
+                                        "pipeline": "check",
+                                        "execute_time": 1531907631.088146
+                                    }
+                                ],
+                                "item_ahead": null,
+                                "live": true,
+                                "remaining_time": 1787919,
+                                "failing_reasons": [],
+                                "items_behind": [],
+                                "project": "Juniper/contrail-test",
+                                "id": "44700,1",
+                                "active": true,
+                                "zuul_ref": "Zccc7f1242fd740ae8b3d3decb1455619",
+                                "enqueue_time": 1531898945487
+                            }
+                        ]
+                    ]
+                },
+                {
+                    "window": 0,
+                    "name": "Juniper/contrail-vrouter",
+                    "heads": [
+                        [
+                            {
+                                "url": "https://review.opencontrail.org/44653",
+                                "owner": {
+                                    "username": "dariusz.sosnowski",
+                                    "email": "dariusz.sosnowski@codilime.com",
+                                    "name": "Dariusz Sosnowski"
+                                },
+                                "jobs": [
+                                    {
+                                        "url": "static/stream.html?uuid=236c1320c9ef4c93b1dcdd33f5a3eee0&logfile=console.log",
+                                        "start_time": 1531905053.8343947,
+                                        "dependencies": [],
+                                        "elapsed_time": 2717227,
+                                        "uuid": "236c1320c9ef4c93b1dcdd33f5a3eee0",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/236c1320c9ef4c93b1dcdd33f5a3eee0",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 3152173,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/236c1320c9ef4c93b1dcdd33f5a3eee0",
+                                        "end_time": null,
+                                        "estimated_time": 5869.4,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-unittest-ubuntu-trusty",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904891.369379
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=f1363c9f4c06408ba7d38965206c028c&logfile=console.log",
+                                        "start_time": 1531905178.208179,
+                                        "dependencies": [],
+                                        "elapsed_time": 2592853,
+                                        "uuid": "f1363c9f4c06408ba7d38965206c028c",
+                                        "retry": false,
+                                        "voting": false,
+                                        "report_url": "finger://ze01-jnpr:7900/f1363c9f4c06408ba7d38965206c028c",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": null,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/f1363c9f4c06408ba7d38965206c028c",
+                                        "end_time": null,
+                                        "estimated_time": 0.0,
+                                        "result": null,
+                                        "name": "contrail-vnc-unittest-centos7",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904942.172879
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=10abb908a3024f42b8cb36f945b49f3f&logfile=console.log",
+                                        "start_time": 1531905033.2122507,
+                                        "dependencies": [],
+                                        "elapsed_time": 2737849,
+                                        "uuid": "10abb908a3024f42b8cb36f945b49f3f",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/10abb908a3024f42b8cb36f945b49f3f",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 1277251,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/10abb908a3024f42b8cb36f945b49f3f",
+                                        "end_time": null,
+                                        "estimated_time": 4015.1,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-package-centos74",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904862.8642294
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-containers-centos7-ocata",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-test-containers",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-kolla-ocata",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-k8s",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    }
+                                ],
+                                "item_ahead": null,
+                                "live": true,
+                                "remaining_time": null,
+                                "failing_reasons": [],
+                                "items_behind": [],
+                                "project": "Juniper/contrail-vrouter",
+                                "id": "44653,1",
+                                "active": true,
+                                "zuul_ref": "Ze596cd7fc08341368185ccf7373a3a17",
+                                "enqueue_time": 1531900769381
+                            }
+                        ]
+                    ]
+                },
+                {
+                    "window": 0,
+                    "name": "Juniper/contrail-vrouter",
+                    "heads": [
+                        [
+                            {
+                                "url": "https://review.opencontrail.org/44656",
+                                "owner": {
+                                    "username": "dariusz.sosnowski",
+                                    "email": "dariusz.sosnowski@codilime.com",
+                                    "name": "Dariusz Sosnowski"
+                                },
+                                "jobs": [
+                                    {
+                                        "url": "static/stream.html?uuid=8e48cf4f2cb34360940668349ba82bd8&logfile=console.log",
+                                        "start_time": 1531905032.8263314,
+                                        "dependencies": [],
+                                        "elapsed_time": 2738235,
+                                        "uuid": "8e48cf4f2cb34360940668349ba82bd8",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/8e48cf4f2cb34360940668349ba82bd8",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 3131165,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/8e48cf4f2cb34360940668349ba82bd8",
+                                        "end_time": null,
+                                        "estimated_time": 5869.4,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-unittest-ubuntu-trusty",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904877.3691738
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=772799ed286949868718e2f4e94c4ad5&logfile=console.log",
+                                        "start_time": 1531905195.6005201,
+                                        "dependencies": [],
+                                        "elapsed_time": 2575461,
+                                        "uuid": "772799ed286949868718e2f4e94c4ad5",
+                                        "retry": false,
+                                        "voting": false,
+                                        "report_url": "finger://ze01-jnpr:7900/772799ed286949868718e2f4e94c4ad5",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": null,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/772799ed286949868718e2f4e94c4ad5",
+                                        "end_time": null,
+                                        "estimated_time": 0.0,
+                                        "result": null,
+                                        "name": "contrail-vnc-unittest-centos7",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904954.4635699
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=f241e4ec896e49eead0e9724e0d2c24a&logfile=console.log",
+                                        "start_time": 1531901140.8835886,
+                                        "dependencies": [],
+                                        "elapsed_time": 3303027,
+                                        "uuid": "f241e4ec896e49eead0e9724e0d2c24a",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "http://logs.opencontrail.org/56/44656/1/check/contrail-vnc-build-package-centos74/f241e4e/",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 0,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/f241e4ec896e49eead0e9724e0d2c24a",
+                                        "end_time": 1531904443.9108725,
+                                        "estimated_time": 4009.5,
+                                        "result": "SUCCESS",
+                                        "name": "contrail-vnc-build-package-centos74",
+                                        "pipeline": "check",
+                                        "execute_time": 1531900981.0894597
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=ec2cbbad266549d2ab6b481418402f2a&logfile=console.log",
+                                        "start_time": 1531905144.2846248,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": 2288685,
+                                        "uuid": "ec2cbbad266549d2ab6b481418402f2a",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "http://logs.opencontrail.org/56/44656/1/check/contrail-vnc-build-containers-centos7-ocata/ec2cbba/",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 0,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/ec2cbbad266549d2ab6b481418402f2a",
+                                        "end_time": 1531907432.9705355,
+                                        "estimated_time": 2306.4,
+                                        "result": "SUCCESS",
+                                        "name": "contrail-vnc-build-containers-centos7-ocata",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904967.1782033
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=4667486bbd1f4fdea635c0f3cfb174ff&logfile=console.log",
+                                        "start_time": 1531905160.77936,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": 708628,
+                                        "uuid": "4667486bbd1f4fdea635c0f3cfb174ff",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "http://logs.opencontrail.org/56/44656/1/check/contrail-vnc-build-test-containers/4667486/",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 0,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/4667486bbd1f4fdea635c0f3cfb174ff",
+                                        "end_time": 1531905869.4079735,
+                                        "estimated_time": 663.0,
+                                        "result": "SUCCESS",
+                                        "name": "contrail-vnc-build-test-containers",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904979.3323996
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=2a66d65a19094bc2a7d841d6c8703fd7&logfile=console.log",
+                                        "start_time": 1531907554.669145,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": 216392,
+                                        "uuid": "2a66d65a19094bc2a7d841d6c8703fd7",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/2a66d65a19094bc2a7d841d6c8703fd7",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 1736708,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/2a66d65a19094bc2a7d841d6c8703fd7",
+                                        "end_time": null,
+                                        "estimated_time": 1953.1,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-kolla-ocata",
+                                        "pipeline": "check",
+                                        "execute_time": 1531907516.1794336
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=d98d5670d8994fb0a52a569282758697&logfile=console.log",
+                                        "start_time": 1531907554.7542944,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": 216307,
+                                        "uuid": "d98d5670d8994fb0a52a569282758697",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/d98d5670d8994fb0a52a569282758697",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": null,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/d98d5670d8994fb0a52a569282758697",
+                                        "end_time": null,
+                                        "estimated_time": 0.0,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-k8s",
+                                        "pipeline": "check",
+                                        "execute_time": 1531907517.200474
+                                    }
+                                ],
+                                "item_ahead": null,
+                                "live": true,
+                                "remaining_time": 3131165,
+                                "failing_reasons": [],
+                                "items_behind": [],
+                                "project": "Juniper/contrail-vrouter",
+                                "id": "44656,1",
+                                "active": true,
+                                "zuul_ref": "Z11099b06187f4e48ad114de99595b901",
+                                "enqueue_time": 1531900877794
+                            }
+                        ]
+                    ]
+                },
+                {
+                    "window": 0,
+                    "name": "Juniper/contrail-controller",
+                    "heads": [
+                        [
+                            {
+                                "url": "https://review.opencontrail.org/44664",
+                                "owner": {
+                                    "username": "hkumar",
+                                    "email": "hkumar@juniper.net",
+                                    "name": "Kumar Harsh"
+                                },
+                                "jobs": [
+                                    {
+                                        "url": "static/stream.html?uuid=87257383a21d4616bbba0f07d1166af1&logfile=console.log",
+                                        "start_time": 1531905021.4829733,
+                                        "dependencies": [],
+                                        "elapsed_time": 2749579,
+                                        "uuid": "87257383a21d4616bbba0f07d1166af1",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/87257383a21d4616bbba0f07d1166af1",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 3400521,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/87257383a21d4616bbba0f07d1166af1",
+                                        "end_time": null,
+                                        "estimated_time": 6150.1,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-unittest-ubuntu-trusty",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904863.7415595
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=4bc5da536831432e887cf9e4016d2062&logfile=console.log",
+                                        "start_time": 1531905202.4081933,
+                                        "dependencies": [],
+                                        "elapsed_time": 2568653,
+                                        "uuid": "4bc5da536831432e887cf9e4016d2062",
+                                        "retry": false,
+                                        "voting": false,
+                                        "report_url": "finger://ze01-jnpr:7900/4bc5da536831432e887cf9e4016d2062",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 547547,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/4bc5da536831432e887cf9e4016d2062",
+                                        "end_time": null,
+                                        "estimated_time": 3116.2,
+                                        "result": null,
+                                        "name": "contrail-vnc-unittest-centos7",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904955.4149146
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=7a06dc26888e448fb99db8b0261ac040&logfile=console.log",
+                                        "start_time": 1531905082.0092094,
+                                        "dependencies": [],
+                                        "elapsed_time": 2689052,
+                                        "uuid": "7a06dc26888e448fb99db8b0261ac040",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/7a06dc26888e448fb99db8b0261ac040",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 1288248,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/7a06dc26888e448fb99db8b0261ac040",
+                                        "end_time": null,
+                                        "estimated_time": 3977.3,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-package-centos74",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904878.197501
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-containers-centos7-ocata",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-test-containers",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-kolla-ocata",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-k8s",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    }
+                                ],
+                                "item_ahead": null,
+                                "live": true,
+                                "remaining_time": null,
+                                "failing_reasons": [],
+                                "items_behind": [],
+                                "project": "Juniper/contrail-controller",
+                                "id": "44664,1",
+                                "active": true,
+                                "zuul_ref": "Z9136c5fab5494956979383bf70b700e8",
+                                "enqueue_time": 1531901658562
+                            }
+                        ]
+                    ]
+                },
+                {
+                    "window": 0,
+                    "name": "Juniper/contrail-vrouter",
+                    "heads": [
+                        [
+                            {
+                                "url": "https://review.opencontrail.org/44458",
+                                "owner": {
+                                    "username": "mateusz.jablonski",
+                                    "email": "mateusz.jablonski@codilime.com",
+                                    "name": "Mateusz Jablonski"
+                                },
+                                "jobs": [],
+                                "item_ahead": null,
+                                "live": false,
+                                "remaining_time": 0,
+                                "failing_reasons": [],
+                                "items_behind": [
+                                    "44604,1"
+                                ],
+                                "project": "Juniper/contrail-vrouter",
+                                "id": "44458,1",
+                                "active": true,
+                                "zuul_ref": "Ze888b842be6942f4a5bbebeef9ba4d49",
+                                "enqueue_time": 1531901668375
+                            },
+                            {
+                                "url": "https://review.opencontrail.org/44604",
+                                "owner": {
+                                    "username": "mateusz.jablonski",
+                                    "email": "mateusz.jablonski@codilime.com",
+                                    "name": "Mateusz Jablonski"
+                                },
+                                "jobs": [
+                                    {
+                                        "url": "static/stream.html?uuid=569889d7708f419d8ad3632d7d87313f&logfile=console.log",
+                                        "start_time": 1531905058.9025583,
+                                        "dependencies": [],
+                                        "elapsed_time": 2712159,
+                                        "uuid": "569889d7708f419d8ad3632d7d87313f",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/569889d7708f419d8ad3632d7d87313f",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 2779141,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/569889d7708f419d8ad3632d7d87313f",
+                                        "end_time": null,
+                                        "estimated_time": 5491.3,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-unittest-ubuntu-trusty",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904892.218097
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=5f1606388ae746b5ab718778dcd27238&logfile=console.log",
+                                        "start_time": 1531905208.290167,
+                                        "dependencies": [],
+                                        "elapsed_time": 2562772,
+                                        "uuid": "5f1606388ae746b5ab718778dcd27238",
+                                        "retry": false,
+                                        "voting": false,
+                                        "report_url": "finger://ze01-jnpr:7900/5f1606388ae746b5ab718778dcd27238",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": null,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/5f1606388ae746b5ab718778dcd27238",
+                                        "end_time": null,
+                                        "estimated_time": 0.0,
+                                        "result": null,
+                                        "name": "contrail-vnc-unittest-centos7",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904968.0022435
+                                    },
+                                    {
+                                        "url": "static/stream.html?uuid=62b6a94a438549acafa8f118fa798896&logfile=console.log",
+                                        "start_time": 1531905131.597529,
+                                        "dependencies": [],
+                                        "elapsed_time": 2639464,
+                                        "uuid": "62b6a94a438549acafa8f118fa798896",
+                                        "retry": false,
+                                        "voting": true,
+                                        "report_url": "finger://ze01-jnpr:7900/62b6a94a438549acafa8f118fa798896",
+                                        "node_name": null,
+                                        "worker": {
+                                            "hostname": "ze01-jnpr",
+                                            "name": "ze01-jnpr"
+                                        },
+                                        "remaining_time": 1174836,
+                                        "canceled": false,
+                                        "node_labels": [],
+                                        "finger_url": "finger://ze01-jnpr:7900/62b6a94a438549acafa8f118fa798896",
+                                        "end_time": null,
+                                        "estimated_time": 3814.3,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-package-centos74",
+                                        "pipeline": "check",
+                                        "execute_time": 1531904904.7247524
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-containers-centos7-ocata",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-package-centos74"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-vnc-build-test-containers",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-kolla-ocata",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    },
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [
+                                            "contrail-vnc-build-test-containers",
+                                            "contrail-vnc-build-containers-centos7-ocata"
+                                        ],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-k8s",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    }
+                                ],
+                                "item_ahead": "44458,1",
+                                "live": true,
+                                "remaining_time": null,
+                                "failing_reasons": [],
+                                "items_behind": [],
+                                "project": "Juniper/contrail-vrouter",
+                                "id": "44604,1",
+                                "active": true,
+                                "zuul_ref": "Z82cdca93e6ab40b781eb65143eaa24a8",
+                                "enqueue_time": 1531901668375
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "name": "check",
+            "description": "Newly uploaded patchsets enter this pipeline to receive an\ninitial +/-1 Verified vote.\n"
+        }
+    ],
+    "management_event_queue": {
+        "length": 0
+    },
+    "result_event_queue": {
+        "length": 0
+    },
+    "last_reconfigured": 1531730590000
+}
