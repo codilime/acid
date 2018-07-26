@@ -6,8 +6,16 @@
     {% endif %}
 {% endmacro %}
 
+{% macro local_datetime(datetime) %}
+    {% if not datetime %}
+        N/A
+    {% else %}
+        <span data-localtime="true">{{ datetime }}</span>
+    {% endif %}
+{% endmacro %}
+
 {% macro show_pagination(paginator) %}
-    {% if paginator.pages|length > 1 %}
+    {% if paginator.pages | length > 1 %}
     <nav>
         <ul class="pagination justify-content-center">
             {% if paginator.previous_page %}

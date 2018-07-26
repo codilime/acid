@@ -1,4 +1,4 @@
-{% from "macros.html" import show_yes_no, show_object_or_na, buildset_progress, job_progress, buildset_status with context %}
+{% from "macros.html" import show_yes_no, show_object_or_na, local_datetime, buildset_progress, job_progress, buildset_status with context %}
 {% block content %}
     <h4 class="mt-2 mb-2">Queue: {{ queue.name }}</h4>
     {% for buildset in queue.buildsets %}
@@ -17,8 +17,8 @@
                             Status: {{ buildset_status(buildset) }}
                             Elapsed time: {{ buildset.elapsed_time }}
                             Remaining time: {{ show_object_or_na(buildset.remaining_time) }}
-                            Start time: {{ show_object_or_na(buildset.start_datetime) }}
-                            Enqueue time: {{ buildset.enqueue }}
+                            Start time: {{ local_datetime(buildset.start_datetime) }}
+                            Enqueue time: {{ local_datetime(buildset.enqueue) }}
                             Owner: {{ buildset.owner.name }} {{ buildset.owner.email }}
                         </h6>
                 </div>
@@ -51,7 +51,7 @@
                                             {{ job_progress(job) }}
                                         </div>
                                     </td>
-                                    <td>{{ show_object_or_na(job.time_tracker.start_to_datetime) }}</td>
+                                    <td>{{ local_datetime(job.time_tracker.start_to_datetime) }}</td>
                                     <td>{{ show_object_or_na(job.time_tracker.elapsed_to_time) }}</td>
                                     <td>{{ show_object_or_na(job.time_tracker.remaining_to_time) }}</td>
                                     <td>{{ show_yes_no(job.cancelled) }}</td>

@@ -12,7 +12,7 @@ class TestTimeUtils(unittest.TestCase):
 
     def test_zero_epoch_to_datetime_should_return_data(self):
         result = epoch_to_datetime(seconds=0)
-        expected = '1970-01-01 00:00:00 GMT'
+        expected = '1970-01-01 00:00:00'
         self.assertEqual(result, expected)
 
     def test_none_seconds_to_time_should_raise_excpetion(self):

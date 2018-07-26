@@ -5,7 +5,7 @@ import time
 def epoch_to_datetime(seconds):
     if seconds is None:
         raise TypeError
-    return time.strftime("%Y-%m-%d %H:%M:%S %Z", time.gmtime(seconds))
+    return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(seconds))
 
 
 def seconds_to_time(seconds):
