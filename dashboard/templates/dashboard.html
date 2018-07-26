@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="lead mx-auto w-25 mt-5 table-responsive">
+      <table class="table">
+        <thead class="thead-dark">
+        <tr>
+          <th scope="col">Pipeline</th>
+          <th scope="col">Buildsets</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for pipeline in pipeline_stats %}
+            <tr>
+                <td><a class="mt-5 font-weight-bold" href="{{ url_for('status.show_status', pipename=pipeline.name) }}">{{ pipeline.name }}</a></td>
+                <td>Buildsets: {{ pipeline.buildsets_count }}</td>
+            </tr>
+        {% endfor %}
+      </tbody>
+      </table>
+    </div>
+{% endblock %}

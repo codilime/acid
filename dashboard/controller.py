@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
-import requests
-
 from flask import Blueprint, current_app, render_template, request
 
 from pony.orm import db_session
 
-from dashboard import db
+from dashboard import db, service
 from dashboard.config import config
 from dashboard.exceptions import (BadDataFormat, PageOutOfRange,
                                   PipelineNotFound, RemoteServerError)
 from dashboard.history import BuildSetsHistory, pagination
-from dashboard.status import make_queues
+from dashboard.service import status_endpoint
 
 status = Blueprint('status', __name__, template_folder='templates')
 builds = Blueprint('builds', __name__, template_folder='templates')
@@ -34,21 +32,21 @@ def error_404(error):
     return render_template('error_404.html')
 
 
-@status.route('/', methods=['GET'])
+@status.route('/status')
 @status.route('/status/<string:pipename>', methods=['GET'])
 def show_status(pipename=config['default']['pipename']):
-    url = str(f'{config["zuul"]["url"].rstrip("/")}/'
-              f'{config["zuul"]["status_endpoint"]}')
-
-    res = requests.get(url, timeout=3)
-
-    if res.status_code not in [200, 304]:
-        current_app.logger.error(res.text)
-        raise RemoteServerError('Request for Zuul status failed.')
-
-    res = res.json()
-    queues = make_queues(res['pipelines'], pipename)
+    url = status_endpoint()
+    resource = service.fetch_json_data(endpoint=url)
+    queues = service.make_queues(resource['pipelines'], pipename)
     return render_template('status.html', queues=queues, pipename=pipename)
+
+
+@status.route('/', methods=['GET'])
+def show_dashboard():
+    url = status_endpoint()
+    resource = service.fetch_json_data(endpoint=url)
+    pipeline_stats = service.pipelines_stats(resource['pipelines'])
+    return render_template('dashboard.html', pipeline_stats=pipeline_stats)
 
 
 @builds.route('/builds')

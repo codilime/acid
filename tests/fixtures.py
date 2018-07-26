@@ -36,3 +36,8 @@ def status_request(filename=None, status_code=200):
     with open(filename) as json_data:
         result.json = MagicMock(return_value=json.load(json_data))
     return MagicMock(return_value=result)
+
+
+def load_status_data(name):
+    with open(f'tests/static/{name}.json', "r") as data:
+        return json.load(data)

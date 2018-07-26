@@ -1,0 +1,113 @@
+{
+    "trigger_event_queue": {
+        "length": 0
+    },
+    "zuul_version": "2.5.3.dev1607",
+    "pipelines": [
+        {
+            "change_queues": [
+                {
+                    "window": 0,
+                    "name": "Juniper/openshift-ansible",
+                    "heads": [
+                        [
+                            {
+                                "url": "https://review.opencontrail.org/44516",
+                                "owner": {
+                                    "username": "kravvcu",
+                                    "email": "michal.krawczyk@codilime.com",
+                                    "name": "Michal Krawczyk"
+                                },
+                                "jobs": [],
+                                "item_ahead": null,
+                                "live": false,
+                                "remaining_time": 0,
+                                "failing_reasons": [],
+                                "items_behind": [
+                                    "44744,6"
+                                ],
+                                "project": "Juniper/contrail-zuul-jobs",
+                                "id": "44516,41",
+                                "active": true,
+                                "zuul_ref": "Z22c73722a05a41d7afe5580c46896f75",
+                                "enqueue_time": 1532419160584
+                            },
+                            {
+                                "url": "https://review.opencontrail.org/44744",
+                                "owner": {
+                                    "username": "kravvcu",
+                                    "email": "michal.krawczyk@codilime.com",
+                                    "name": "Michal Krawczyk"
+                                },
+                                "jobs": [],
+                                "item_ahead": "44516,41",
+                                "live": false,
+                                "remaining_time": 0,
+                                "failing_reasons": [],
+                                "items_behind": [
+                                    "44526,6"
+                                ],
+                                "project": "Juniper/openshift-ansible",
+                                "id": "44744,6",
+                                "active": true,
+                                "zuul_ref": "Z87136569311342c2a1fe4dd556ef6a39",
+                                "enqueue_time": 1532419160585
+                            },
+                            {
+                                "url": "https://review.opencontrail.org/44526",
+                                "owner": {
+                                    "username": "kravvcu",
+                                    "email": "michal.krawczyk@codilime.com",
+                                    "name": "Michal Krawczyk"
+                                },
+                                "jobs": [
+                                    {
+                                        "url": null,
+                                        "start_time": null,
+                                        "dependencies": [],
+                                        "elapsed_time": null,
+                                        "uuid": null,
+                                        "retry": null,
+                                        "voting": true,
+                                        "report_url": null,
+                                        "node_name": null,
+                                        "worker": null,
+                                        "remaining_time": null,
+                                        "canceled": null,
+                                        "node_labels": [],
+                                        "finger_url": null,
+                                        "end_time": null,
+                                        "estimated_time": null,
+                                        "result": null,
+                                        "name": "contrail-sanity-centos7-openshift-3.7",
+                                        "pipeline": null,
+                                        "execute_time": null
+                                    }
+                                ],
+                                "item_ahead": "44744,6",
+                                "live": true,
+                                "remaining_time": null,
+                                "failing_reasons": [],
+                                "items_behind": [],
+                                "project": "Juniper/openshift-ansible",
+                                "id": "44526,6",
+                                "active": true,
+                                "zuul_ref": "Z75c2d6f5e9834689a58bf8d476b98ff2",
+                                "enqueue_time": 1532419160585
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "name": "test_pipeline1",
+            "description": "On-demand pipeline for testing jobs."
+        }
+    ],
+    "management_event_queue": {
+        "length": 0
+    },
+    "result_event_queue": {
+        "length": 0
+    },
+    "last_reconfigured": 1531730590000
+}

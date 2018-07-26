@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import time
-
-from flask import current_app
+from collections import namedtuple
 
 from dashboard.config import config
-from dashboard.exceptions import PipelineNotFound
 from dashboard.time_utils import (epoch_to_datetime, milliseconds_to_seconds,
                                   seconds_to_time)
+
+
+PipelineStat = namedtuple("PipelineStat", ["name", "buildsets_count"])
 
 
 class Queue:
@@ -23,15 +24,6 @@ class Queue:
         if len(queue['heads']) > 0:
             buildsets = [Buildset.create(b) for b in queue['heads'][0]]
         return cls(queue['name'], buildsets)
-
-
-def make_queues(pipelines, pipename):
-    for pipeline in pipelines:
-        if pipeline['name'] == pipename:
-            return [Queue.create(q) for q in pipeline['change_queues']]
-    else:
-        current_app.logger.error(f'Pipe "{pipename}" not found.')
-        raise PipelineNotFound(f'Pipe "{pipename}" not found.')
 
 
 class Buildset:
