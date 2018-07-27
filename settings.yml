@@ -2,6 +2,7 @@
 default:
   pipename: 'periodic-nightly'
   users_file: 'users.yml'
+  secret_key: b'\x8f\xa6gL\xc7\xc8\xe7\xf4v\xe8\xfc\xef\x85\xd3\xa6\x142\xc1\xc3\x12\xcc\xcfp['
 database:
   provider: 'mysql'
   host: '127.0.0.1'

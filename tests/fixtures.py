@@ -5,6 +5,7 @@ from unittest.mock import MagicMock
 
 from dashboard.config import config
 from dashboard.status import Buildset, Job, TimeTracker
+from dashboard.users import User
 
 
 def time_tracker():
@@ -27,6 +28,23 @@ def buildset():
                     enqueue_time=random.randint(1000, 100000),  # noqa
                     owner={'name': 'John smith'}, ref='12345',
                     review_url="http://fake_url")
+
+
+class UserFactory:
+    ROLE_ADMIN = 'admin'
+    ROLE_USER = 'user'
+
+    @staticmethod
+    def get_user(role):
+        if role == UserFactory.ROLE_ADMIN:
+            attrs = {'full_name': 'Admin Admin',
+                     'email': 'admin@acid.com',
+                     'token': 'foo'}
+        else:
+            attrs = {'full_name': 'Noname Guest',
+                     'email': 'noname@guest.com',
+                     'token': 'bar'}
+        return User(**attrs)
 
 
 def status_request(filename=None, status_code=200):

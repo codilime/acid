@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import requests
 
-from flask import current_app
+from flask import current_app, session
 
 from dashboard.config import config
 from dashboard.exceptions import PipelineNotFound, RemoteServerError
 from dashboard.status import PipelineStat, Queue
+from dashboard.users import User
 
 
 def fetch_json_data(endpoint):
@@ -42,3 +43,18 @@ def make_queues(pipelines, pipename):
 def status_endpoint():
     return str(f'{config["zuul"]["url"].rstrip("/")}/'
                f'{config["zuul"]["status_endpoint"]}')
+
+
+def create_user_session(user):
+    session['user'] = user
+
+
+def drop_user_session():
+    session.pop('user')
+
+
+def fetch_user_data(token):
+    # TODO (pawelzny): Fetch data from OpenID
+    return User(full_name='Admin Admin',  # noqa
+                email='admin@acid.com',
+                token=token)

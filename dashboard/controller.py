@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, current_app, render_template, request
+from flask import (Blueprint, current_app, redirect, render_template, request,
+                   url_for)
 
 from pony.orm import db_session
 
@@ -8,10 +9,10 @@ from dashboard.config import config
 from dashboard.exceptions import (BadDataFormat, PageOutOfRange,
                                   PipelineNotFound, RemoteServerError)
 from dashboard.history import BuildSetsHistory, pagination
-from dashboard.service import status_endpoint
 
 status = Blueprint('status', __name__, template_folder='templates')
 builds = Blueprint('builds', __name__, template_folder='templates')
+auth = Blueprint('auth', __name__, template_folder='templates')
 error_handlers = Blueprint('error_handlers', __name__,
                            template_folder='templates/errors')
 
@@ -35,7 +36,7 @@ def error_404(error):
 @status.route('/status')
 @status.route('/status/<string:pipename>', methods=['GET'])
 def show_status(pipename=config['default']['pipename']):
-    url = status_endpoint()
+    url = service.status_endpoint()
     resource = service.fetch_json_data(endpoint=url)
     queues = service.make_queues(resource['pipelines'], pipename)
     return render_template('status.html', queues=queues, pipename=pipename)
@@ -43,7 +44,7 @@ def show_status(pipename=config['default']['pipename']):
 
 @status.route('/', methods=['GET'])
 def show_dashboard():
-    url = status_endpoint()
+    url = service.status_endpoint()
     resource = service.fetch_json_data(endpoint=url)
     pipeline_stats = service.pipelines_stats(resource['pipelines'])
     return render_template('dashboard.html', pipeline_stats=pipeline_stats)
@@ -67,3 +68,29 @@ def show_builds_history(page=1):
     return render_template('builds_history.html', buildsets=buildsets,
                            paginator=paginator,
                            buildsets_log_url=buildset_log_url)
+
+
+@auth.route('/sign_in')
+def sign_in():
+    """
+    TODO (pawelzny): Redirect user to OpenID page for authorization
+                     When user gives us full_name and email should
+                     be redirect to /signed_in route where
+                     session will be created.
+    For now we redirect user strictly to signed_in with fake token
+    to simulate real scenario since OpenID is not ready yet.
+    """
+    return redirect(url_for('auth.signed_in', token='tmp_fake_token'))  # noqa
+
+
+@auth.route('/signed_in/<token>')
+def signed_in(token):
+    user = service.fetch_user_data(token)
+    service.create_user_session(user)
+    return redirect(url_for('status.show_dashboard'))
+
+
+@auth.route('/sign_out')
+def sign_out():
+    service.drop_user_session()
+    return redirect(url_for('status.show_dashboard'))
