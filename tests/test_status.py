@@ -247,24 +247,87 @@ class TestBuildset(unittest.TestCase):
         result = test_buildset.status
         self.assertEqual(result, expected)
 
-    def test_status_with_failing_voting_job_should_have_fail_status(self):
+    def test_status_with_any_failing_voting_job_should_have_fail_status(self):
         test_buildset = fixtures.buildset()
         test_job = fixtures.job()
-        test_job.result = 'FAILURE'
         test_job.voting = True
         test_buildset.jobs = [test_job]
-        expected = 'Failing'
+        expected = "Failing"
+
+        for fresult in Job.FAILING_RESULTS:
+            test_job.result = fresult
+            result = test_buildset.status
+            self.assertEqual(result, expected)
+
+    def test_status_with_failing_notvoting_job_should_have_success_status(self):
+        test_buildset = fixtures.buildset()
+        test_jobs = [fixtures.job() for _ in Job.FAILING_RESULTS]
+        for job, job_result in zip(test_jobs, Job.FAILING_RESULTS):
+            job.result = job_result
+            job.voting = False
+        test_buildset.jobs = test_jobs
+
         result = test_buildset.status
+        expected = "Succeeding"
         self.assertEqual(result, expected)
 
     def test_status_wo_failing_and_voting_jobs_should_have_success_status(self):
+        example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
+
         test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job() for x in range(3)]
-        for j in test_jobs:
-            j.result = "SUCCESS"
+        test_jobs = [fixtures.job() for _ in example_succeeding_job_results]
+        for job, job_result in zip(test_jobs,
+                                   example_succeeding_job_results):
+            job.result = job_result
         test_buildset.jobs = test_jobs
-        expected = "Succeeding"
+
         result = test_buildset.status
+        expected = "Succeeding"
+        self.assertEqual(result, expected)
+
+    def test_status_with_only_notfailing_voting_jobs_should_have_success(self):
+        example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
+
+        test_buildset = fixtures.buildset()
+        test_jobs = [fixtures.job() for _ in example_succeeding_job_results]
+        for job, job_result in zip(test_jobs,
+                                   example_succeeding_job_results):
+            job.result = job_result
+            job.voting = True
+        test_buildset.jobs = test_jobs
+
+        result = test_buildset.status
+        expected = "Succeeding"
+        self.assertEqual(result, expected)
+
+    def test_status_with_mixed_notvoting_jobs_should_have_success_status(self):
+        job_results = ["SUCCESS", "ERROR", "SKIPPED"]
+
+        test_buildset = fixtures.buildset()
+        test_jobs = [fixtures.job() for _ in job_results]
+
+        for job, job_result in zip(test_jobs, job_results):
+            job.result = job_result
+            job.voting = False
+        test_buildset.jobs = test_jobs
+
+        result = test_buildset.status
+        expected = "Succeeding"
+        self.assertEqual(result, expected)
+
+    def test_status_with_mixed_voting_jobs_should_have_fail_status(self):
+        job_results = ["SUCCESS", "ERROR", "SKIPPED"]
+
+        test_buildset = fixtures.buildset()
+        test_jobs = [fixtures.job() for _ in job_results]
+
+        for job, job_result in zip(test_jobs, job_results):
+            job.result = job_result
+            job.voting = True
+        test_buildset.jobs = test_jobs
+
+        result = test_buildset.status
+        expected = "Failing"
         self.assertEqual(result, expected)
 
     def test_progress_wo_jobs_should_return_100(self):

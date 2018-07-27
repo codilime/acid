@@ -27,8 +27,6 @@ class Queue:
 
 
 class Buildset:
-    failing_results = ('FAILURE', 'POST_FAILURE', 'RETRY_LIMIT')
-
     def __init__(self, name, buildset_id, jobs, enqueue_time, owner, ref,
                  review_url):
         self.name = name
@@ -81,7 +79,7 @@ class Buildset:
             return 'Enqueued'
 
         for job in self.jobs:
-            if job.result in self.failing_results and job.voting:
+            if job.result in Job.FAILING_RESULTS and job.voting:
                 return 'Failing'
         return 'Succeeding'
 
@@ -100,6 +98,8 @@ class Buildset:
 
 
 class Job:
+    FAILING_RESULTS = ('FAILURE', 'POST_FAILURE', 'RETRY_LIMIT', 'ERROR')
+
     def __init__(self, name, time_tracker, result, url, report_url, canceled,
                  voting, retry, worker):
         self.name = name
