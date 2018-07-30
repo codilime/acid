@@ -5,4 +5,7 @@ $(function () {
     dateTime.local()
     $element.text(dateTime.format('YYYY-MM-DD HH:mm:ss'))
   })
+  $('.no-collapsable').on('click', function (event) {
+    event.stopImmediatePropagation()
+  })
 })

@@ -6,37 +6,31 @@
         <h1>Builds history for {{ buildsets.pipeline }}</h1>
     </div>
 </div>
-<div class="container">
+<div class="container mt-5 mb-5">
     <div class="row build-table table-head">
-        <div class="col">Id</div>
         <div class="col">Branch</div>
         <div class="col">Build number</div>
         <div class="col">Duration</div>
         <div class="col-2">Started</div>
         <div class="col-2">Finished</div>
-        <div class="col">Result</div>
-        <div class="col"></div>
+        <div class="col-2 text-center">Result</div>
+        <div></div>
     </div>
     {% for b in buildsets.page %}
-    <div class="row hover-row build-table">
-        <div class="col">{{ b.id }}</div>
+    <div class="row hover-row build-table clickable" data-toggle="collapse" data-target="#collapse-{{ b.id }}">
         <div class="col">{{ b.branch }}</div>
-        <div class="col">{{ show_object_or_na(b.build_number) }}</div>
+        <div class="col"><a class="no-collapsable" href="{{ buildsets_log_url }}/{{ buildsets.pipeline }}/review.opencontrail.org/{{ b.branch }}/{{ b.build_number }}/" title="Open logs">{{ show_object_or_na(b.build_number) }}</a></div>
         <div class="col">{{ show_object_or_na(b.duration) }}</div>
         <div class="col-2">{{ local_datetime(b.start_datetime) }}</div>
         <div class="col-2">{{ local_datetime(b.end_datetime) }}</div>
-        <div class="col">
-            <a href="{{ buildsets_log_url }}/{{ buildsets.pipeline }}/review.opencontrail.org/{{ b.branch }}/{{ b.build_number }}/" title="Open logs">
-                <span class="badge {% if b.result == 'SUCCESS' %} badge-success {% else %} badge-danger {% endif %}">{{ b.result }}</span>
-            </a>
+        <div class="col text-center">
+            <span class="badge {% if b.result == 'SUCCESS' %} badge-success {% else %} badge-danger {% endif %}">{{ b.result }}</span>
         </div>
-        <div class="col">
-            <a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="collapse" href="#collapse-{{ b.id }}" title="Toggle jobs">jobs</a>
-        </div>
+        <div class="dropdown-toggle"></div>
     </div>
-    <div class="collapse row justify-content-md-center p-3" id="collapse-{{ b.id }}">
+    <div class="collapse row justify-content-md-center p-3"  id="collapse-{{ b.id }}">
         <div class="col-12">
-            <div class="row build-table table-head">
+            <div class="row build-table text-white bg-secondary font-weight-bold">
                 <div class="col-5">Job name</div>
                 <div class="col">Duration</div>
                 <div class="col-2">Start time</div>
@@ -44,19 +38,19 @@
                 <div class="col">Result</div>
             </div>
             {% for job in b.builds %}
-            <div class="row hover-row build-table">
-                <div class="col-5 {% if job.voting %} font-weight-bold {% endif %}" title="{% if job.voting %} This job is voting {% endif %}">{{ job.job_name }}</div>
+            <div class="row build-table bg-light">
+                <div class="col-5" title="{% if not job.voting %} This job is not voting {% endif %}">
+                    <a href="{{ job.log_url }}" title="Open log">{{ job.job_name }}</a>{% if not job.voting %} <span class="badge badge-secondary">non-voting</span>{% endif %}
+                </div>
                 <div class="col">{{ show_object_or_na(job.duration) }}</div>
                 <div class="col-2">{{ local_datetime(job.start_time) }}</div>
                 <div class="col-2">{{ local_datetime(job.end_time) }}</div>
                 <div class="col">
-                    <a href="{{ job.log_url }}" title="Open log">
-                        <span class="badge {% if job.result == 'SUCCESS' %} badge-success
-                                        {% elif job.result == 'FAILURE' %} badge-danger
-                                        {% elif job.result == 'SKIPPED' %} badge-info
-                                        {% else %} badge-warning
-                                        {% endif %} ">{{ job.result }}</span>
-                    </a>
+                    <span class="badge {% if job.result == 'SUCCESS' %} badge-success
+                                    {% elif job.result == 'FAILURE' %} badge-danger
+                                    {% elif job.result == 'SKIPPED' %} badge-info
+                                    {% else %} badge-warning
+                                    {% endif %} ">{{ job.result }}</span>
                 </div>
             </div>
             {% endfor %}
