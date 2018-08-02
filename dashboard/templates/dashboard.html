@@ -1,21 +1,42 @@
 {% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
 {% block content %}
-    <div class="lead mx-auto w-25 mt-5 table-responsive">
-      <table class="table">
-        <thead class="thead-dark">
-        <tr>
-          <th scope="col">Pipeline</th>
-          <th scope="col">Buildsets</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for pipeline in pipeline_stats %}
-            <tr>
-                <td><a class="mt-5 font-weight-bold" href="{{ url_for('status.show_status', pipename=pipeline.name) }}">{{ pipeline.name }}</a></td>
-                <td>{{ pipeline.buildsets_count }}</td>
-            </tr>
-        {% endfor %}
-      </tbody>
-      </table>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <img
+                    src="{{ url_for('static', filename='img/acid_square.png') }}"
+                    class="img-fluid"
+                    alt="Logo with doodle happy sun and ACID text">
+            </div>
+        </div>
+        <div class="row mt-5 mb-2">
+            <div class="col-md-12 col-lg-6 offset-lg-3">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Pipeline</th>
+                            <th scope="col">Buildsets</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for pipeline in pipeline_stats %}
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('status.show_status', pipename=pipeline.name) }}">
+                                        {{ pipeline.name }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{ pipeline.buildsets_count }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

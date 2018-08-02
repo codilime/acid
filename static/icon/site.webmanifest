@@ -1,0 +1,14 @@
+{
+    "name": "Awesome CI Dashboard",
+    "short_name": "ACID",
+    "icons": [
+        {
+            "src": "/static/icon/android-chrome-144x144.png?v=dLJl6vqAj9",
+            "sizes": "144x144",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}

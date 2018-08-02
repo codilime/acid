@@ -2,7 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Zuul Dashboard{% endblock %}</title>
+    <title>ACID - {% block title %}Home{% endblock %}</title>
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='icon/apple-touch-icon.png') }}?v=dLJl6vqAj9">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icon/favicon-32x32.png') }}?v=dLJl6vqAj9">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icon/favicon-16x16.png') }}?v=dLJl6vqAj9">
+    <link rel="manifest" href="{{ url_for('static', filename='icon/site.webmanifest') }}?v=dLJl6vqAj9">
+    <link rel="mask-icon" href="{{ url_for('static', filename='icon/safari-pinned-tab.svg') }}?v=dLJl6vqAj9" color="#5bbad5">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon/favicon.ico') }}?v=dLJl6vqAj9">
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="msapplication-config" content="{{ url_for('static', filename='icon/browserconfig.xml?v=dLJl6vqAj9') }}">
+    <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet"
           href="{{ url_for('static', filename='bootstrap-4.1.1-dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet"
@@ -11,14 +20,17 @@
 <body>
 {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Dashboard</a>
+        <a class="navbar-brand" href="/">
+            <img src="{{ url_for('static', filename='img/acid_text.png') }}"
+                 alt="Doodle logo with ACID text"/>
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown {% if request.path.startswith("/status") %}active{% endif %}">
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Status</a>
                     <div class="dropdown-menu" style="width:auto">
                         {% for pipeline in pipelines %}
@@ -27,11 +39,11 @@
                         {% endfor %}
                     </div>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% if request.path.startswith("/builds") %}active{% endif %}">
                     <a class="nav-link" href="{{ url_for('builds.show_builds_history') }}">Builds</a>
                 </li>
             </ul>
-            <ul class="nav pull-right">
+            <ul class="navbar-nav pull-right">
                 {% if session and session['user'] %}
                     <li class="navbar-text">
                         {{ session['user'].full_name }} {{ session['user'].email }}
@@ -51,8 +63,12 @@
 <div class="container-fluid">
     {% block content %}{% endblock %}
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js" integrity="sha256-VrmtNHAdGzjNsUNtWYG55xxE9xDTz4gF63x/prKXKH0=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"
+        integrity="sha256-VrmtNHAdGzjNsUNtWYG55xxE9xDTz4gF63x/prKXKH0="
+        crossorigin="anonymous"></script>
 <script src="{{ url_for('static', filename='bootstrap-4.1.1-dist/js/bootstrap.min.js') }}"></script>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
