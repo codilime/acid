@@ -21,15 +21,22 @@ class TestServicePipelineStats(unittest.TestCase):
         resource = fixtures.load_status_data(
             name='status_pipelines_with_no_buildsets')
         result = service.pipelines_stats(pipelines=resource['pipelines'])
-        expected = [PipelineStat(name='test_pipeline1', buildsets_count=0),
-                    PipelineStat(name='test_pipeline2', buildsets_count=0)]
+        expected = [PipelineStat(name='check', buildsets_count=0),
+                    PipelineStat(name='gate', buildsets_count=0)]
+        self.assertEqual(result, expected)
+
+    def test_pipelines_stats_returns_nothing_for_pipelines_not_in_config(self):
+        resource = fixtures.load_status_data(
+            name='status_pipelines_not_on_list_in_config')
+        result = service.pipelines_stats(pipelines=resource['pipelines'])
+        expected = [PipelineStat(name='check', buildsets_count=0)]
         self.assertEqual(result, expected)
 
     def test_pipelines_stats_returns_expected_for_queue_with_many_heads(self):
         resource = fixtures.load_status_data(
             name='status_pipeline_with_couple_buildsets_in_queue')
         result = service.pipelines_stats(pipelines=resource['pipelines'])
-        expected = [PipelineStat(name='test_pipeline1', buildsets_count=3)]
+        expected = [PipelineStat(name='check', buildsets_count=3)]
         self.assertEqual(result, expected)
 
 
@@ -59,7 +66,7 @@ class TestServiceEndpointStatus(unittest.TestCase):
 @patch('dashboard.service.current_app')
 @patch('dashboard.service.requests')
 class TestServiceFetchData(unittest.TestCase):
-    def test_fetch_reise_when_cant_download(self, requests, *args):
+    def test_fetch_raise_when_cant_download(self, requests, *args):
         result = MagicMock()
         result.status_code = 404
         result.text = "{}"

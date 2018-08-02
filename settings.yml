@@ -17,3 +17,10 @@ buildset:
 zuul:
   url: 'http://zuulv3.opencontrail.org/'
   status_endpoint: 'status.json'
+  pipelines:
+    - check
+    - gate
+    - periodic-nightly
+    - periodic-sanity
+    - experimental
+    - experimental-provision

@@ -14,3 +14,10 @@ buildset:
 zuul:
   url: 'http://localhost:3000/'
   status_endpoint: 'static/status.json'
+  pipelines:
+    - check
+    - gate
+    - periodic-nightly
+    - periodic-sanity
+    - experimental
+    - experimental-provision

@@ -13,14 +13,19 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/">Dashboard</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
+                data-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('status.show_status') }}">Status</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Status</a>
+                    <div class="dropdown-menu" style="width:auto">
+                        {% for pipeline in pipelines %}
+                            <a class="dropdown-item"
+                               href="{{ url_for('status.show_status', pipename=pipeline) }}">{{ pipeline }}</a>
+                        {% endfor %}
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('builds.show_builds_history') }}">Builds</a>

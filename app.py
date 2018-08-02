@@ -24,3 +24,8 @@ app.register_blueprint(error_handlers)
 app.register_blueprint(status)
 app.register_blueprint(builds)
 app.register_blueprint(auth)
+
+
+@app.context_processor
+def template_context():
+    return {'pipelines': config['zuul']['pipelines']}

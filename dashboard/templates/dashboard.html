@@ -12,7 +12,7 @@
         {% for pipeline in pipeline_stats %}
             <tr>
                 <td><a class="mt-5 font-weight-bold" href="{{ url_for('status.show_status', pipename=pipeline.name) }}">{{ pipeline.name }}</a></td>
-                <td>Buildsets: {{ pipeline.buildsets_count }}</td>
+                <td>{{ pipeline.buildsets_count }}</td>
             </tr>
         {% endfor %}
       </tbody>

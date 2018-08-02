@@ -99,7 +99,7 @@
                     ]
                 }
             ],
-            "name": "test_pipeline1",
+            "name": "check",
             "description": "On-demand pipeline for testing jobs."
         }
     ],
