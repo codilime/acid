@@ -58,5 +58,5 @@ def drop_user_session():
 def fetch_user_data(token):
     # TODO (pawelzny): Fetch data from OpenID
     return User(full_name='Admin Admin',  # noqa
-                email='admin@acid.com',
+                email='admin@acid.test',
                 token=token)
