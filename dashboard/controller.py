@@ -6,8 +6,9 @@ from pony.orm import db_session
 
 from dashboard import db, service
 from dashboard.config import config
-from dashboard.exceptions import (BadDataFormat, PageOutOfRange,
-                                  PipelineNotFound, RemoteServerError)
+from dashboard.exceptions import (AuthenticationFailed, BadDataFormat,
+                                  PageOutOfRange, PipelineNotFound,
+                                  RemoteServerError)
 from dashboard.history import BuildSetsHistory, pagination
 
 status = Blueprint('status', __name__, template_folder='templates')
@@ -21,7 +22,7 @@ error_handlers = Blueprint('error_handlers', __name__,
 @error_handlers.app_errorhandler(RemoteServerError)
 @error_handlers.app_errorhandler(Exception)
 def generic_error(error):
-    current_app.logger.error(f"{error} on URL: {request.base_url}")
+    current_app.logger.error(f"{error}; raised on URL: {request.url}")
     return render_template('error.html')
 
 
@@ -29,8 +30,14 @@ def generic_error(error):
 @error_handlers.app_errorhandler(PageOutOfRange)
 @error_handlers.app_errorhandler(404)
 def error_404(error):
-    current_app.logger.error(f"{error} on URL: {request.base_url}")
+    current_app.logger.error(f"{error}; raised on URL: {request.url}")
     return render_template('error_404.html')
+
+
+@error_handlers.app_errorhandler(AuthenticationFailed)
+def auth_error(error):
+    current_app.logger.error(f"{error}; raised on URL: {request.url}")
+    return render_template('auth_error.html')
 
 
 @status.route('/status')
@@ -72,20 +79,13 @@ def show_builds_history(page=1):
 
 @auth.route('/sign_in')
 def sign_in():
-    """
-    TODO (pawelzny): Redirect user to OpenID page for authorization
-                     When user gives us full_name and email should
-                     be redirect to /signed_in route where
-                     session will be created.
-    For now we redirect user strictly to signed_in with fake token
-    to simulate real scenario since OpenID is not ready yet.
-    """
-    return redirect(url_for('auth.signed_in', token='tmp_fake_token'))  # noqa
+    redirect_url = service.start_openid_auth()
+    return redirect(redirect_url)
 
 
-@auth.route('/signed_in/<token>')
-def signed_in(token):
-    user = service.fetch_user_data(token)
+@auth.route('/signed_in')
+def signed_in():
+    user = service.fetch_user_data()
     service.create_user_session(user)
     return redirect(url_for('status.show_dashboard'))
 

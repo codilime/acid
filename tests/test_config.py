@@ -33,7 +33,9 @@ class TestConfig(unittest.TestCase):
         self.assertDictEqual(config['default'],
                              {'pipename': 'test-pipeline',
                               'users_file': 'test_admins.yml',
-                              'secret_key': 'thisisverysecret'})
+                              'secret_key': 'thisisverysecret',
+                              'openid_provider':
+                              'https://login.launchpad.net/+openid'})
 
     def test_config_raises_when_try_to_set_new_section(self):
         config = Config(file_path='tests/static/test_settings.yml')

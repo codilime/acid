@@ -3,10 +3,9 @@ from dashboard.config import Config, config
 
 
 class User:
-    def __init__(self, full_name, email, token):
+    def __init__(self, full_name, email):
         self.full_name = full_name
         self.email = email
-        self.token = token
 
     def is_admin(self):
         user_roles = Config(config['default']['users_file'])

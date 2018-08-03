@@ -38,12 +38,10 @@ class UserFactory:
     def get_user(role):
         if role == UserFactory.ROLE_ADMIN:
             attrs = {'full_name': 'Admin Admin',
-                     'email': 'admin@acid.test',
-                     'token': 'foo'}
+                     'email': 'admin@acid.test'}
         else:
             attrs = {'full_name': 'Noname Guest',
-                     'email': 'noname@guest.test',
-                     'token': 'bar'}
+                     'email': 'noname@guest.test'}
         return User(**attrs)
 
 

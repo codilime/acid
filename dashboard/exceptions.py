@@ -13,3 +13,7 @@ class RemoteServerError(Exception):
 
 class BadDataFormat(Exception):
     pass
+
+
+class AuthenticationFailed(Exception):
+    pass
