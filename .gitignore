@@ -226,3 +226,9 @@ typings/
 
 # next.js build output
 .next
+
+# ansible
+*.retry
+
+# vagrant
+.vagrant/

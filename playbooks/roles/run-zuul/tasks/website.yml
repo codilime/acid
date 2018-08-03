@@ -1,0 +1,80 @@
+---
+- name: Create web directory
+  become: yes
+  file:
+    path: /var/lib/zuul/web
+    state: directory
+    owner: zuul
+    mode: u+rwx,g+rwx,o+rw
+
+- name: Install YARN npm package
+  become: yes
+  npm:
+    global: yes
+    name: "{{ item }}"
+  with_items:
+    - yarn
+    - webpack@^4.4.0
+    - webpack-cli@^2.0.11
+
+- set_fact:
+      web_src: /home/vagrant/src/git.openstack.org/openstack-infra/zuul
+
+- name: Install NPM Dependencies
+  shell: |
+    set -e
+    set -x
+    yarn install
+  args:
+    chdir: "{{ web_src }}"
+
+- name: Build zuul status website
+  shell: |
+    set -e
+    set -x
+    npm run build:dist -- --define ZUUL_API_URL="'http://10.10.10.5:9000'"
+  args:
+    chdir: "{{ web_src }}"
+
+- name: Unpack website build
+  shell: |
+    set -e
+    set -x
+    tar -xvzf zuul-web.tgz -C /var/lib/zuul/web
+  args:
+    chdir: "{{ web_src }}"
+
+- name: Find all default config files for Apache2
+  find:
+    paths:
+      - /etc/apache2/sites-enabled
+      - /etc/apache2/sites-available
+    patterns: "*.conf"
+  register: apache2_config
+
+- name: Remove default apache2 config
+  become: yes
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ apache2_config.files }}"
+
+- name: Deploy Apache2 config for zuul website
+  become: yes
+  copy:
+    src: acid.conf.j2
+    dest: /etc/apache2/sites-available/acid.conf
+
+- name: Enable acid website
+  become: yes
+  file:
+    src: /etc/apache2/sites-available/acid.conf
+    dest: /etc/apache2/sites-enabled/acid.conf
+    state: link
+
+- name: Restart Apache2
+  become: yes
+  service:
+    name: apache2
+    state: restarted
+    enabled: yes

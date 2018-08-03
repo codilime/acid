@@ -1,0 +1,16 @@
+---
+- include_tasks: history-db.yml
+- include_tasks: zookeeper.yml
+- include_tasks: gearman.yml
+- include_tasks: config.yml
+
+- name: Run ansible-role-zuul
+  shell: |
+    set -e
+    set -x
+    ansible-playbook -vv -i inventory.yml install-zuul.yml
+  args:
+    chdir: /opt/app/playbooks
+    executable: /bin/bash
+
+- include_tasks: website.yml

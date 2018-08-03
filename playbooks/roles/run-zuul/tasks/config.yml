@@ -1,0 +1,36 @@
+---
+- set_fact:
+    galaxy_path: /home/vagrant/.ansible/roles
+
+- name: Create ~/.ansible/roles directory
+  file:
+    path: "{{ galaxy_path }}"
+    state: directory
+    recurse: true
+    owner: vagrant
+
+- name: Install zuul role from ansible galaxy
+  shell: |
+    set -e
+    set -x
+    ansible-galaxy install --roles-path {{ galaxy_path }} openstack.zuul
+  args:
+    executable: /bin/bash
+
+- name: Deploy zuul.conf
+  template:
+    src: zuul.conf.j2
+    dest: "{{ galaxy_path }}/openstack.zuul/templates/etc/zuul/zuul.conf"
+
+- name: Deploy main.yaml file
+  become: yes
+  template:
+    src: main.yaml.j2
+    dest: "{{ galaxy_path }}/openstack.zuul/templates/etc/zuul/main.yaml"
+
+- name: Change deploy method from PIP to GIT
+  become: yes
+  lineinfile:
+    path: "{{ galaxy_path }}/openstack.zuul/defaults/main.yaml"
+    regexp: "^zuul_install_method: pip"
+    line: "zuul_install_method: git"

@@ -1,0 +1,24 @@
+[gerrit]
+  basePath = git
+  canonicalWebUrl = http://{{ host_ip }}:8080/
+
+[database]
+  type = H2
+
+[index]
+  type = LUCENE
+
+[auth]
+  type = DEVELOPMENT_BECOME_ANY_ACCOUNT
+
+[sshd]
+  listenAddress = *:29418
+
+[httpd]
+  listenUrl = http://*:8080/
+
+[cache]
+  directory = cache
+
+[container]
+  user = root

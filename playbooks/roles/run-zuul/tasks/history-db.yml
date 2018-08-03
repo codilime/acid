@@ -1,0 +1,36 @@
+---
+- name: Run mariadb container
+  become: yes
+  shell: |
+    set -e
+    set -x
+    docker run -d \
+               -p 3306:3306 \
+               --name {{ zuul.history_db.name }} \
+               -e MYSQL_ROOT_PASSWORD={{ zuul.history_db.pass }} \
+               mariadb:10.3
+  args:
+    executable: /bin/bash
+
+- name: Wait until MariaDB comes up (naive)
+  pause:
+    seconds: 10
+
+- name: Copy sqldump with examples
+  copy:
+    src: zuul.sql
+    dest: "{{ zuul.home }}/{{ zuul.history_db.name }}.sql"
+  when: zuul.history_db.migrate == true
+
+- name: Import database from zuul.sql dump file
+  become: yes
+  shell: |
+    set -e
+    set -x
+    docker exec -i {{ zuul.history_db.name }} mysql \
+                -p{{ zuul.history_db.pass }} \
+                -u {{ zuul.history_db.user }} \
+                < {{ zuul.home }}/{{ zuul.history_db.name }}.sql
+  args:
+    executable: /bin/bash
+  when: zuul.history_db.migrate == true

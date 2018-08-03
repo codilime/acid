@@ -1,0 +1,8 @@
+---
+- name: Install gearman
+  become: yes
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - gearman
+    - gearman-server

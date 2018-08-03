@@ -45,3 +45,13 @@ docs: ## generate Sphinx HTML documentation, including API docs
 
 serve: ## run flask server in development mode
 	SETTINGS_PATH=settings.yml FLASK_ENV=development FLASK_APP=app.py flask run --port 3000
+
+dev-run: ## run development environment in vagrant box
+	vagrant up
+
+dev-stop: ## stop vagrant box
+	vagrant halt
+
+dev-reload: ## remove vagrant box and start from scratch
+	vagrant destroy -f
+	vagrant up

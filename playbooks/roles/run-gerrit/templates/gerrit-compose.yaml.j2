@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  gerrit:
+    image: gerritcodereview/gerrit
+    entrypoint: java -jar /var/gerrit/bin/gerrit.war init -d /var/gerrit
+    volumes:
+      - {{ gerrit.home }}/etc:/var/gerrit/etc
+      - {{ gerrit.home }}/git:/var/gerrit/git
+      - {{ gerrit.home }}/db:/var/gerrit/db
+      - {{ gerrit.home }}/index:/var/gerrit/index
+      - cache-volume:/var/gerrit/cache
+    ports:
+      - "29418:29418"
+      - "8080:8080"
+
+volumes:
+  cache-volume:

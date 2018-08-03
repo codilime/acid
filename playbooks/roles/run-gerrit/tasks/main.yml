@@ -1,0 +1,81 @@
+---
+- name: Create directories for Gerrit
+  file:
+    path: "{{ gerrit.home }}/{{ item }}"
+    state: directory
+    recurse: true
+  with_items:
+    - etc
+    - .ssh
+
+- name: Copy Gerrit configuration
+  template:
+    src: gerrit.config.j2
+    dest: "{{ gerrit.home }}/etc/gerrit.config"
+
+- name: Copy Gerrit host ssh key
+  copy:
+    src: "{{ item }}"
+    dest: "{{ gerrit.home }}/etc/{{ item }}"
+  with_items:
+    - ssh_host_key
+    - ssh_host_key.pub
+    - authorized_keys
+
+- name: Copy Gerrit admin ssh key
+  copy:
+    src: "{{ item }}"
+    dest: "{{ gerrit.home }}/.ssh/{{ item }}"
+  with_items:
+    - admin_id_rsa
+    - admin_id_rsa.pub
+
+- name: Copy gerrit-compose.yaml file
+  template:
+    src: "gerrit-compose.yaml.j2"
+    dest: "{{ gerrit.home }}/docker-compose.yaml"
+
+- name: Copy and unarchive Gerrit db, index, and git files
+  unarchive:
+    src: "{{ item }}.tar.gz"
+    dest: "{{ gerrit.home }}"
+  with_items:
+    - db
+    - index
+    - git
+  when: gerrit.from_scratch == false
+
+- name: Initialize Gerrit container
+  become: yes
+  shell: |
+    set -e
+    set -x
+    docker-compose up
+  args:
+    executable: /bin/bash
+    chdir: "{{ gerrit.home }}"
+  when: gerrit.from_scratch == true
+
+- name: Remove init entrypoint for Gerrit
+  # Entrypoint is used for running Gerrit from scratch.
+  # Either way it has to be removed at this point.
+  lineinfile:
+    path: "{{ gerrit.home }}/docker-compose.yaml"
+    state: absent
+    regexp: "entrypoint"
+
+- name: Run Gerrit container
+  become: yes
+  shell: |
+    set -e
+    set -x
+    docker-compose up -d
+  args:
+    executable: /bin/bash
+    chdir: "{{ gerrit.home }}"
+
+- name: Wait until gerrit comes up
+  wait_for:
+    delay: 6
+    port: 8080
+    msg: "Gerrit didn't start to listen on port 8080"
