@@ -5,8 +5,11 @@ default:
   secret_key: 'thisisverysecret'
   openid_provider: 'https://login.launchpad.net/+openid'
 database:
-  provider: 'sqlite'
-  filename: ':memory:'
+  provider: 'mysql'
+  host: '10.10.10.5'
+  user: 'root'
+  password: 'root'
+  port: 3306
   name: 'zuul'
 buildset:
   per_page: 20

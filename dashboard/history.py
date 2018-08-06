@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from collections import namedtuple
 
-from dashboard.model import ZuulBuildSet
 from dashboard.exceptions import PageOutOfRange
+from dashboard.model import ZuulBuildSet
 
 Paginator = namedtuple("Paginator", ["pages", "previous_page",
                                      "next_page", "current_page"])
 
 
-class BuildSetsHistory:
+class BuildSetsPaginated:
     def __init__(self, pipeline, per_page):
         self.pipeline = pipeline
         self.per_page = per_page
@@ -27,6 +27,20 @@ class BuildSetsHistory:
 
     def _create_query(self):
         return ZuulBuildSet.get_for_pipeline(self.pipeline)
+
+    @property
+    def branches(self):
+        return ZuulBuildSet.get_branches()
+
+
+class BuildSetsFiltered(BuildSetsPaginated):
+    def __init__(self, pipeline, per_page, branch, build):
+        self.branch = branch
+        self.build = build
+        super().__init__(pipeline, per_page)
+
+    def _create_query(self):
+        return ZuulBuildSet.get_filtered(self.pipeline, self.branch, self.build)
 
 
 def pagination(number_of_buildsets, page, per_page, page_links):

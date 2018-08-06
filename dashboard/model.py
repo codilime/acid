@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
-from pony.orm import Optional, Set, desc, select
+from pony.orm import Optional, Set, desc, raw_sql, select
 
 from dashboard.db import db
 
@@ -59,11 +59,32 @@ class ZuulBuildSet(db.Entity):
         return None
 
     @classmethod
+    def get_branches(cls):
+        branches = select(raw_sql("SUBSTRING_INDEX(ref, '/', -1)") for b in cls)
+        return branches
+
+    @classmethod
     def get_for_pipeline(cls, pipeline):
-        return select(bs for bs in cls
-                      if bs.pipeline == pipeline and
-                      len(select(b for b in bs.builds)) > 0).sort_by(
-                          desc(cls.id))
+        return select(
+            bs for bs in cls
+            if bs.pipeline == pipeline and
+            len(select(b for b in bs.builds)) > 0).sort_by(desc(cls.id))
+
+    @classmethod
+    def get_filtered(cls, pipeline, branch='', build=''):
+        if branch not in cls.get_branches():
+            branch = ''
+
+        if build is None or not build.isnumeric():
+            build = ''
+        else:
+            build = f'/{build}/'
+
+        return select(
+            bs for bs in cls if
+            bs.pipeline == pipeline and bs.ref.endswith(branch) and
+            len(select(b for b in bs.builds if
+                       build in b.log_url)) > 0).sort_by(desc(cls.id))
 
 
 class ZuulBuild(db.Entity):

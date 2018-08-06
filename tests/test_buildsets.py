@@ -3,19 +3,19 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 from dashboard.exceptions import PageOutOfRange
-from dashboard.history import BuildSetsHistory
+from dashboard.history import BuildSetsPaginated
 
 
 class TestBuildSets(unittest.TestCase):
     @patch('dashboard.model.ZuulBuildSet.get_for_pipeline')
     def test_create_buildsets_history_object(self, get_for_pipeline):
-        buildsets = BuildSetsHistory(pipeline="foo", per_page=20)
+        buildsets = BuildSetsPaginated(pipeline="foo", per_page=20)
 
         self.assertEqual(buildsets.per_page, 20)
 
     @patch('dashboard.model.ZuulBuildSet.get_for_pipeline')
     def test_create_query(self, get_for_pipeline):
-        BuildSetsHistory(pipeline="foo", per_page=20)
+        BuildSetsPaginated(pipeline="foo", per_page=20)
 
         get_for_pipeline.assert_called_with("foo")
 
@@ -24,7 +24,7 @@ class TestBuildSets(unittest.TestCase):
         get_for_pipeline.return_value = [
             'first_element', 'second_element', 'third_element']
 
-        buildsets = BuildSetsHistory(pipeline="foo", per_page=20)
+        buildsets = BuildSetsPaginated(pipeline="foo", per_page=20)
 
         with self.assertRaises(PageOutOfRange):
             buildsets.fetch_page(2)
@@ -36,7 +36,7 @@ class TestBuildSets(unittest.TestCase):
         query = self._query_mock(data)
         get_for_pipeline.return_value = query
 
-        buildset = BuildSetsHistory(pipeline="foo", per_page=20)
+        buildset = BuildSetsPaginated(pipeline="foo", per_page=20)
         buildset.fetch_page(page=1)
 
         self.assertEqual(buildset.page, data)
