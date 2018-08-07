@@ -3,7 +3,7 @@ import unittest
 from unittest import mock
 
 from dashboard.config import config
-from dashboard.status import Buildset, Job, TimeTracker
+from dashboard.status.model import Buildset, Job, TimeTracker
 from dashboard.time_utils import (epoch_to_datetime, milliseconds_to_seconds,
                                   seconds_to_time)
 

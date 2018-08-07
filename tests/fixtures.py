@@ -4,7 +4,7 @@ import random
 from unittest.mock import MagicMock
 
 from dashboard.config import config
-from dashboard.status import Buildset, Job, TimeTracker
+from dashboard.status.model import Buildset, Job, TimeTracker
 from dashboard.users import User
 
 

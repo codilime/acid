@@ -13,7 +13,7 @@ from dashboard.exceptions import (AuthenticationFailed, BadDataFormat,
                                   RemoteServerError)
 from dashboard.history import BuildSetsFiltered, BuildSetsPaginated, pagination
 
-status = Blueprint('status', __name__, template_folder='templates')
+
 builds = Blueprint('builds', __name__, template_folder='templates')
 auth = Blueprint('auth', __name__, template_folder='templates')
 error_handlers = Blueprint('error_handlers', __name__,
@@ -43,23 +43,6 @@ def auth_error(error):
     current_app.logger.error(f'{error}; raised on URL: {request.url}')
     return make_response(render_template('auth_error.html'),
                          requests.codes.unauthorized)
-
-
-@status.route('/status')
-@status.route('/status/<string:pipename>')
-def show_status(pipename=config['default']['pipename']):
-    url = service.status_endpoint()
-    resource = service.fetch_json_data(endpoint=url)
-    queues = service.make_queues(resource['pipelines'], pipename)
-    return render_template('status.html', queues=queues, pipename=pipename)
-
-
-@status.route('/')
-def show_dashboard():
-    url = service.status_endpoint()
-    resource = service.fetch_json_data(endpoint=url)
-    pipeline_stats = service.pipelines_stats(resource['pipelines'])
-    return render_template('dashboard.html', pipeline_stats=pipeline_stats)
 
 
 @builds.route('/builds')

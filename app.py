@@ -6,7 +6,8 @@ from flask import Flask
 from flask_session import Session
 
 from dashboard.config import config
-from dashboard.controller import auth, builds, error_handlers, status
+from dashboard.controller import auth, builds, error_handlers
+from dashboard.status.controller import status
 
 if os.getenv('FLASK_ENV') == 'production' and not os.getenv('SECRET_KEY'):
     raise Exception("On production use environment variables")
