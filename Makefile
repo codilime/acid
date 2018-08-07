@@ -1,17 +1,23 @@
-.PHONY: clean-pyc clean-build docs help
+.PHONY: clean docs help test
 .DEFAULT_GOAL := help
+
+APP=app.py
+SETTINGS_DEV=settings.yml
+SETTINGS_TEST=tests/static/test_settings.yml
+ENV_DEV=development
+ENV_TEST=testing
 
 help:
 	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-25s\033[0m %s\n", $$1, $$2}'
 
-install: ## install dependencies
+install: ## install required dependencies
 	pip install -r requirements.txt
 
-install-dev: install ## install dev dependencies
+install-dev: install ## install required dependencies with test-requirements
 	pip install -r requirements.txt
 	pip install -r test-requirements.txt
 
-clean: clean-build clean-pyc clean-cache
+clean: clean-build clean-pyc clean-cache clean-session ## clean all artifacts and cache
 
 clean-build: ## remove build artifacts
 	rm -fr build/
@@ -27,31 +33,34 @@ clean-cache: ## remove .cache and .pytest_cache
 	rm -rf .cache
 	rm -rf .pytest_cache
 
-lint: ## check style with flake8
+clean-session: ## remove flask_session files
+	rm -rf flask_session/
+
+lint: ## check code style and formatting with flake8
 	flake8
 
 test: ## run tests
-	SETTINGS_PATH=tests/static/test_settings.yml FLASK_ENV=testing FLASK_APP=app.py TESTING=1 pytest tests/
+	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_ENV=$(ENV_TEST) FLASK_APP=$(APP) TESTING=1 pytest tests/
 
-coverage: ## check code coverage quickly with the default Python
+coverage: clean-cache ## create code coverage report
 	coverage erase
-	coverage run -m pytest
+	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_ENV=$(ENV_TEST) FLASK_APP=$(APP) TESTING=1 coverage run -m pytest tests/
 	coverage report -m
 	coverage html
 
-docs: ## generate Sphinx HTML documentation, including API docs
+docs: ## generate Sphinx HTML documentation
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 
-serve: ## run flask server in development mode
-	SETTINGS_PATH=settings.yml FLASK_ENV=development FLASK_APP=app.py flask run --port 3000
+serve: ## run Flask server in development mode
+	SETTINGS_PATH=$(SETTINGS_DEV) FLASK_ENV=$(ENV_DEV) FLASK_APP=$(APP) flask run --port 3000
 
-dev-run: ## run development environment in vagrant box
+dev-run: ## run vagrant box with Zuul and Gerrit
 	vagrant up
 
 dev-stop: ## stop vagrant box
 	vagrant halt
 
-dev-reload: ## remove vagrant box and start from scratch
+dev-reload: ## remove vagrant box and run again
 	vagrant destroy -f
 	vagrant up
