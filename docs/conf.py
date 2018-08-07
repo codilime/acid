@@ -21,9 +21,9 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = u'Tungsten CI Dashboard'
-copyright = u'2018, Tungsten Fabric'
-author = u'Tungsten Fabric'
+project = 'ACID CI Dashboard'
+copyright = u'2018, CodiLime'
+author = u'CodiLime'
 
 # The short X.Y version
 version = __version__
@@ -107,7 +107,7 @@ html_theme = 'sphinx_rtd_theme'
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'TungstenCIDashboard'
+htmlhelp_basename = 'ACID'
 
 
 # -- Options for manual page output ------------------------------------------
@@ -115,7 +115,7 @@ htmlhelp_basename = 'TungstenCIDashboard'
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'TungstenCIDashboard', 'Tungsten CI dashboard Documentation',
+    (master_doc, 'ACID', 'ACID Documentation',
      [author], 1)
 ]
 
