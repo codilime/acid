@@ -9,8 +9,15 @@ Custom dashboard for Zuul
    :caption: Contents:
 
 
-*******
+
+===============
+GETTING STARTED
+===============
+
+.. include:: ../README.rst
+
+=======
 LICENSE
-*******
+=======
 
 .. include:: ../LICENSE
