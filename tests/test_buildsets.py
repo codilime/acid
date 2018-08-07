@@ -42,7 +42,8 @@ class TestBuildSets(unittest.TestCase):
         self.assertEqual(buildset.page, data)
         query.page.assert_called_with(1, 20)
 
-    def _query_mock(self, data):
+    @staticmethod
+    def _query_mock(data):
         query = MagicMock()
         query.__len__ = lambda x: len(data)
         query.page = MagicMock()

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from flask import (Blueprint, current_app, redirect, render_template, request,
-                   url_for)
+import requests
+
+from flask import (Blueprint, current_app, make_response, redirect,
+                   render_template, request, url_for)
 
 from pony.orm import db_session
 
@@ -22,22 +24,25 @@ error_handlers = Blueprint('error_handlers', __name__,
 @error_handlers.app_errorhandler(RemoteServerError)
 @error_handlers.app_errorhandler(Exception)
 def generic_error(error):
-    current_app.logger.error(f"{error}; raised on URL: {request.url}")
-    return render_template('error.html')
+    current_app.logger.error(f'{error}; raised on URL: {request.url}')
+    return make_response(render_template('error.html'),
+                         requests.codes.server_error)
 
 
 @error_handlers.app_errorhandler(PipelineNotFound)
 @error_handlers.app_errorhandler(PageOutOfRange)
 @error_handlers.app_errorhandler(404)
 def error_404(error):
-    current_app.logger.error(f"{error}; raised on URL: {request.url}")
-    return render_template('error_404.html')
+    current_app.logger.error(f'{error}; raised on URL: {request.url}')
+    return make_response(render_template('error_404.html'),
+                         requests.codes.not_found)
 
 
 @error_handlers.app_errorhandler(AuthenticationFailed)
 def auth_error(error):
-    current_app.logger.error(f"{error}; raised on URL: {request.url}")
-    return render_template('auth_error.html')
+    current_app.logger.error(f'{error}; raised on URL: {request.url}')
+    return make_response(render_template('auth_error.html'),
+                         requests.codes.unauthorized)
 
 
 @status.route('/status')

@@ -2,6 +2,8 @@
 import re
 from unittest.mock import patch
 
+import requests
+
 from app import app
 
 from tests import IntegrationTestCase
@@ -31,18 +33,22 @@ class TestControllerBuildHistory(IntegrationTestCase):
         with app.test_client() as client:
             rv = client.get('/builds/123')
             self.assertIn(b'Site was not found', rv.data)
+            self.assertEqual(rv._status_code, requests.codes.not_found)
 
     def test_page_very_out_of_range_should_display_site_not_found(self, *args):
         with app.test_client() as client:
             rv = client.get('/builds/2346122865')
             self.assertIn(b'Site was not found', rv.data)
+            self.assertEqual(rv._status_code, requests.codes.not_found)
 
     def test_page_negative_should_display_site_not_found(self, *args):
         with app.test_client() as client:
             rv = client.get('/builds/-1')
             self.assertIn(b'Site was not found', rv.data)
+            self.assertEqual(rv._status_code, requests.codes.not_found)
 
     def test_page_zero_should_display_site_not_found(self, *args):
         with app.test_client() as client:
             rv = client.get('/builds/0')
             self.assertIn(b'Site was not found', rv.data)
+            self.assertEqual(rv._status_code, requests.codes.not_found)
