@@ -4,45 +4,45 @@
   roles:
     - openstack.zuul
   tasks:
-  - set_fact:
-      zuul_ssh_dir: "/var/lib/zuul/.ssh"
-      gerrit_ssh_dir: "/home/vagrant/gerrit/.ssh"
+    - set_fact:
+        zuul_ssh_dir: "/var/lib/zuul/.ssh"
+        gerrit_ssh_dir: "/home/vagrant/gerrit/.ssh"
 
-  - name: Create zuul/.ssh directory
-    become: yes
-    file:
-      path: "{{ zuul_ssh_dir }}"
-      recurse: yes
-      state: directory
-      owner: zuul
+    - name: Create zuul/.ssh directory
+      become: yes
+      file:
+        path: "{{ zuul_ssh_dir }}"
+        recurse: yes
+        state: directory
+        owner: zuul
 
-  - name: Copy ssh keys to zuul dir
-    become: yes
-    shell: cp {{ gerrit_ssh_dir }}/admin_id_rsa id_rsa
-    args:
-      chdir: "{{ zuul_ssh_dir }}"
+    - name: Copy ssh keys to zuul dir
+      become: yes
+      shell: cp {{ gerrit_ssh_dir }}/admin_id_rsa id_rsa
+      args:
+        chdir: "{{ zuul_ssh_dir }}"
 
-  - name: Change mode and owner of zuul/id_rsa file
-    become: yes
-    file:
-      path: "{{ zuul_ssh_dir }}/id_rsa"
-      mode: u+r
-      owner: zuul
+    - name: Change mode and owner of zuul/id_rsa file
+      become: yes
+      file:
+        path: "{{ zuul_ssh_dir }}/id_rsa"
+        mode: u+r
+        owner: zuul
 
-  - name: Create known_hosts file
-    become: yes
-    file:
-      path: "{{ zuul_ssh_dir }}/known_hosts"
-      mode: u+rw,g+r
-      owner: zuul
-      state: touch
+    - name: Create known_hosts file
+      become: yes
+      file:
+        path: "{{ zuul_ssh_dir }}/known_hosts"
+        mode: u+rw,g+r
+        owner: zuul
+        state: touch
 
-  - name: restart Zuul services
-    become: yes
-    service:
-      name: "{{ item }}"
-      state: restarted
-    with_items:
-      - zuul-scheduler
-      - zuul-merger
-      - zuul-web
+    - name: restart Zuul services
+      become: yes
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - zuul-scheduler
+        - zuul-merger
+        - zuul-web
