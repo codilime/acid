@@ -6,7 +6,9 @@ from flask import Flask
 from flask_session import Session
 
 from dashboard.config import config
-from dashboard.controller import auth, builds, error_handlers
+from dashboard.controller import error_handlers
+from dashboard.auth.controller import auth
+from dashboard.history.controller import builds
 from dashboard.status.controller import status
 
 if os.getenv('FLASK_ENV') == 'production' and not os.getenv('SECRET_KEY'):

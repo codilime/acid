@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from dashboard.history import Paginator, pagination
+from dashboard.history.service import Paginator, pagination
 
 
 class TestPagination(unittest.TestCase):

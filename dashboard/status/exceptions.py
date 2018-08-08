@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-class PageOutOfRange(ValueError):
-    pass
 
 
 class PipelineNotFound(Exception):
@@ -15,5 +13,3 @@ class BadDataFormat(Exception):
     pass
 
 
-class AuthenticationFailed(Exception):
-    pass

@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 from dashboard.config import config
 
-from tests import fixtures
+from dashboard.auth.tests import fixtures
 
 
 class TestUsers(unittest.TestCase):

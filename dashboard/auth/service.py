@@ -7,8 +7,8 @@ from openid.consumer import consumer
 from openid.extensions import sreg
 
 from dashboard.config import config
-from dashboard.exceptions import (AuthenticationFailed)
-from dashboard.users import User
+from dashboard.auth.exceptions import AuthenticationFailed
+from dashboard.auth.model import User
 
 
 def create_user_session(user):

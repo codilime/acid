@@ -4,10 +4,10 @@ from unittest import mock
 
 from app import app
 
-from tests.fixtures import UserFactory
+from dashboard.auth.tests.fixtures import UserFactory
 
 
-@mock.patch('dashboard.service.fetch_user_data')
+@mock.patch('dashboard.auth.service.fetch_user_data')
 class TestAuthControllers(unittest.TestCase):
     def test_user_can_sign_in_and_sign_out(self, fetch_data):
         cases = (UserFactory.ROLE_ADMIN, UserFactory.ROLE_USER)

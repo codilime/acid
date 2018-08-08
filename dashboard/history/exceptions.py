@@ -1,0 +1,2 @@
+class PageOutOfRange(ValueError):
+    pass

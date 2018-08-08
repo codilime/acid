@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from dashboard.time_utils import (epoch_to_datetime, milliseconds_to_seconds,
-                                  seconds_to_time)
+from dashboard.status.time_utils import (epoch_to_datetime, milliseconds_to_seconds,
+                                         seconds_to_time)
 
 
 class TestTimeUtils(unittest.TestCase):

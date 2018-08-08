@@ -1,21 +1,13 @@
 # -*- coding: utf-8 -*-
 import requests
 
-from flask import (Blueprint, current_app, make_response, redirect,
-                   render_template, request, url_for)
+from flask import (Blueprint, current_app, make_response, render_template, request)
 
-from pony.orm import db_session
+from dashboard.status.exceptions import (BadDataFormat,
+                                         PipelineNotFound,
+                                         RemoteServerError)
+from dashboard.history.exceptions import PageOutOfRange
 
-from dashboard import db, service
-from dashboard.config import config
-from dashboard.exceptions import (AuthenticationFailed, BadDataFormat,
-                                  PageOutOfRange, PipelineNotFound,
-                                  RemoteServerError)
-from dashboard.history import BuildSetsFiltered, BuildSetsPaginated, pagination
-
-
-builds = Blueprint('builds', __name__, template_folder='templates')
-auth = Blueprint('auth', __name__, template_folder='templates')
 error_handlers = Blueprint('error_handlers', __name__,
                            template_folder='templates/errors')
 
@@ -38,53 +30,3 @@ def error_404(error):
                          requests.codes.not_found)
 
 
-@error_handlers.app_errorhandler(AuthenticationFailed)
-def auth_error(error):
-    current_app.logger.error(f'{error}; raised on URL: {request.url}')
-    return make_response(render_template('auth_error.html'),
-                         requests.codes.unauthorized)
-
-
-@builds.route('/builds')
-@builds.route('/builds/<int:page>')
-@db_session
-def show_builds_history(page=1):
-    per_page = config['buildset']['per_page']
-    pipeline = config['default']['pipename']
-    page_links = config['buildset']['page_links']
-    buildset_log_url = config['buildset']['log_url']
-
-    db.connect()
-
-    branch = request.args.get('branch')
-    build = request.args.get('build')
-
-    if branch or build:
-        buildsets = BuildSetsFiltered(pipeline, per_page, branch, build)
-    else:
-        buildsets = BuildSetsPaginated(pipeline, per_page)
-
-    buildsets.fetch_page(page)
-    paginator = pagination(len(buildsets), page, per_page, page_links)
-    return render_template('builds_history.html', buildsets=buildsets,
-                           paginator=paginator,
-                           buildsets_log_url=buildset_log_url)
-
-
-@auth.route('/sign_in')
-def sign_in():
-    redirect_url = service.start_openid_auth()
-    return redirect(redirect_url)
-
-
-@auth.route('/signed_in')
-def signed_in():
-    user = service.fetch_user_data()
-    service.create_user_session(user)
-    return redirect(url_for('status.show_dashboard'))
-
-
-@auth.route('/sign_out')
-def sign_out():
-    service.drop_user_session()
-    return redirect(url_for('status.show_dashboard'))

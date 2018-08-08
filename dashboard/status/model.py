@@ -3,8 +3,8 @@ import time
 from collections import namedtuple
 
 from dashboard.config import config
-from dashboard.time_utils import (epoch_to_datetime, milliseconds_to_seconds,
-                                  seconds_to_time)
+from dashboard.status.time_utils import (epoch_to_datetime, milliseconds_to_seconds,
+                                         seconds_to_time)
 
 
 PipelineStat = namedtuple("PipelineStat", ["name", "buildsets_count"])

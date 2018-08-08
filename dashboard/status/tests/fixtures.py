@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
+import os
 import json
 import random
 from unittest.mock import MagicMock
 
 from dashboard.config import config
-from dashboard.status.model import Buildset, Job, TimeTracker
-from dashboard.users import User
+from dashboard.status.model import TimeTracker, Job, Buildset
 
 
 def time_tracker():
@@ -30,30 +29,17 @@ def buildset():
                     review_url="http://fake_url")
 
 
-class UserFactory:
-    ROLE_ADMIN = 'admin'
-    ROLE_USER = 'user'
-
-    @staticmethod
-    def get_user(role):
-        if role == UserFactory.ROLE_ADMIN:
-            attrs = {'full_name': 'Admin Admin',
-                     'email': 'admin@acid.test'}
-        else:
-            attrs = {'full_name': 'Noname Guest',
-                     'email': 'noname@guest.test'}
-        return User(**attrs)
-
-
 def status_request(filename=None, status_code=200):
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    filename = filename or config['zuul']['status_endpoint']
     result = MagicMock()
     result.status_code = status_code
-    filename = filename or config['zuul']['status_endpoint']
-    with open(filename) as json_data:
+    with open(f'{current_dir}/static/{filename}.json') as json_data:
         result.json = MagicMock(return_value=json.load(json_data))
     return MagicMock(return_value=result)
 
 
 def load_status_data(name):
-    with open(f'tests/static/{name}.json', "r") as data:
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    with open(f'{current_dir}/static/{name}.json', "r") as data:
         return json.load(data)

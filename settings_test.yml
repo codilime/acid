@@ -1,7 +1,7 @@
 ---
 default:
   pipename: 'periodic-nightly'
-  users_file: 'tests/static/test_users.yml'
+  users_file: 'users.yml'
   secret_key: 'thisisverysecret'
   openid_provider: 'https://login.launchpad.net/+openid'
 database:
