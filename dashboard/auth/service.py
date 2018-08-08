@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import urllib.parse
+from urllib.parse import urljoin
 
 from flask import request, session, url_for
 
@@ -22,7 +22,7 @@ def drop_user_session():
 def fetch_user_data():
     # (kam193) OpenID library needs full decoded url, but from flask we
     # can get only encoded URL which breaks parsing.
-    full_decoded_url = urllib.parse.urljoin(request.host_url, request.full_path)
+    full_decoded_url = urljoin(request.host_url, request.full_path)
 
     oid_consumer = consumer.Consumer(session, None)
     info = oid_consumer.complete(request.args, full_decoded_url)

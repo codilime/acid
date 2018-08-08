@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-import unittest
-from unittest import mock
+from unittest import TestCase, mock
 
 from app import app
 
@@ -8,7 +7,7 @@ from dashboard.auth.tests.fixtures import UserFactory
 
 
 @mock.patch('dashboard.auth.service.fetch_user_data')
-class TestAuthControllers(unittest.TestCase):
+class TestAuthControllers(TestCase):
     def test_user_can_sign_in_and_sign_out(self, fetch_data):
         cases = (UserFactory.ROLE_ADMIN, UserFactory.ROLE_USER)
 

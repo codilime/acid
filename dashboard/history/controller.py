@@ -1,9 +1,13 @@
-from flask import request, render_template, Blueprint
+# -*- coding: utf-8 -*-
+from flask import Blueprint, render_template, request
+
 from pony.orm import db_session
 
 from dashboard import db
 from dashboard.config import config
-from dashboard.history.service import BuildSetsFiltered, BuildSetsPaginated, pagination
+from dashboard.history.service import (BuildSetsFiltered,
+                                       BuildSetsPaginated,
+                                       pagination)
 
 builds = Blueprint('builds', __name__, template_folder='../templates')
 

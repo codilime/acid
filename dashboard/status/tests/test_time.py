@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-import unittest
+from unittest import TestCase
 
-from dashboard.status.time_utils import (epoch_to_datetime, milliseconds_to_seconds,
+from dashboard.status.time_utils import (epoch_to_datetime,
+                                         milliseconds_to_seconds,
                                          seconds_to_time)
 
 
-class TestTimeUtils(unittest.TestCase):
+class TestTimeUtils(TestCase):
     def test_empty_epoch_to_datetime_should_raise_exception(self):
         with self.assertRaises(TypeError):
             epoch_to_datetime(seconds=None)

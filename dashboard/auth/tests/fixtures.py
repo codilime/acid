@@ -16,5 +16,3 @@ class UserFactory:
             attrs = {'full_name': 'Noname Guest',
                      'email': 'noname@guest.test'}
         return User(**attrs)
-
-

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import re
-from unittest.mock import patch
-
 import requests
+
+from re import search
+from unittest.mock import patch
 
 from app import app
 
@@ -17,7 +17,7 @@ class TestControllerBuildHistory(IntegrationTestCase):
             # Here we use regular expression to evade possible
             # changes in styling of the input form.
             reg_exp = b'<option[^>]+ selected="selected"[^>]>master</option>'
-            result = re.search(reg_exp, rv.data)
+            result = search(reg_exp, rv.data)
             self.assertIsNotNone(result)
 
     def test_can_invoke_show_history_filterd_by_build(self, *args):
@@ -26,7 +26,7 @@ class TestControllerBuildHistory(IntegrationTestCase):
             # Here we use regular expression to evade possible
             # changes in styling of the input form.
             reg_exp = b'<input type="text" name="build"[^>]+value="121'
-            result = re.search(reg_exp, rv.data)
+            result = search(reg_exp, rv.data)
             self.assertIsNotNone(result)
 
     def test_page_out_of_range_should_display_site_not_found(self, *args):

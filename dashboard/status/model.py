@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-import time
+from time import time
 from collections import namedtuple
 
 from dashboard.config import config
-from dashboard.status.time_utils import (epoch_to_datetime, milliseconds_to_seconds,
+from dashboard.status.time_utils import (epoch_to_datetime,
+                                         milliseconds_to_seconds,
                                          seconds_to_time)
 
 
@@ -52,7 +53,7 @@ class Buildset:
     def elapsed_time(self):
         if self.enqueue_time:
             return seconds_to_time(
-                time.time() - self.enqueue_time)
+                time() - self.enqueue_time)
         return 0
 
     @property

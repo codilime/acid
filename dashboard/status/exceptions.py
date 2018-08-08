@@ -11,5 +11,3 @@ class RemoteServerError(Exception):
 
 class BadDataFormat(Exception):
     pass
-
-

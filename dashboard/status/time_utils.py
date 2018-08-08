@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-import time
+from time import gmtime, strftime
 
 
 def epoch_to_datetime(seconds):
     if seconds is None:
         raise TypeError
-    return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(seconds))
+    return strftime("%Y-%m-%d %H:%M:%S", gmtime(seconds))
 
 
 def seconds_to_time(seconds):

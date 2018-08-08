@@ -1,10 +1,12 @@
-from flask import render_template, Blueprint
+# -*- coding: utf-8 -*-
+from flask import Blueprint, render_template
 
 from dashboard.status import service
 from dashboard.config import config
 
 
 status = Blueprint('status', __name__, template_folder='templates')
+
 
 @status.route('/status')
 @status.route('/status/<string:pipename>')

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-import unittest
+from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
 from dashboard.history.exceptions import PageOutOfRange
 from dashboard.history.service import BuildSetsPaginated
 
 
-class TestBuildSets(unittest.TestCase):
+class TestBuildSets(TestCase):
     @patch('dashboard.history.model.ZuulBuildSet.get_for_pipeline')
     def test_create_buildsets_history_object(self, get_for_pipeline):
         buildsets = BuildSetsPaginated(pipeline="foo", per_page=20)

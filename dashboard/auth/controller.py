@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
 import requests
-from flask import url_for, Blueprint, current_app, make_response, render_template
+
+from flask import (Blueprint, current_app, make_response,
+                   render_template, request, url_for)
+
 from werkzeug.utils import redirect
 
 from dashboard.auth import service

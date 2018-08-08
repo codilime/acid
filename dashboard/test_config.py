@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
-import unittest
+from unittest import TestCase
 
 from dashboard.config import Config
 
 
-class TestConfig(unittest.TestCase):
+class TestConfig(TestCase):
     def test_config_object_can_be_created(self):
         Config(file_path=os.getenv('SETTINGS_PATH'))
 

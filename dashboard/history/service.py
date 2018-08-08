@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from collections.__init__ import namedtuple
 
 from dashboard.history.exceptions import PageOutOfRange

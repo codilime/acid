@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-import unittest
+from unittest import TestCase
 from unittest import mock
 
 import dashboard.status.tests.fixtures
 from dashboard.config import config
 from dashboard.status.model import Buildset, Job, TimeTracker
-from dashboard.status.time_utils import (epoch_to_datetime, milliseconds_to_seconds,
+from dashboard.status.time_utils import (epoch_to_datetime,
+                                         milliseconds_to_seconds,
                                          seconds_to_time)
 
 
-class TestTimeTracker(unittest.TestCase):
+class TestTimeTracker(TestCase):
     def test_none_start_to_datetime_should_return_none(self):
         tt = dashboard.status.tests.fixtures.time_tracker()
         tt.start = None
@@ -54,7 +55,7 @@ class TestTimeTracker(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
-class TestJob(unittest.TestCase):
+class TestJob(TestCase):
     def compare_jobs(self, job1, job2, msg=None):
         self.assertDictEqual(job1.time_tracker.__dict__,
                              job2.time_tracker.__dict__, msg=msg)
@@ -144,7 +145,7 @@ class TestJob(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
-class TestBuildset(unittest.TestCase):
+class TestBuildset(TestCase):
     def compare_buildsets(self, buildset1, buildset2, msg=None):
         # assumes buildset has empty job list
         self.assertDictEqual(buildset1.owner, buildset2.owner, msg=msg)
@@ -184,7 +185,7 @@ class TestBuildset(unittest.TestCase):
         result = test_buildset.elapsed_time
         self.assertEqual(result, expected)
 
-    @mock.patch('time.time')
+    @mock.patch('dashboard.status.model.time')
     def test_valid_elapsed_time_should_return_expected_time(self, time):
         test_buildset = dashboard.status.tests.fixtures.buildset()
         fixed_time = 1532004145.20974
@@ -260,7 +261,8 @@ class TestBuildset(unittest.TestCase):
 
     def test_status_with_failing_notvoting_job_should_have_success_status(self):
         test_buildset = dashboard.status.tests.fixtures.buildset()
-        test_jobs = [dashboard.status.tests.fixtures.job() for _ in Job.FAILING_RESULTS]
+        test_jobs = [dashboard.status.tests.fixtures.job()
+                     for _ in Job.FAILING_RESULTS]
         for job, job_result in zip(test_jobs, Job.FAILING_RESULTS):
             job.result = job_result
             job.voting = False
@@ -274,7 +276,8 @@ class TestBuildset(unittest.TestCase):
         example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
 
         test_buildset = dashboard.status.tests.fixtures.buildset()
-        test_jobs = [dashboard.status.tests.fixtures.job() for _ in example_succeeding_job_results]
+        test_jobs = [dashboard.status.tests.fixtures.job()
+                     for _ in example_succeeding_job_results]
         for job, job_result in zip(test_jobs,
                                    example_succeeding_job_results):
             job.result = job_result
@@ -288,7 +291,8 @@ class TestBuildset(unittest.TestCase):
         example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
 
         test_buildset = dashboard.status.tests.fixtures.buildset()
-        test_jobs = [dashboard.status.tests.fixtures.job() for _ in example_succeeding_job_results]
+        test_jobs = [dashboard.status.tests.fixtures.job()
+                     for _ in example_succeeding_job_results]
         for job, job_result in zip(test_jobs,
                                    example_succeeding_job_results):
             job.result = job_result

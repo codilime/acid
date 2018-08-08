@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 import requests
+
 from flask import current_app
 
 from dashboard.config import config
-from dashboard.status.exceptions import RemoteServerError, PipelineNotFound
+from dashboard.status.exceptions import PipelineNotFound, RemoteServerError
 from dashboard.status.model import PipelineStat, Queue
 
 

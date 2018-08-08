@@ -1,26 +1,29 @@
 # -*- coding: utf-8 -*-
-import unittest
+from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
 import dashboard.status.service
 import dashboard.status.tests.fixtures
-
 from dashboard.config import config
-from dashboard.status.exceptions import PipelineNotFound, RemoteServerError
+from dashboard.status.exceptions import (PipelineNotFound,
+                                         RemoteServerError)
 from dashboard.status.model import PipelineStat
 
 
-class TestServicePipelineStats(unittest.TestCase):
+class TestServicePipelineStats(TestCase):
     def test_pipelines_stats_returns_empty_when_no_pipelines(self):
-        resource = dashboard.status.tests.fixtures.load_status_data(name='status_no_pipelines')
+        resource = dashboard.status.tests.fixtures.load_status_data(
+            name='status_no_pipelines')
         expected = []
-        result = dashboard.status.service.pipelines_stats(pipelines=resource['pipelines'])
+        result = dashboard.status.service.pipelines_stats(
+            pipelines=resource['pipelines'])
         self.assertEqual(result, expected)
 
     def test_pipelines_stats_returns_zeros_for_empty_pipelines(self):
         resource = dashboard.status.tests.fixtures.load_status_data(
             name='status_pipelines_with_no_buildsets')
-        result = dashboard.status.service.pipelines_stats(pipelines=resource['pipelines'])
+        result = dashboard.status.service.pipelines_stats(
+            pipelines=resource['pipelines'])
         expected = [PipelineStat(name='check', buildsets_count=0),
                     PipelineStat(name='gate', buildsets_count=0)]
         self.assertEqual(result, expected)
@@ -28,19 +31,21 @@ class TestServicePipelineStats(unittest.TestCase):
     def test_pipelines_stats_returns_nothing_for_pipelines_not_in_config(self):
         resource = dashboard.status.tests.fixtures.load_status_data(
             name='status_pipelines_not_on_list_in_config')
-        result = dashboard.status.service.pipelines_stats(pipelines=resource['pipelines'])
+        result = dashboard.status.service.pipelines_stats(
+            pipelines=resource['pipelines'])
         expected = [PipelineStat(name='check', buildsets_count=0)]
         self.assertEqual(result, expected)
 
     def test_pipelines_stats_returns_expected_for_queue_with_many_heads(self):
         resource = dashboard.status.tests.fixtures.load_status_data(
             name='status_pipeline_with_couple_buildsets_in_queue')
-        result = dashboard.status.service.pipelines_stats(pipelines=resource['pipelines'])
+        result = dashboard.status.service.pipelines_stats(
+            pipelines=resource['pipelines'])
         expected = [PipelineStat(name='check', buildsets_count=3)]
         self.assertEqual(result, expected)
 
 
-class TestServiceEndpointStatus(unittest.TestCase):
+class TestServiceEndpointStatus(TestCase):
     def test_status_endpoint_returns_expected_when_no_slashes(self):
         with patch.dict(config['zuul'], {'url': 'http://fake.url',
                                          'status_endpoint': 'fake.json'}):
@@ -65,34 +70,39 @@ class TestServiceEndpointStatus(unittest.TestCase):
 
 @patch('dashboard.status.service.current_app')
 @patch('dashboard.status.service.requests')
-class TestServiceFetchData(unittest.TestCase):
+class TestServiceFetchData(TestCase):
     def test_fetch_raise_when_cant_download(self, requests, *args):
         result = MagicMock()
         result.status_code = 404
         result.text = "{}"
         requests.get.return_value = result
         with self.assertRaises(RemoteServerError):
-            dashboard.status.service.fetch_json_data(endpoint='http://fake.endpoint')
+            dashboard.status.service.fetch_json_data(
+                endpoint='http://fake.endpoint')
 
     def test_fetch_return_expected_data(self, requests, *args):
         requests.get = dashboard.status.tests.fixtures.status_request(
             filename='status_check')
 
-        result = dashboard.status.service.fetch_json_data(endpoint='http://fake.endpoint')
-        expected = dashboard.status.tests.fixtures.load_status_data(name='status_check')
+        result = dashboard.status.service.fetch_json_data(
+            endpoint='http://fake.endpoint')
+        expected = dashboard.status.tests.fixtures.load_status_data(
+            name='status_check')
         self.assertDictEqual(result, expected)
 
 
 @patch('dashboard.status.service.current_app')
-class TestServiceMakeQueues(unittest.TestCase):
+class TestServiceMakeQueues(TestCase):
     def test_raises_when_no_queues(self, *args):
-        resources = dashboard.status.tests.fixtures.load_status_data(name='status_no_queues')
+        resources = dashboard.status.tests.fixtures.load_status_data(
+            name='status_no_queues')
         with self.assertRaises(KeyError):
             dashboard.status.service.make_queues(
                 pipelines=resources['pipelines'], pipename='check')
 
     def test_raises_when_no_pipeline(self, *args):
-        resources = dashboard.status.tests.fixtures.load_status_data(name='status_no_pipelines')
+        resources = dashboard.status.tests.fixtures.load_status_data(
+            name='status_no_pipelines')
         with self.assertRaises(PipelineNotFound):
             dashboard.status.service.make_queues(
                 pipelines=resources['pipelines'], pipename='check')

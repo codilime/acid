@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-import unittest
+from unittest import TestCase
 from unittest.mock import patch
 
 from dashboard.config import config
-
 from dashboard.auth.tests import fixtures
 
 
-class TestUsers(unittest.TestCase):
+class TestUsers(TestCase):
     def test_user_is_admin_should_return_true(self):
         user = fixtures.UserFactory.get_user(fixtures.UserFactory.ROLE_ADMIN)
         self.assertTrue(user.is_admin())

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import requests
 
-from flask import (Blueprint, current_app, make_response, render_template, request)
+from flask import (Blueprint, current_app,
+                   make_response, render_template, request)
 
 from dashboard.status.exceptions import (BadDataFormat,
                                          PipelineNotFound,
@@ -28,5 +29,3 @@ def error_404(error):
     current_app.logger.error(f'{error}; raised on URL: {request.url}')
     return make_response(render_template('error_404.html'),
                          requests.codes.not_found)
-
-
