@@ -232,3 +232,6 @@ typings/
 
 # vagrant
 .vagrant/
+
+# auto-generated developmend version of settings
+settings_dev.yml

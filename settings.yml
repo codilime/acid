@@ -30,3 +30,12 @@ zuul:
       - periodic-nightly:
           - master
           - R5.0
+zuul_manager:
+  host: '10.10.10.5'
+  username: 'vagrant'
+  user_key_file: '/etc/acid/insecure_private_key' # ssh client key
+  host_key_file: 'zuul_host_key.pub' # file with fingerprint from host with zuul
+  tenant: 'acid'
+  trigger: 'timer'
+  project: 'acid-test-dev'
+  policy: 'AutoAddPolicy'

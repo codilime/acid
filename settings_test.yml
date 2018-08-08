@@ -30,3 +30,11 @@ zuul:
       - periodic-nightly:
           - master
           - R5.0
+zuul_manager:
+  host: '10.10.10.5'
+  username: 'vagrant'
+  user_key_file: '~/.vagrant.d/insecure_private_key'
+  host_key_file: '/tmp/acid_host_key_test.pub'
+  tenant: 'acid'
+  trigger: 'timer'
+  project: 'acid-test-dev'
