@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pony.orm import Optional, Set, desc, raw_sql, select
 
-from dashboard.db import db
+from acid.db import db
 
 
 class ZuulBuildSet(db.Entity):

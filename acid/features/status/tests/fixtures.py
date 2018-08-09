@@ -4,8 +4,8 @@ from json import load
 from random import randint
 from unittest.mock import MagicMock
 
-from dashboard.config import config
-from dashboard.status.model import Buildset, Job, TimeTracker
+from acid.config import config
+from acid.status.model import Buildset, Job, TimeTracker
 
 
 def time_tracker():

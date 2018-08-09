@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
 
-from dashboard.status.time_utils import (epoch_to_datetime,
-                                         milliseconds_to_seconds,
-                                         seconds_to_time)
+from acid.status.time_utils import (epoch_to_datetime,
+                                    milliseconds_to_seconds,
+                                    seconds_to_time)
 
 
 class TestTimeUtils(TestCase):

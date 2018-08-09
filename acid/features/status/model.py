@@ -2,10 +2,10 @@
 from time import time
 from collections import namedtuple
 
-from dashboard.config import config
-from dashboard.status.time_utils import (epoch_to_datetime,
-                                         milliseconds_to_seconds,
-                                         seconds_to_time)
+from acid.config import config
+from acid.status.time_utils import (epoch_to_datetime,
+                                    milliseconds_to_seconds,
+                                    seconds_to_time)
 
 
 PipelineStat = namedtuple("PipelineStat", ["name", "buildsets_count"])

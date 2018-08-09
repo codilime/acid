@@ -6,9 +6,9 @@ from flask import request, session, url_for
 from openid.consumer import consumer
 from openid.extensions import sreg
 
-from dashboard.config import config
-from dashboard.auth.exceptions import AuthenticationFailed
-from dashboard.auth.model import User
+from acid.config import config
+from acid.auth.exceptions import AuthenticationFailed
+from acid.auth.model import User
 
 
 def create_user_session(user):

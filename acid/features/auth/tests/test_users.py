@@ -2,8 +2,8 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from dashboard.config import config
-from dashboard.auth.tests import fixtures
+from acid.config import config
+from acid.auth.tests import fixtures
 
 
 class TestUsers(TestCase):

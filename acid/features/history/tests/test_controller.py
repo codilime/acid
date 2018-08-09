@@ -9,7 +9,7 @@ from app import app
 from tests import IntegrationTestCase
 
 
-@patch('dashboard.history.controller.db.connect')
+@patch('acid.history.controller.db.connect')
 class TestControllerBuildHistory(IntegrationTestCase):
     def test_can_invoke_show_history_filterd_by_branch(self, *args):
         with app.test_client() as client:

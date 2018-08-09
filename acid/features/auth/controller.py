@@ -6,9 +6,9 @@ from flask import (Blueprint, current_app, make_response,
 
 from werkzeug.utils import redirect
 
-from dashboard.auth import service
-from dashboard.controller import error_handlers
-from dashboard.auth.exceptions import AuthenticationFailed
+from acid.auth import service
+from acid.controller import error_handlers
+from acid.auth.exceptions import AuthenticationFailed
 
 auth = Blueprint('auth', __name__, template_folder='templates')
 

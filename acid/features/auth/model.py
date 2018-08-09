@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from dashboard.config import Config, config
+from acid.config import Config, config
 
 
 class User:

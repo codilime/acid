@@ -3,9 +3,9 @@ import requests
 
 from flask import current_app
 
-from dashboard.config import config
-from dashboard.status.exceptions import PipelineNotFound, RemoteServerError
-from dashboard.status.model import PipelineStat, Queue
+from acid.config import config
+from acid.status.exceptions import PipelineNotFound, RemoteServerError
+from acid.status.model import PipelineStat, Queue
 
 
 def fetch_json_data(endpoint):

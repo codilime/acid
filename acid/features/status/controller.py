@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template
 
-from dashboard.status import service
-from dashboard.config import config
+from acid.status import service
+from acid.config import config
 
 
 status = Blueprint('status', __name__, template_folder='templates')
@@ -22,4 +22,4 @@ def show_dashboard():
     url = service.status_endpoint()
     resource = service.fetch_json_data(endpoint=url)
     pipeline_stats = service.pipelines_stats(resource['pipelines'])
-    return render_template('dashboard.html', pipeline_stats=pipeline_stats)
+    return render_template('acid.html', pipeline_stats=pipeline_stats)

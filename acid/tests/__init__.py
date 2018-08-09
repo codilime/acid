@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from pony.orm import db_session
-
-from dashboard import db
-
-from dashboard.auth.tests import fixtures
+from acid import db
 
 
 class IntegrationTestCase(unittest.TestCase):
