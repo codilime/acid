@@ -32,27 +32,32 @@
             <div class="col ml-2">Branch</div>
             <div class="col">Build number</div>
             <div class="col">Duration</div>
-            <div class="col-2">Started</div>
-            <div class="col-2">Finished</div>
-            <div class="col-2 text-center">Result</div>
+            <div class="col">Started</div>
+            <div class="col">Finished</div>
+            <div class="col text-center">Result</div>
+            <div class="col text-center" >Permalink</div>
         </div>
         {% for b in buildsets.page %}
-        <div class="row hover-row build-table clickable collapsed" data-toggle="collapse"
-             data-target="#collapse-{{ b.id }}">
+        <div class="row hover-row build-table clickable {% if not request.args.unfold %}collapsed{% endif %}"
+             data-toggle="collapse" data-target="#collapse-{{ b.id }}">
             <div class="dropdown-toggle"></div>
             <div class="col">{{ b.branch }}</div>
-            <div class="col"><a class="no-collapsable"
-                                href="{{ buildsets_log_url }}/{{ buildsets.pipeline }}/review.opencontrail.org/{{ b.branch }}/{{ b.build_number }}/"
-                                title="Open logs">{{ show_object_or_na(b.build_number) }}</a></div>
+            <div class="col">
+                <a class="no-collapsable"
+                   href="{{ buildsets_log_url }}/{{ buildsets.pipeline }}/review.opencontrail.org/{{ b.branch }}/{{ b.build_number }}/"
+                   title="Open logs">{{ show_object_or_na(b.build_number) }}</a>
+            </div>
             <div class="col">{{ show_object_or_na(b.duration) }}</div>
-            <div class="col-2">{{ local_datetime(b.start_datetime) }}</div>
-            <div class="col-2">{{ local_datetime(b.end_datetime) }}</div>
+            <div class="col">{{ local_datetime(b.start_datetime) }}</div>
+            <div class="col">{{ local_datetime(b.end_datetime) }}</div>
             <div class="col text-center">
-                <span
-                    class="badge {% if b.result == 'SUCCESS' %} badge-success {% else %} badge-danger {% endif %}">{{ b.result }}</span>
+                <span class="badge {% if b.result == 'SUCCESS' %} badge-success {% else %} badge-danger {% endif %}">{{ b.result }}</span>
+            </div>
+            <div class="col text-center">
+                <a class="btn btn-outline-primary" href="builds?branch={{b.branch}}&build={{b.build_number}}&unfold=true">permalink</a>
             </div>
         </div>
-        <div class="collapse row justify-content-md-center p-3"
+        <div class="collapse row justify-content-md-center p-3 {% if request.args.unfold %}show{% endif %}"
              id="collapse-{{ b.id }}">
             <div class="col-12">
                 <div
