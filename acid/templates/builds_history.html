@@ -12,7 +12,7 @@
             <div class="col-12">
                 <form class="form-inline" action="{{ url_for('builds.show_builds_history') }}">
                     <div class="form-group mr-sm-2">
-                        <select class="form-control mb-2 mr-sm-2" name="branch">
+                        <select class="custom-select form-control mb-2 mr-sm-2" name="branch">
                             <option value=""> -- select branch -- </option>
                             {% for branch in buildsets.branches %}
                                 <option {% if branch == request.args.branch %} selected="selected" {% endif %}>{{ branch }}</option>

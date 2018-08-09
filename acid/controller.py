@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import requests
+from requests import codes
 
 from flask import Blueprint
 
@@ -14,9 +14,11 @@ error_handlers = Blueprint('error_handlers', __name__,
 
 handlers = [
     ErrorHandler([BadDataFormat, RemoteServerError, Exception], 'error.html',
-                 requests.codes.server_error),
+                 codes.server_error),
     ErrorHandler([PipelineNotFound, PageOutOfRange, 404], 'error_404.html',
-                 requests.codes.not_found),
+                 codes.not_found),
+    ErrorHandler([codes.unauthorized], 'error_401.html', codes.unauthorized),
+    ErrorHandler([codes.bad_request], 'error.html', codes.bad_request)
 ]
 
 bind_error_handlers(error_handlers, handlers)
