@@ -30,6 +30,11 @@
     - admin_id_rsa
     - admin_id_rsa.pub
 
+- name: Set chmod 600 on admin_id_rsa
+  file:
+    path: "{{ gerrit.home }}/.ssh/admin_id_rsa"
+    mode: 0600
+
 - name: Copy gerrit-compose.yaml file
   template:
     src: "gerrit-compose.yaml.j2"

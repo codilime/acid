@@ -37,3 +37,12 @@
     - provision-dev
     - run-gerrit
     - run-zuul
+  tasks:
+    - name: Set environments for GIT
+      # git user.name and user.email comes from Gerrit configuration.
+      shell: |
+        set -e
+        set -x
+        echo "export GIT_SSH_COMMAND='ssh -i {{ gerrit.home }}/.ssh/admin_id_rsa'" >> /home/vagrant/.bashrc
+        git config --global user.name "Administrator"
+        git config --global user.email "admin@example.com"

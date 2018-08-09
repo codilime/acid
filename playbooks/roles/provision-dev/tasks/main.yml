@@ -19,6 +19,7 @@
     - nodejs
     - npm
     - apache2
+    - bubblewrap
 
 - name: "Create directory: {{ item }}"
   file:
@@ -94,3 +95,7 @@
     set -e
     set -x
     locale-gen en_US en_US.UTF-8 pl_PL.UTF-8
+
+- name: Set VIM as default editor
+  become: yes
+  shell: update-alternatives --set editor /usr/bin/vim.basic
