@@ -14,7 +14,7 @@ from acid.features.status.controller import status
 if os.getenv('FLASK_ENV') == 'production' and not os.getenv('SECRET_KEY'):
     raise Exception("On production use environment variables")
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../static')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY',
                                      config['default']['secret_key'])
 app.config['SESSION_TYPE'] = 'filesystem'

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from os import path
-from json import load
+import json
 from random import randint
 from unittest.mock import MagicMock
 
 from acid.config import config
-from acid.status.model import Buildset, Job, TimeTracker
+from acid.features.status.model import Buildset, Job, TimeTracker
 
 
 def time_tracker():
@@ -36,11 +36,11 @@ def status_request(filename=None, status_code=200):
     result = MagicMock()
     result.status_code = status_code
     with open(f'{current_dir}/static/{filename}.json') as json_data:
-        result.json = MagicMock(return_value=load(json_data))
+        result.json = MagicMock(return_value=json.load(json_data))
     return MagicMock(return_value=result)
 
 
 def load_status_data(name):
     current_dir = path.dirname(path.realpath(__file__))
     with open(f'{current_dir}/static/{name}.json', "r") as data:
-        return load(data)
+        return json.load(data)

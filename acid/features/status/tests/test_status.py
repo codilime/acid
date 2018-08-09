@@ -2,54 +2,54 @@
 from unittest import TestCase
 from unittest import mock
 
-import acid.status.tests.fixtures
+import acid.features.status.tests.fixtures
 from acid.config import config
-from acid.status.model import Buildset, Job, TimeTracker
-from acid.status.time_utils import (epoch_to_datetime,
-                                    milliseconds_to_seconds,
-                                    seconds_to_time)
+from acid.features.status.model import Buildset, Job, TimeTracker
+from acid.features.status.time_utils import (epoch_to_datetime,
+                                             milliseconds_to_seconds,
+                                             seconds_to_time)
 
 
 class TestTimeTracker(TestCase):
     def test_none_start_to_datetime_should_return_none(self):
-        tt = acid.status.tests.fixtures.time_tracker()
+        tt = acid.features.status.tests.fixtures.time_tracker()
         tt.start = None
         result = tt.start_to_datetime
         self.assertIsNone(result)
 
     def test_none_elapsed_to_time_should_return_none(self):
-        tt = acid.status.tests.fixtures.time_tracker()
+        tt = acid.features.status.tests.fixtures.time_tracker()
         tt.elapsed = None
         result = tt.elapsed_to_time
         self.assertIsNone(result)
 
     def test_none_remaining_to_time_should_return_none(self):
-        tt = acid.status.tests.fixtures.time_tracker()
+        tt = acid.features.status.tests.fixtures.time_tracker()
         tt.remaining = None
         result = tt.remaining_to_time
         self.assertIsNone(result)
 
     def test_zero_remainig_to_time_should_return_zero(self):
-        tt = acid.status.tests.fixtures.time_tracker()
+        tt = acid.features.status.tests.fixtures.time_tracker()
         tt.remaining = 0
         result = tt.remaining_to_time
         expected = seconds_to_time(0)
         self.assertEqual(result, expected)
 
     def test_zero_start_to_datetime_should_return_data(self):
-        tt = acid.status.tests.fixtures.time_tracker()
+        tt = acid.features.status.tests.fixtures.time_tracker()
         result = tt.start_to_datetime
         expected = epoch_to_datetime(tt.start)
         self.assertEqual(result, expected)
 
     def test_hour_elapsed_to_time_should_return_data(self):
-        tt = acid.status.tests.fixtures.time_tracker()
+        tt = acid.features.status.tests.fixtures.time_tracker()
         result = tt.elapsed_to_time
         expected = seconds_to_time(milliseconds_to_seconds(tt.elapsed))
         self.assertEqual(result, expected)
 
     def test_hour_remaining_to_time_should_return_data(self):
-        tt = acid.status.tests.fixtures.time_tracker()
+        tt = acid.features.status.tests.fixtures.time_tracker()
         result = tt.remaining_to_time
         expected = seconds_to_time(milliseconds_to_seconds(tt.remaining))
         self.assertEqual(result, expected)
@@ -90,28 +90,28 @@ class TestJob(TestCase):
         self.assertEquals(expected_job, return_job)
 
     def test_no_remaining_should_return_100(self):
-        test_job = acid.status.tests.fixtures.job()
+        test_job = acid.features.status.tests.fixtures.job()
         test_job.time_tracker.remaining = 0
         expected = 100
         result = test_job.progress
         self.assertEqual(result, expected)
 
     def test_no_estimated_should_return_0(self):
-        test_job = acid.status.tests.fixtures.job()
+        test_job = acid.features.status.tests.fixtures.job()
         test_job.time_tracker.estimated = 0
         expected = 0
         result = test_job.progress
         self.assertEqual(result, expected)
 
     def test_none_remaining_should_return_0(self):
-        test_job = acid.status.tests.fixtures.job()
+        test_job = acid.features.status.tests.fixtures.job()
         test_job.time_tracker.remaining = None
         expected = 0
         result = test_job.progress
         self.assertEqual(result, expected)
 
     def test_valid_progress_should_return_data(self):
-        test_job = acid.status.tests.fixtures.job()
+        test_job = acid.features.status.tests.fixtures.job()
         test_job.time_tracker.remaining = 1000
         test_job.time_tracker.estimated = 10
         expected = 90
@@ -119,7 +119,7 @@ class TestJob(TestCase):
         self.assertEqual(result, expected)
 
     def test_nonempty_result_should_return_data(self):
-        test_job = acid.status.tests.fixtures.job()
+        test_job = acid.features.status.tests.fixtures.job()
         test_job.result = "test"
         test_job.report_url = "http://fake_url"
         expected = "http://fake_url"
@@ -127,7 +127,7 @@ class TestJob(TestCase):
         self.assertEqual(result, expected)
 
     def test_empty_result_with_multiple_slashes_should_return_url(self):
-        test_job = acid.status.tests.fixtures.job()
+        test_job = acid.features.status.tests.fixtures.job()
         test_job.result = None
         test_job.url = "fake_endpoint"
         expected = "http://fake_url/fake_endpoint"
@@ -136,7 +136,7 @@ class TestJob(TestCase):
         self.assertEqual(result, expected)
 
     def test_empty_result_wo_slashes_should_return_url(self):
-        test_job = acid.status.tests.fixtures.job()
+        test_job = acid.features.status.tests.fixtures.job()
         test_job.result = None
         test_job.url = "fake_endpoint"
         expected = "http://fake_url/fake_endpoint"
@@ -163,7 +163,7 @@ class TestBuildset(TestCase):
                          "id": "12345,6", "active": True, "zuul_ref": "12345",
                          "enqueue_time": 0}
 
-        expected_buildset = acid.status.tests.fixtures.buildset()
+        expected_buildset = acid.features.status.tests.fixtures.buildset()
         expected_buildset.enqueue_time = 0
 
         result_buildset = Buildset.create(buildset=buildset_data)
@@ -172,22 +172,22 @@ class TestBuildset(TestCase):
         self.assertEquals(expected_buildset, result_buildset)
 
     def test_none_elapsed_time_should_return_0(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
         test_buildset.enqueue_time = None
         expected = 0
         result = test_buildset.elapsed_time
         self.assertEqual(result, expected)
 
     def test_zero_elapsed_time_should_return_0(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
         test_buildset.enqueue_time = 0
         expected = 0
         result = test_buildset.elapsed_time
         self.assertEqual(result, expected)
 
-    @mock.patch('acid.status.model.time')
+    @mock.patch('acid.features.status.model.time')
     def test_valid_elapsed_time_should_return_expected_time(self, time):
-        test_buildset = acid.status.tests.fixtures.buildset()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
         fixed_time = 1532004145.20974
         time.return_value = fixed_time
         result = test_buildset.elapsed_time
@@ -195,22 +195,23 @@ class TestBuildset(TestCase):
         self.assertEqual(result, expected)
 
     def test_remaining_wo_jobs_should_return_none(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
         test_buildset.jobs = []
         result = test_buildset.remaining_time
         self.assertIsNone(result)
 
     def test_remaining_with_job_wo_remaining_should_return_none(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_job = acid.status.tests.fixtures.job()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_job = acid.features.status.tests.fixtures.job()
         test_job.time_tracker.remaining = None
         test_buildset.jobs = [test_job]
         result = test_buildset.remaining_time
         self.assertIsNone(result)
 
     def test_remaining_with_multiple_jobs_should_return_longest_time(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_jobs = [acid.status.tests.fixtures.job() for x in range(3)]
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_jobs = [acid.features.status.tests.fixtures.job()
+                     for x in range(3)]
         max_time = max(job.time_tracker.remaining for job in test_jobs)
         test_buildset.jobs = test_jobs
         result = test_buildset.remaining_time
@@ -218,22 +219,23 @@ class TestBuildset(TestCase):
         self.assertEqual(result, expected)
 
     def test_start_wo_jobs_should_return_none(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
         test_buildset.jobs = []
         result = test_buildset.start_datetime
         self.assertIsNone(result)
 
     def test_start_with_job_wo_start_should_return_none(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_job = acid.status.tests.fixtures.job()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_job = acid.features.status.tests.fixtures.job()
         test_job.time_tracker.start = None
         test_buildset.jobs = [test_job]
         result = test_buildset.start_datetime
         self.assertIsNone(result)
 
     def test_start_with_multiple_jobs_should_return_earliest_time(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_jobs = [acid.status.tests.fixtures.job() for x in range(3)]
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_jobs = [acid.features.status.tests.fixtures.job()
+                     for x in range(3)]
         min_time = min(job.time_tracker.start for job in test_jobs)
         test_buildset.jobs = test_jobs
         result = test_buildset.start_datetime
@@ -241,15 +243,15 @@ class TestBuildset(TestCase):
         self.assertEqual(result, expected)
 
     def test_status_wo_jobs_should_have_enqueued_status(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
         test_buildset.jobs = []
         expected = 'Enqueued'
         result = test_buildset.status
         self.assertEqual(result, expected)
 
     def test_status_with_any_failing_voting_job_should_have_fail_status(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_job = acid.status.tests.fixtures.job()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_job = acid.features.status.tests.fixtures.job()
         test_job.voting = True
         test_buildset.jobs = [test_job]
         expected = "Failing"
@@ -260,8 +262,8 @@ class TestBuildset(TestCase):
             self.assertEqual(result, expected)
 
     def test_status_with_failing_notvoting_job_should_have_success_status(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_jobs = [acid.status.tests.fixtures.job()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_jobs = [acid.features.status.tests.fixtures.job()
                      for _ in Job.FAILING_RESULTS]
         for job, job_result in zip(test_jobs, Job.FAILING_RESULTS):
             job.result = job_result
@@ -275,8 +277,8 @@ class TestBuildset(TestCase):
     def test_status_wo_failing_and_voting_jobs_should_have_success_status(self):
         example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
 
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_jobs = [acid.status.tests.fixtures.job()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_jobs = [acid.features.status.tests.fixtures.job()
                      for _ in example_succeeding_job_results]
         for job, job_result in zip(test_jobs,
                                    example_succeeding_job_results):
@@ -290,8 +292,8 @@ class TestBuildset(TestCase):
     def test_status_with_only_notfailing_voting_jobs_should_have_success(self):
         example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
 
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_jobs = [acid.status.tests.fixtures.job()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_jobs = [acid.features.status.tests.fixtures.job()
                      for _ in example_succeeding_job_results]
         for job, job_result in zip(test_jobs,
                                    example_succeeding_job_results):
@@ -306,8 +308,9 @@ class TestBuildset(TestCase):
     def test_status_with_mixed_notvoting_jobs_should_have_success_status(self):
         job_results = ["SUCCESS", "ERROR", "SKIPPED"]
 
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_jobs = [acid.status.tests.fixtures.job() for _ in job_results]
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_jobs = [acid.features.status.tests.fixtures.job()
+                     for _ in job_results]
 
         for job, job_result in zip(test_jobs, job_results):
             job.result = job_result
@@ -321,8 +324,9 @@ class TestBuildset(TestCase):
     def test_status_with_mixed_voting_jobs_should_have_fail_status(self):
         job_results = ["SUCCESS", "ERROR", "SKIPPED"]
 
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_jobs = [acid.status.tests.fixtures.job() for _ in job_results]
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_jobs = [acid.features.status.tests.fixtures.job()
+                     for _ in job_results]
 
         for job, job_result in zip(test_jobs, job_results):
             job.result = job_result
@@ -334,43 +338,44 @@ class TestBuildset(TestCase):
         self.assertEqual(result, expected)
 
     def test_progress_wo_jobs_should_return_100(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
         test_buildset.jobs = []
         expected = 100
         result = test_buildset.progress
         self.assertEqual(result, expected)
 
     def test_progress_with_one_job_should_return_100(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_job = acid.status.tests.fixtures.job()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_job = acid.features.status.tests.fixtures.job()
         test_buildset.jobs = [test_job]
         expected = 100
         result = test_buildset.progress
         self.assertEqual(result, expected)
 
     def test_progress_with_multiple_jobs_should_return_expected(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
-        test_jobs = [acid.status.tests.fixtures.job() for x in range(3)]
+        test_buildset = acid.features.status.tests.fixtures.buildset()
+        test_jobs = [acid.features.status.tests.fixtures.job()
+                     for x in range(3)]
         test_buildset.jobs = test_jobs
         expected = 100 / len(test_jobs)
         result = test_buildset.progress
         self.assertEqual(result, expected)
 
     def test_none_enqueue_should_return_none(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
         test_buildset.enqueue_time = None
         result = test_buildset.enqueue
         self.assertIsNone(result)
 
     def test_zero_enqueue_should_return_current_date(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
         test_buildset.enqueue_time = 0
         result = test_buildset.enqueue
         expected = epoch_to_datetime(0)
         self.assertEqual(result, expected)
 
     def test_valid_enqueue_should_return_expected(self):
-        test_buildset = acid.status.tests.fixtures.buildset()
+        test_buildset = acid.features.status.tests.fixtures.buildset()
         result = test_buildset.enqueue
         expected = epoch_to_datetime(test_buildset.enqueue_time)
         self.assertEqual(result, expected)

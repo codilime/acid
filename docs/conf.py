@@ -115,7 +115,7 @@ htmlhelp_basename = 'TungstenCIDashboard'
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'TungstenCIDashboard', 'Tungsten CI dashboard Documentation',
+    (master_doc, 'TungstenCIDashboard', 'Tungsten CI acid Documentation',
      [author], 1)
 ]
 

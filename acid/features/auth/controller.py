@@ -6,11 +6,11 @@ from flask import (Blueprint, current_app, make_response,
 
 from werkzeug.utils import redirect
 
-from acid.auth import service
+from acid.features.auth import service
 from acid.controller import error_handlers
-from acid.auth.exceptions import AuthenticationFailed
+from acid.features.auth.exceptions import AuthenticationFailed
 
-auth = Blueprint('auth', __name__, template_folder='templates')
+auth = Blueprint('auth', __name__, template_folder='../../templates')
 
 
 @auth.route('/sign_in')

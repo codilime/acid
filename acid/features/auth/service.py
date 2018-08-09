@@ -7,8 +7,8 @@ from openid.consumer import consumer
 from openid.extensions import sreg
 
 from acid.config import config
-from acid.auth.exceptions import AuthenticationFailed
-from acid.auth.model import User
+from acid.features.auth.exceptions import AuthenticationFailed
+from acid.features.auth.model import User
 
 
 def create_user_session(user):

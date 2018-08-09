@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
 
-from acid.history.service import Paginator, pagination
+from acid.features.history.service import Paginator, pagination
 
 
 class TestPagination(TestCase):

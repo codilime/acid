@@ -3,7 +3,7 @@ import os
 
 from pony.orm import Database
 
-from dashboard.config import config
+from acid.config import config
 
 if os.getenv('FLASK_ENV') == 'production' and not os.getenv('DBPASSWORD'):
     raise Exception("On production use environment variables")

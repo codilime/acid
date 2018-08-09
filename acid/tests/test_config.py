@@ -16,7 +16,7 @@ class TestConfig(TestCase):
     def test_config_can_be_created_with_file_path_expect_types(self):
         Config(file_path=os.getenv('SETTINGS_PATH'))
         Config(file_path=os.path.normpath(os.getenv('SETTINGS_PATH')))
-        Config(file_path=bytes(os.getenv('SETTINGS_PATH'),encoding="utf-8"))
+        Config(file_path=bytes(os.getenv('SETTINGS_PATH'), encoding="utf-8"))
 
     def test_config_raises_when_file_path_is_unexpected_type(self):
         with self.assertRaises(TypeError):

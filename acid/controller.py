@@ -4,10 +4,9 @@ import requests
 from flask import (Blueprint, current_app,
                    make_response, render_template, request)
 
-from dashboard.status.exceptions import (BadDataFormat,
-                                         PipelineNotFound,
-                                         RemoteServerError)
-from dashboard.history.exceptions import PageOutOfRange
+from acid.features.status.exceptions import (BadDataFormat, PipelineNotFound,
+                                             RemoteServerError)
+from acid.features.history.exceptions import PageOutOfRange
 
 error_handlers = Blueprint('error_handlers', __name__,
                            template_folder='templates/errors')

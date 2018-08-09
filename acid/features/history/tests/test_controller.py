@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 import requests
 
-from re import search
+import re
 from unittest.mock import patch
 
-from app import app
+from acid.app import app
+from acid.tests import IntegrationTestCase
 
-from tests import IntegrationTestCase
 
-
-@patch('acid.history.controller.db.connect')
+@patch('acid.features.history.controller.db.connect')
 class TestControllerBuildHistory(IntegrationTestCase):
     def test_can_invoke_show_history_filterd_by_branch(self, *args):
         with app.test_client() as client:
@@ -17,7 +16,7 @@ class TestControllerBuildHistory(IntegrationTestCase):
             # Here we use regular expression to evade possible
             # changes in styling of the input form.
             reg_exp = b'<option[^>]+ selected="selected"[^>]>master</option>'
-            result = search(reg_exp, rv.data)
+            result = re.search(reg_exp, rv.data)
             self.assertIsNotNone(result)
 
     def test_can_invoke_show_history_filterd_by_build(self, *args):
@@ -26,7 +25,7 @@ class TestControllerBuildHistory(IntegrationTestCase):
             # Here we use regular expression to evade possible
             # changes in styling of the input form.
             reg_exp = b'<input type="text" name="build"[^>]+value="121'
-            result = search(reg_exp, rv.data)
+            result = re.search(reg_exp, rv.data)
             self.assertIsNotNone(result)
 
     def test_page_out_of_range_should_display_site_not_found(self, *args):

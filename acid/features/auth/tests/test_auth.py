@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase, mock
 
-from app import app
+from acid.app import app
+from acid.features.auth.tests.fixtures import UserFactory
 
-from acid.auth.tests.fixtures import UserFactory
 
-
-@mock.patch('acid.auth.service.fetch_user_data')
+@mock.patch('acid.features.auth.service.fetch_user_data')
 class TestAuthControllers(TestCase):
     def test_user_can_sign_in_and_sign_out(self, fetch_data):
         cases = (UserFactory.ROLE_ADMIN, UserFactory.ROLE_USER)

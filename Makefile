@@ -1,7 +1,7 @@
 .PHONY: clean docs help test
 .DEFAULT_GOAL := help
 
-APP=app.py
+APP=acid/app.py
 SETTINGS_DEV=settings.yml
 SETTINGS_TEST=settings_test.yml
 ENV_DEV=development

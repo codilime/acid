@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from acid.auth.model import User
+from acid.features.auth.model import User
 
 
 class UserFactory:
