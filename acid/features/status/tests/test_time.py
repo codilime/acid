@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
 
-from acid.features.status.time_utils import (epoch_to_datetime,
-                                             milliseconds_to_seconds,
-                                             seconds_to_time)
+from ..time_utils import (epoch_to_datetime, milliseconds_to_seconds,
+                          seconds_to_time)
 
 
 class TestTimeUtils(TestCase):

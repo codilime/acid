@@ -5,9 +5,8 @@ from pony.orm import db_session
 
 from acid import db
 from acid.config import config
-from acid.features.history.service import (BuildSetsFiltered,
-                                           BuildSetsPaginated,
-                                           pagination)
+
+from .service import BuildSetsFiltered, BuildSetsPaginated, pagination
 
 builds = Blueprint('builds', __name__, template_folder='../../templates')
 

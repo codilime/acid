@@ -3,7 +3,8 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from acid.config import config
-from acid.features.auth.tests import fixtures
+
+from . import fixtures
 
 
 class TestUsers(TestCase):

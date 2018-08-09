@@ -2,8 +2,8 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from acid.features.history.exceptions import PageOutOfRange
-from acid.features.history.service import BuildSetsPaginated
+from ..exceptions import PageOutOfRange
+from ..service import BuildSetsPaginated
 
 
 class TestBuildSets(TestCase):

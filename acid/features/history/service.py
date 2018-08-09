@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from collections import namedtuple
 
-from acid.features.history.exceptions import PageOutOfRange
-from acid.features.history.model import ZuulBuildSet
+from .exceptions import PageOutOfRange
+from .model import ZuulBuildSet
 
 Paginator = namedtuple("Paginator", ["pages", "previous_page",
                                      "next_page", "current_page"])

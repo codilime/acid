@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template
 
-from acid.features.status import service
+from . import service
+
 from acid.config import config
 
 

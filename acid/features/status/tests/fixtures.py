@@ -5,7 +5,8 @@ from random import randint
 from unittest.mock import MagicMock
 
 from acid.config import config
-from acid.features.status.model import Buildset, Job, TimeTracker
+
+from ..model import Buildset, Job, TimeTracker
 
 
 def time_tracker():

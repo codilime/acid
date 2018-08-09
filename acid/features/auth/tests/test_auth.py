@@ -2,7 +2,8 @@
 from unittest import TestCase, mock
 
 from acid.app import app
-from acid.features.auth.tests.fixtures import UserFactory
+
+from .fixtures import UserFactory
 
 
 @mock.patch('acid.features.auth.service.fetch_user_data')
