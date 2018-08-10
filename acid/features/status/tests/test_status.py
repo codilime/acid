@@ -255,8 +255,8 @@ class TestBuildset(unittest.TestCase):
         test_buildset.jobs = [test_job]
         expected = "Failing"
 
-        for fresult in Job.FAILING_RESULTS:
-            test_job.result = fresult
+        for failing_result in Job.FAILING_RESULTS:
+            test_job.result = failing_result
             result = test_buildset.status
             self.assertEqual(result, expected)
 
@@ -276,10 +276,8 @@ class TestBuildset(unittest.TestCase):
         example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
 
         test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job()
-                     for _ in example_succeeding_job_results]
-        for job, job_result in zip(test_jobs,
-                                   example_succeeding_job_results):
+        test_jobs = [fixtures.job() for _ in example_succeeding_job_results]
+        for job, job_result in zip(test_jobs, example_succeeding_job_results):
             job.result = job_result
         test_buildset.jobs = test_jobs
 
