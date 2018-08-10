@@ -348,8 +348,7 @@ class TestBuildset(unittest.TestCase):
 
     def test_progress_with_multiple_jobs_should_return_expected(self):
         test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job()
-                     for x in range(3)]
+        test_jobs = [fixtures.job() for x in range(3)]
         test_buildset.jobs = test_jobs
         expected = 100 / len(test_jobs)
         result = test_buildset.progress

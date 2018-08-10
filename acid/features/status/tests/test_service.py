@@ -29,8 +29,7 @@ class TestServicePipelineStats(unittest.TestCase):
     def test_pipelines_stats_returns_nothing_for_pipelines_not_in_config(self):
         resource = fixtures.load_status_data(
             name='status_pipelines_not_on_list_in_config')
-        result = service.pipelines_stats(
-            pipelines=resource['pipelines'])
+        result = service.pipelines_stats(pipelines=resource['pipelines'])
         expected = [PipelineStat(name='check', buildsets_count=0)]
         self.assertEqual(result, expected)
 
@@ -74,8 +73,7 @@ class TestServiceFetchData(unittest.TestCase):
         result.text = "{}"
         requests.get.return_value = result
         with self.assertRaises(RemoteServerError):
-            service.fetch_json_data(
-                endpoint='http://fake.endpoint')
+            service.fetch_json_data(endpoint='http://fake.endpoint')
 
     def test_fetch_return_expected_data(self, requests, *args):
         requests.get = fixtures.status_request(filename='status_check')
