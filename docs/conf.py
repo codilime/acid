@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Tungsten CI Dashboard'
+project = u'Tungsten CI Dashboard'
 copyright = u'2018, Tungsten Fabric'
 author = u'Tungsten Fabric'
 

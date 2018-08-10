@@ -1,9 +1,9 @@
 .PHONY: clean docs help test
 .DEFAULT_GOAL := help
 
-APP=app.py
+APP=acid/app.py
 SETTINGS_DEV=settings.yml
-SETTINGS_TEST=tests/static/test_settings.yml
+SETTINGS_TEST=settings_test.yml
 ENV_DEV=development
 ENV_TEST=testing
 
@@ -40,11 +40,11 @@ lint: ## check code style and formatting with flake8
 	flake8
 
 test: ## run tests
-	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_ENV=$(ENV_TEST) FLASK_APP=$(APP) TESTING=1 pytest tests/
+	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_ENV=$(ENV_TEST) FLASK_APP=$(APP) TESTING=1 pytest
 
 coverage: clean-cache ## create code coverage report
 	coverage erase
-	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_ENV=$(ENV_TEST) FLASK_APP=$(APP) TESTING=1 coverage run -m pytest tests/
+	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_ENV=$(ENV_TEST) FLASK_APP=$(APP) TESTING=1 coverage run -m pytest
 	coverage report -m
 	coverage html
 
