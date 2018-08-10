@@ -5,9 +5,10 @@ from unittest import mock
 from acid.app import app
 
 from .fixtures import UserFactory
+from .. import service
 
 
-@mock.patch('acid.features.auth.service.fetch_user_data')
+@mock.patch.object(service, 'fetch_user_data')
 class TestAuthControllers(unittest.TestCase):
     def test_user_can_sign_in_and_sign_out(self, fetch_data):
         cases = (UserFactory.ROLE_ADMIN, UserFactory.ROLE_USER)

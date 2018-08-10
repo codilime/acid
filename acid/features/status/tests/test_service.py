@@ -64,8 +64,8 @@ class TestServiceEndpointStatus(unittest.TestCase):
             self.assertEqual(result, expected)
 
 
-@patch('acid.features.status.service.current_app')
-@patch('acid.features.status.service.requests')
+@patch.object(service, 'current_app')
+@patch.object(service, 'requests')
 class TestServiceFetchData(unittest.TestCase):
     def test_fetch_raise_when_cant_download(self, requests, *args):
         result = MagicMock()
