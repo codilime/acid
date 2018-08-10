@@ -3,11 +3,11 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name='tungsten-ci-dashboard',
+    name='acid',
     version='0.0.0',
-    url='https://github.com/tungstenfabric/tungsten-ci-dashboard',
-    author='Tungsten Fabric',
-    description='CI dashboard for tungsten fabric repo',
+    url='https://github.com/codilime/acid',
+    author='CodiLime',
+    description='CI dashboard for zuul',
     packages=find_packages(exclude=('docs',)),
 )
 
