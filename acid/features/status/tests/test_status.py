@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
+import unittest
 from unittest import mock
 
 from . import fixtures
@@ -11,7 +11,7 @@ from ..time_utils import (epoch_to_datetime, milliseconds_to_seconds,
                           seconds_to_time)
 
 
-class TestTimeTracker(TestCase):
+class TestTimeTracker(unittest.TestCase):
     def test_none_start_to_datetime_should_return_none(self):
         tt = fixtures.time_tracker()
         tt.start = None
@@ -30,7 +30,7 @@ class TestTimeTracker(TestCase):
         result = tt.remaining_to_time
         self.assertIsNone(result)
 
-    def test_zero_remainig_to_time_should_return_zero(self):
+    def test_zero_remaining_to_time_should_return_zero(self):
         tt = fixtures.time_tracker()
         tt.remaining = 0
         result = tt.remaining_to_time
@@ -56,7 +56,7 @@ class TestTimeTracker(TestCase):
         self.assertEqual(result, expected)
 
 
-class TestJob(TestCase):
+class TestJob(unittest.TestCase):
     def compare_jobs(self, job1, job2, msg=None):
         self.assertDictEqual(job1.time_tracker.__dict__,
                              job2.time_tracker.__dict__, msg=msg)
@@ -146,7 +146,7 @@ class TestJob(TestCase):
         self.assertEqual(result, expected)
 
 
-class TestBuildset(TestCase):
+class TestBuildset(unittest.TestCase):
     def compare_buildsets(self, buildset1, buildset2, msg=None):
         # assumes buildset has empty job list
         self.assertDictEqual(buildset1.owner, buildset2.owner, msg=msg)
@@ -211,8 +211,7 @@ class TestBuildset(TestCase):
 
     def test_remaining_with_multiple_jobs_should_return_longest_time(self):
         test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job()
-                     for x in range(3)]
+        test_jobs = [fixtures.job() for x in range(3)]
         max_time = max(job.time_tracker.remaining for job in test_jobs)
         test_buildset.jobs = test_jobs
         result = test_buildset.remaining_time
@@ -235,8 +234,7 @@ class TestBuildset(TestCase):
 
     def test_start_with_multiple_jobs_should_return_earliest_time(self):
         test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job()
-                     for x in range(3)]
+        test_jobs = [fixtures.job() for x in range(3)]
         min_time = min(job.time_tracker.start for job in test_jobs)
         test_buildset.jobs = test_jobs
         result = test_buildset.start_datetime
@@ -262,10 +260,9 @@ class TestBuildset(TestCase):
             result = test_buildset.status
             self.assertEqual(result, expected)
 
-    def test_status_with_failing_notvoting_job_should_have_success_status(self):
+    def test_status_with_failing_non_voting_job_should_have_success_status(self):
         test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job()
-                     for _ in Job.FAILING_RESULTS]
+        test_jobs = [fixtures.job() for _ in Job.FAILING_RESULTS]
         for job, job_result in zip(test_jobs, Job.FAILING_RESULTS):
             job.result = job_result
             job.voting = False
@@ -290,14 +287,12 @@ class TestBuildset(TestCase):
         expected = "Succeeding"
         self.assertEqual(result, expected)
 
-    def test_status_with_only_notfailing_voting_jobs_should_have_success(self):
+    def test_status_with_only_succeeding_voting_jobs_should_have_success(self):
         example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
 
         test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job()
-                     for _ in example_succeeding_job_results]
-        for job, job_result in zip(test_jobs,
-                                   example_succeeding_job_results):
+        test_jobs = [fixtures.job() for _ in example_succeeding_job_results]
+        for job, job_result in zip(test_jobs, example_succeeding_job_results):
             job.result = job_result
             job.voting = True
         test_buildset.jobs = test_jobs
@@ -306,12 +301,11 @@ class TestBuildset(TestCase):
         expected = "Succeeding"
         self.assertEqual(result, expected)
 
-    def test_status_with_mixed_notvoting_jobs_should_have_success_status(self):
+    def test_status_with_mixed_non_voting_jobs_should_have_success_status(self):
         job_results = ["SUCCESS", "ERROR", "SKIPPED"]
 
         test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job()
-                     for _ in job_results]
+        test_jobs = [fixtures.job() for _ in job_results]
 
         for job, job_result in zip(test_jobs, job_results):
             job.result = job_result
@@ -326,8 +320,7 @@ class TestBuildset(TestCase):
         job_results = ["SUCCESS", "ERROR", "SKIPPED"]
 
         test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job()
-                     for _ in job_results]
+        test_jobs = [fixtures.job() for _ in job_results]
 
         for job, job_result in zip(test_jobs, job_results):
             job.result = job_result

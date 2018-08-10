@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
-from unittest import TestCase
+import unittest
 
 from acid.config import Config
 
 
-class TestConfig(TestCase):
+class TestConfig(unittest.TestCase):
     def test_config_object_can_be_created(self):
         Config(file_path=os.getenv('SETTINGS_PATH'))
 
@@ -35,7 +35,7 @@ class TestConfig(TestCase):
                               'users_file': 'test_admins.yml',
                               'secret_key': 'thisisverysecret',
                               'openid_provider':
-                              'https://login.launchpad.net/+openid'})
+                                  'https://login.launchpad.net/+openid'})
 
     def test_config_raises_when_try_to_set_new_section(self):
         config = Config(file_path=os.getenv('SETTINGS_PATH'))

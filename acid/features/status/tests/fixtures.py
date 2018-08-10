@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from os import path
+import os
 import json
 from random import randint
 from unittest.mock import MagicMock
@@ -32,7 +32,7 @@ def buildset():
 
 
 def status_request(filename=None, status_code=200):
-    current_dir = path.dirname(path.realpath(__file__))
+    current_dir = os.path.dirname(os.path.realpath(__file__))
     filename = filename or config['zuul']['status_endpoint']
     result = MagicMock()
     result.status_code = status_code
@@ -42,6 +42,6 @@ def status_request(filename=None, status_code=200):
 
 
 def load_status_data(name):
-    current_dir = path.dirname(path.realpath(__file__))
+    current_dir = os.path.dirname(os.path.realpath(__file__))
     with open(f'{current_dir}/static/{name}.json', "r") as data:
         return json.load(data)

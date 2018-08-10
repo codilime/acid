@@ -1,25 +1,26 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
+import unittest
 from unittest.mock import MagicMock, patch
 
 from ..exceptions import PageOutOfRange
 from ..service import BuildSetsPaginated
+from ..model import ZuulBuildSet
 
 
-class TestBuildSets(TestCase):
-    @patch('acid.features.history.model.ZuulBuildSet.get_for_pipeline')
+class TestBuildSets(unittest.TestCase):
+    @patch.object(ZuulBuildSet, 'get_for_pipeline')
     def test_create_buildsets_history_object(self, get_for_pipeline):
         buildsets = BuildSetsPaginated(pipeline="foo", per_page=20)
 
         self.assertEqual(buildsets.per_page, 20)
 
-    @patch('acid.features.history.model.ZuulBuildSet.get_for_pipeline')
+    @patch.object(ZuulBuildSet, 'get_for_pipeline')
     def test_create_query(self, get_for_pipeline):
         BuildSetsPaginated(pipeline="foo", per_page=20)
 
         get_for_pipeline.assert_called_with("foo")
 
-    @patch('acid.features.history.model.ZuulBuildSet.get_for_pipeline')
+    @patch.object(ZuulBuildSet, 'get_for_pipeline')
     def test_fetch_raises_when_page_is_out_of_range(self, get_for_pipeline):
         get_for_pipeline.return_value = [
             'first_element', 'second_element', 'third_element']
@@ -29,7 +30,7 @@ class TestBuildSets(TestCase):
         with self.assertRaises(PageOutOfRange):
             buildsets.fetch_page(2)
 
-    @patch('acid.features.history.model.ZuulBuildSet.get_for_pipeline')
+    @patch.object(ZuulBuildSet, 'get_for_pipeline')
     def test_fetch_set_correct_page(self, get_for_pipeline):
         data = ['first_element', 'second_element', 'third_element']
 

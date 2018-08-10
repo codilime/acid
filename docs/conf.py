@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Tungsten CI Dashboard'
+project = u'Tungsten CI Dashboard'
 copyright = u'2018, Tungsten Fabric'
 author = u'Tungsten Fabric'
 
@@ -115,7 +115,7 @@ htmlhelp_basename = 'TungstenCIDashboard'
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'TungstenCIDashboard', 'Tungsten CI acid Documentation',
+    (master_doc, 'TungstenCIDashboard', 'Tungsten CI dashboard Documentation',
      [author], 1)
 ]
 

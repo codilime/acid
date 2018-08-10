@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
+import unittest
 
 from ..service import Paginator, pagination
 
 
-class TestPagination(TestCase):
-    def test_zero_buildsests_should_return_empty_paginator(self):
+class TestPagination(unittest.TestCase):
+    def test_zero_buildsets_should_return_empty_paginator(self):
         paginator = pagination(number_of_buildsets=0,
                                page=1,
                                per_page=10,

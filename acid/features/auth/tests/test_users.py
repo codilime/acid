@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
+import unittest
 from unittest.mock import patch
 
 from acid.config import config
@@ -7,7 +7,7 @@ from acid.config import config
 from . import fixtures
 
 
-class TestUsers(TestCase):
+class TestUsers(unittest.TestCase):
     def test_user_is_admin_should_return_true(self):
         user = fixtures.UserFactory.get_user(fixtures.UserFactory.ROLE_ADMIN)
         self.assertTrue(user.is_admin())

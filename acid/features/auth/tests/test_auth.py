@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase, mock
+import unittest
+from unittest import mock
 
 from acid.app import app
 
@@ -7,7 +8,7 @@ from .fixtures import UserFactory
 
 
 @mock.patch('acid.features.auth.service.fetch_user_data')
-class TestAuthControllers(TestCase):
+class TestAuthControllers(unittest.TestCase):
     def test_user_can_sign_in_and_sign_out(self, fetch_data):
         cases = (UserFactory.ROLE_ADMIN, UserFactory.ROLE_USER)
 
@@ -27,7 +28,7 @@ class TestAuthControllers(TestCase):
                     self.assertNotIn(bytes(user.full_name, 'utf8'), r_out.data)
                     self.assertIn(b'Sign in', r_out.data)
 
-    def test_can_be_succesfull_redirect_to_openid_provider(self, *args):
+    def test_can_successfully_redirect_to_openid_provider(self, *args):
         with app.test_request_context():
             with app.test_client() as client:
                 r_in = client.get('/sign_in')

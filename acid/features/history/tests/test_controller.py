@@ -8,7 +8,7 @@ from acid.app import app
 from acid.tests import IntegrationTestCase
 
 
-@patch('acid.features.history.controller.db.connect')
+@patch('acid.db.connect')
 class TestControllerBuildHistory(IntegrationTestCase):
     def test_can_invoke_show_history_filterd_by_branch(self, *args):
         with app.test_client() as client:

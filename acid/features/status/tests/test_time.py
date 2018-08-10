@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
+import unittest
 
 from ..time_utils import (epoch_to_datetime, milliseconds_to_seconds,
                           seconds_to_time)
 
 
-class TestTimeUtils(TestCase):
+class TestTimeUtils(unittest.TestCase):
     def test_empty_epoch_to_datetime_should_raise_exception(self):
         with self.assertRaises(TypeError):
             epoch_to_datetime(seconds=None)
