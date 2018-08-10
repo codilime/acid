@@ -82,7 +82,7 @@ class TestServiceFetchData(unittest.TestCase):
         self.assertDictEqual(result, expected)
 
 
-@patch('acid.features.status.service.current_app')
+@patch.object(service, 'current_app')
 class TestServiceMakeQueues(unittest.TestCase):
     def test_raises_when_no_queues(self, *args):
         resources = fixtures.load_status_data(name='status_no_queues')

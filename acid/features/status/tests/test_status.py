@@ -2,11 +2,10 @@
 import unittest
 from unittest import mock
 
-from . import fixtures
-
 from acid.config import config
 
-from ..model import Buildset, Job, TimeTracker
+from . import fixtures
+from .. import model
 from ..time_utils import (epoch_to_datetime, milliseconds_to_seconds,
                           seconds_to_time)
 
@@ -76,18 +75,19 @@ class TestJob(unittest.TestCase):
                     "result": "test_result",
                     "name": "test_name"}
 
-        expected_job = Job(name="test_name", result="test_result",
-                           url="http://fake_url", report_url="http://fake_url",
-                           canceled=False, voting=False, retry=False,
-                           worker={"name": "fake_name"},
-                           time_tracker=TimeTracker(start=1,
-                                                    elapsed=1,
-                                                    remaining=1,
-                                                    estimated=1))
+        expected_job = model.Job(name="test_name", result="test_result",
+                                 url="http://fake_url",
+                                 report_url="http://fake_url",
+                                 canceled=False, voting=False, retry=False,
+                                 worker={"name": "fake_name"},
+                                 time_tracker=model.TimeTracker(start=1,
+                                                                elapsed=1,
+                                                                remaining=1,
+                                                                estimated=1))
 
-        return_job = Job.create(job=job_data)
+        return_job = model.Job.create(job=job_data)
 
-        self.addTypeEqualityFunc(Job, self.compare_jobs)
+        self.addTypeEqualityFunc(model.Job, self.compare_jobs)
         self.assertEquals(expected_job, return_job)
 
     def test_no_remaining_should_return_100(self):
@@ -167,9 +167,9 @@ class TestBuildset(unittest.TestCase):
         expected_buildset = fixtures.buildset()
         expected_buildset.enqueue_time = 0
 
-        result_buildset = Buildset.create(buildset=buildset_data)
+        result_buildset = model.Buildset.create(buildset=buildset_data)
 
-        self.addTypeEqualityFunc(Buildset, self.compare_buildsets)
+        self.addTypeEqualityFunc(model.Buildset, self.compare_buildsets)
         self.assertEquals(expected_buildset, result_buildset)
 
     def test_none_elapsed_time_should_return_0(self):
@@ -186,7 +186,7 @@ class TestBuildset(unittest.TestCase):
         result = test_buildset.elapsed_time
         self.assertEqual(result, expected)
 
-    @mock.patch('acid.features.status.model.time')
+    @mock.patch.object(model, 'time')
     def test_valid_elapsed_time_should_return_expected_time(self, time):
         test_buildset = fixtures.buildset()
         fixed_time = 1532004145.20974
@@ -255,15 +255,15 @@ class TestBuildset(unittest.TestCase):
         test_buildset.jobs = [test_job]
         expected = "Failing"
 
-        for failing_result in Job.FAILING_RESULTS:
+        for failing_result in model.Job.FAILING_RESULTS:
             test_job.result = failing_result
             result = test_buildset.status
             self.assertEqual(result, expected)
 
-    def test_status_with_failing_non_voting_job_should_have_success_status(self):
+    def test_status_with_failing_non_voting_job_should_success(self):
         test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job() for _ in Job.FAILING_RESULTS]
-        for job, job_result in zip(test_jobs, Job.FAILING_RESULTS):
+        test_jobs = [fixtures.job() for _ in model.Job.FAILING_RESULTS]
+        for job, job_result in zip(test_jobs, model.Job.FAILING_RESULTS):
             job.result = job_result
             job.voting = False
         test_buildset.jobs = test_jobs
