@@ -29,17 +29,17 @@
     </div>
     <div class="container mt-5 mb-5">
         <div class="row build-table table-head">
-            <div class="col">Branch</div>
+            <div class="col ml-2">Branch</div>
             <div class="col">Build number</div>
             <div class="col">Duration</div>
             <div class="col-2">Started</div>
             <div class="col-2">Finished</div>
             <div class="col-2 text-center">Result</div>
-            <div></div>
         </div>
         {% for b in buildsets.page %}
         <div class="row hover-row build-table clickable" data-toggle="collapse"
              data-target="#collapse-{{ b.id }}">
+            <div class="dropdown-toggle"></div>
             <div class="col">{{ b.branch }}</div>
             <div class="col"><a class="no-collapsable"
                                 href="{{ buildsets_log_url }}/{{ buildsets.pipeline }}/review.opencontrail.org/{{ b.branch }}/{{ b.build_number }}/"
@@ -51,7 +51,6 @@
                 <span
                     class="badge {% if b.result == 'SUCCESS' %} badge-success {% else %} badge-danger {% endif %}">{{ b.result }}</span>
             </div>
-            <div class="dropdown-toggle"></div>
         </div>
         <div class="collapse row justify-content-md-center p-3"
              id="collapse-{{ b.id }}">
