@@ -10,7 +10,7 @@ start = false
 [gerrit]
 port = 29418
 server = 127.0.0.1
-sshkey = {{ gerrit.home }}/.ssh/admin_id_rsa
+sshkey = /var/lib/zuul/.ssh/id_rsa
 user = admin
 
 [scheduler]
@@ -35,5 +35,5 @@ zuul_url = 127.0.0.1
 
 [web]
 log_config = /etc/zuul/web-logging.conf
-listen_address = 0.0.0.0
+listen_address = 127.0.0.1
 port = 9000

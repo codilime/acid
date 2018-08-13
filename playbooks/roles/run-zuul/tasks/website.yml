@@ -32,7 +32,7 @@
   shell: |
     set -e
     set -x
-    npm run build:dist -- --define ZUUL_API_URL="'http://10.10.10.5:9000'"
+    npm run build:dist -- --define ZUUL_API_URL="'http://10.10.10.5'"
   args:
     chdir: "{{ web_src }}"
 
@@ -62,7 +62,7 @@
 - name: Deploy Apache2 config for zuul website
   become: yes
   copy:
-    src: acid.conf.j2
+    src: acid_apache.conf.j2
     dest: /etc/apache2/sites-available/acid.conf
 
 - name: Enable acid website
@@ -71,6 +71,13 @@
     src: /etc/apache2/sites-available/acid.conf
     dest: /etc/apache2/sites-enabled/acid.conf
     state: link
+
+- name: Enable mod_proxy
+  become: yes
+  shell: |
+    set -e
+    set -x
+    a2enmod proxy proxy_http
 
 - name: Restart Apache2
   become: yes
