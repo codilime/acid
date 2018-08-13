@@ -2,11 +2,14 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from ..exceptions import PageOutOfRange
 from ..service import BuildSetsPaginated
 from ..model import ZuulBuildSet
 
 
+@pytest.mark.unit
 class TestBuildSets(unittest.TestCase):
     @patch.object(ZuulBuildSet, 'get_for_pipeline')
     def test_create_buildsets_history_object(self, get_for_pipeline):

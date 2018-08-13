@@ -2,12 +2,15 @@
 import unittest
 from unittest import mock
 
+import pytest
+
 from acid.app import app
 
 from .fixtures import UserFactory
 from .. import service
 
 
+@pytest.mark.integration
 @mock.patch.object(service, 'fetch_user_data')
 class TestAuthControllers(unittest.TestCase):
     def test_user_can_sign_in_and_sign_out(self, fetch_data):

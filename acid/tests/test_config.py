@@ -2,9 +2,12 @@
 import os
 import unittest
 
+import pytest
+
 from acid.config import Config
 
 
+@pytest.mark.unit
 class TestConfig(unittest.TestCase):
     def test_config_object_can_be_created(self):
         Config(file_path=os.getenv('SETTINGS_PATH'))

@@ -2,6 +2,8 @@
 import unittest
 from unittest import mock
 
+import pytest
+
 from acid.config import config
 
 from . import fixtures
@@ -10,6 +12,7 @@ from ..time_utils import (epoch_to_datetime, milliseconds_to_seconds,
                           seconds_to_time)
 
 
+@pytest.mark.unit
 class TestTimeTracker(unittest.TestCase):
     def test_none_start_to_datetime_should_return_none(self):
         tt = fixtures.time_tracker()
@@ -55,6 +58,7 @@ class TestTimeTracker(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
+@pytest.mark.unit
 class TestJob(unittest.TestCase):
     def compare_jobs(self, job1, job2, msg=None):
         self.assertDictEqual(job1.time_tracker.__dict__,
@@ -146,6 +150,7 @@ class TestJob(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
+@pytest.mark.unit
 class TestBuildset(unittest.TestCase):
     def compare_buildsets(self, buildset1, buildset2, msg=None):
         # assumes buildset has empty job list
