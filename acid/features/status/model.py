@@ -23,7 +23,9 @@ class Queue:
     def create(cls, queue):
         buildsets = []
         if len(queue['heads']) > 0:
-            buildsets = [Buildset.create(b) for b in queue['heads'][0]]
+            for head in queue['heads']:
+                for buildset in head:
+                    buildsets.append(Buildset.create(buildset))
         return cls(queue['name'], buildsets)
 
 
