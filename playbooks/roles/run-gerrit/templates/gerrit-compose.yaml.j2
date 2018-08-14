@@ -13,6 +13,9 @@ services:
     ports:
       - "29418:29418"
       - "8080:8080"
+    deploy:
+      restart_policy:
+        condition: always
 
 volumes:
   cache-volume:
