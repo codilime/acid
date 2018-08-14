@@ -2,6 +2,8 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from .. import service
 from . import fixtures
 
@@ -11,6 +13,7 @@ from ..exceptions import PipelineNotFound, RemoteServerError
 from ..model import PipelineStat
 
 
+@pytest.mark.unit
 class TestServicePipelineStats(unittest.TestCase):
     def test_pipelines_stats_returns_empty_when_no_pipelines(self):
         resource = fixtures.load_status_data(name='status_no_pipelines')
@@ -41,6 +44,7 @@ class TestServicePipelineStats(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
+@pytest.mark.unit
 class TestServiceEndpointStatus(unittest.TestCase):
     def test_status_endpoint_returns_expected_when_no_slashes(self):
         with patch.dict(config['zuul'], {'url': 'http://fake.url',
@@ -64,6 +68,7 @@ class TestServiceEndpointStatus(unittest.TestCase):
             self.assertEqual(result, expected)
 
 
+@pytest.mark.unit
 @patch.object(service, 'current_app')
 @patch.object(service, 'requests')
 class TestServiceFetchData(unittest.TestCase):
@@ -82,6 +87,7 @@ class TestServiceFetchData(unittest.TestCase):
         self.assertDictEqual(result, expected)
 
 
+@pytest.mark.unit
 @patch.object(service, 'current_app')
 class TestServiceMakeQueues(unittest.TestCase):
     def test_raises_when_no_queues(self, *args):

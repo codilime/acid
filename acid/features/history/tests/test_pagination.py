@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import unittest
 
+import pytest
+
 from ..service import Paginator, pagination
 
 
+@pytest.mark.unit
 class TestPagination(unittest.TestCase):
     def test_zero_buildsets_should_return_empty_paginator(self):
         paginator = pagination(number_of_buildsets=0,

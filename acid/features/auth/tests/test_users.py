@@ -2,11 +2,14 @@
 import unittest
 from unittest.mock import patch
 
+import pytest
+
 from acid.config import config
 
 from . import fixtures
 
 
+@pytest.mark.unit
 class TestUsers(unittest.TestCase):
     def test_user_is_admin_should_return_true(self):
         user = fixtures.UserFactory.get_user(fixtures.UserFactory.ROLE_ADMIN)

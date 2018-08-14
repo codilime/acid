@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import pytest
+
 import requests
 
 import re
@@ -8,6 +10,7 @@ from acid.app import app
 from acid.tests import IntegrationTestCase
 
 
+@pytest.mark.integration
 @patch('acid.db.connect')
 class TestControllerBuildHistory(IntegrationTestCase):
     def test_can_invoke_show_history_filterd_by_branch(self, *args):
