@@ -6,6 +6,7 @@
     set -x
     docker run -d \
                -p 3306:3306 \
+               --restart=unless-stopped \
                --name {{ zuul.history_db.name }} \
                -e MYSQL_ROOT_PASSWORD={{ zuul.history_db.pass }} \
                mariadb:10.3
