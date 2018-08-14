@@ -1,30 +1,22 @@
 # -*- coding: utf-8 -*-
 import requests
 
-from flask import (Blueprint, current_app,
-                   make_response, render_template, request)
+from flask import Blueprint
 
+from acid.error_handler import ErrorHandler, bind_error_handlers
+from acid.features.history.exceptions import PageOutOfRange
 from acid.features.status.exceptions import (BadDataFormat, PipelineNotFound,
                                              RemoteServerError)
-from acid.features.history.exceptions import PageOutOfRange
 
 error_handlers = Blueprint('error_handlers', __name__,
                            template_folder='templates/errors')
 
 
-@error_handlers.app_errorhandler(BadDataFormat)
-@error_handlers.app_errorhandler(RemoteServerError)
-@error_handlers.app_errorhandler(Exception)
-def generic_error(error):
-    current_app.logger.error(f'{error}; raised on URL: {request.url}')
-    return make_response(render_template('error.html'),
-                         requests.codes.server_error)
+handlers = [
+    ErrorHandler([BadDataFormat, RemoteServerError, Exception], 'error.html',
+                 requests.codes.server_error),
+    ErrorHandler([PipelineNotFound, PageOutOfRange, 404], 'error_404.html',
+                 requests.codes.not_found),
+]
 
-
-@error_handlers.app_errorhandler(PipelineNotFound)
-@error_handlers.app_errorhandler(PageOutOfRange)
-@error_handlers.app_errorhandler(404)
-def error_404(error):
-    current_app.logger.error(f'{error}; raised on URL: {request.url}')
-    return make_response(render_template('error_404.html'),
-                         requests.codes.not_found)
+bind_error_handlers(error_handlers, handlers)
