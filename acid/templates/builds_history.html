@@ -35,7 +35,7 @@
             <div class="col">Started</div>
             <div class="col">Finished</div>
             <div class="col text-center">Result</div>
-            <div class="col text-center" >Permalink</div>
+            <div class="col text-center">Permalink</div>
         </div>
         {% for b in buildsets.page %}
         <div class="row hover-row build-table clickable {% if not request.args.unfold %}collapsed{% endif %}"
@@ -54,7 +54,7 @@
                 <span class="badge {% if b.result == 'SUCCESS' %} badge-success {% else %} badge-danger {% endif %}">{{ b.result }}</span>
             </div>
             <div class="col text-center">
-                <a class="btn btn-outline-primary" href="builds?branch={{b.branch}}&build={{b.build_number}}&unfold=true">permalink</a>
+                <a class="btn btn-outline-primary" href="{{ url_for('builds.show_builds_history', branch=b.branch, build=b.build_number, unfold=true) }}">permalink</a>
             </div>
         </div>
         <div class="collapse row justify-content-md-center p-3 {% if request.args.unfold %}show{% endif %}"
