@@ -28,11 +28,11 @@
     cursor: pointer;
 }
 
-.row.hover-row.build-table.clickable.collapsed {
+.build-table.clickable.collapsed {
     background: #fff;
 }
 
-.row.hover-row.build-table.clickable {
+.build-table.clickable {
     background: #ccc;
 }
 
