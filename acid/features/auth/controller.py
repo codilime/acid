@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import requests
 
-from flask import (Blueprint, current_app, make_response, redirect,
-                   render_template, request, url_for)
-
-from . import service
+from flask import Blueprint, redirect, url_for
 
 from acid.controller import error_handlers
+from acid.error_handler import ErrorHandler, bind_error_handlers
 
+from . import service
 from .exceptions import AuthenticationFailed
 
 auth = Blueprint('auth', __name__, template_folder='../../templates')
@@ -32,8 +31,9 @@ def sign_out():
     return redirect(url_for('status.show_dashboard'))
 
 
-@error_handlers.app_errorhandler(AuthenticationFailed)
-def auth_error(error):
-    current_app.logger.error(f'{error}; raised on URL: {request.url}')
-    return make_response(render_template('auth_error.html'),
-                         requests.codes.unauthorized)
+handlers = [
+    ErrorHandler([AuthenticationFailed], 'auth_error.html',
+                 requests.codes.unauthorized)
+]
+
+bind_error_handlers(error_handlers, handlers)
