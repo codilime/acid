@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import requests
 
-from flask import (Blueprint, current_app, make_response,
+from flask import (Blueprint, current_app, make_response, redirect,
                    render_template, request, url_for)
-
-from werkzeug.utils import redirect
 
 from . import service
 
