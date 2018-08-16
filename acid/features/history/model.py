@@ -5,6 +5,7 @@ from pony.orm import Optional, Set, desc, raw_sql, select
 
 from acid.db import db
 
+from acid.config import config
 
 class ZuulBuildSet(db.Entity):
     _table_ = "zuul_buildset"
@@ -40,7 +41,7 @@ class ZuulBuildSet(db.Entity):
 
     @property
     def branch(self):
-        return self.ref.split('/')[-1]
+        return self.ref[config['buildset']['build_start']:]
 
     @property
     def duration(self):
@@ -60,7 +61,7 @@ class ZuulBuildSet(db.Entity):
 
     @classmethod
     def get_branches(cls):
-        branches = select(raw_sql("SUBSTRING_INDEX(ref, '/', -1)") for b in cls)
+        branches = select(b.branch for b in cls)
         return branches
 
     @classmethod
