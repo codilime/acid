@@ -6,7 +6,7 @@ from flask import Blueprint, abort, redirect, render_template, request, url_for
 from acid.config import config
 
 from ..auth.model import get_current_user
-from . import service
+from .manager import ZuulManager
 
 zuul_manager = Blueprint('zuul_manager', __name__,
                          template_folder='../../templates')
@@ -32,6 +32,8 @@ def manage():
     branch = request.form.get('branch')
     action = request.form.get('action')
 
+    zuul_manager = ZuulManager(**config['zuul']['manager'])
+
     for pipeline in config['zuul']['build_enqueue']['pipelines']:
         if pipeline_name not in pipeline.keys():
             continue
@@ -39,9 +41,9 @@ def manage():
             continue
 
         if action == 'start':
-            service.start_buildset(pipeline_name, branch)
+            zuul_manager.enqueue(pipeline_name, branch)
         elif action == 'stop':
-            service.stop_buildset(pipeline_name, branch)
+            zuul_manager.dequeue(pipeline_name, branch)
         else:
             abort(requests.codes.bad_request)
 
