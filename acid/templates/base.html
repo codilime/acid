@@ -30,7 +30,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown {% if request.path.startswith("/status") %}active{% endif %}">
+                <li class="nav-item dropdown {% if request.path.startswith('/status') %}active{% endif %}">
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Status</a>
                     <div class="dropdown-menu" style="width:auto">
                         {% for pipeline in pipelines %}
@@ -39,14 +39,19 @@
                         {% endfor %}
                     </div>
                 </li>
-                <li class="nav-item {% if request.path.startswith("/builds") %}active{% endif %}">
+                <li class="nav-item {% if request.path.startswith('/builds') %}active{% endif %}">
                     <a class="nav-link" href="{{ url_for('builds.show_builds_history') }}">Builds</a>
                 </li>
+                {% if current_user and current_user.is_admin() %}
+                    <li class="nav-item {% if request.path.startswith('/control') %}active{% endif %}">
+                        <a class="nav-link" href="{{ url_for('zuul_manager.show_panel') }}">Zuul manager</a>
+                    </li>
+                {% endif %}
             </ul>
             <ul class="navbar-nav pull-right">
-                {% if session and session['user'] %}
+                {% if current_user %}
                     <li class="navbar-text">
-                        {{ session['user'].full_name }} {{ session['user'].email }}
+                        {{ current_user.full_name }} {{ current_user.email }}
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('auth.sign_out') }}">Sign out</a>

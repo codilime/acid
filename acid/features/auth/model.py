@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
+from flask import session
+
 from acid.config import Config, config
+
+
+def get_current_user():
+    if not session:
+        return None
+    else:
+        return session.get('user')
 
 
 class User:

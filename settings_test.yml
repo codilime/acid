@@ -16,7 +16,7 @@ buildset:
   page_links: 4
   log_url: 'http://logs.opencontrail.org'
 zuul:
-  url: 'http://localhost:3000/'
+  url: 'http://127.0.0.1:3000/'
   status_endpoint: 'static/status.json'
   pipelines:
     - check
@@ -25,3 +25,8 @@ zuul:
     - periodic-sanity
     - experimental
     - experimental-provision
+  build_enqueue:
+    pipelines:
+      - periodic-nightly:
+          - master
+          - R5.0

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Zuul manager{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <h1>Zuul manager</h1>
+            </div>
+        </div>
+        <div class="row mt-5 mb-2">
+            <div class="col-md-12 col-lg-6 offset-lg-3">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Pipeline</th>
+                                <th scope="col">Branch</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for pipelines in pipelines %}
+                            {% for pipeline_name, branches in pipelines.items() %}
+                                {% for branch in branches %}
+                                    <tr>
+                                        <td> {{ pipeline_name }}</td>
+                                        <td> {{ branch }}</td>
+                                        <td>
+                                            <form class="form" method="POST" action="{{ url_for('zuul_manager.manage') }}">
+                                                <input type="hidden" name="branch" value="{{ branch }}">
+                                                <input type="hidden" name="pipeline_name" value="{{ pipeline_name }}">
+                                                <button type="submit" class="btn btn-success" name="action" value="stop">START</button>
+                                                <button type="submit" class="btn btn-danger" name="action" value="stop">STOP</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
