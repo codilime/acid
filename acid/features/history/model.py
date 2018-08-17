@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
-from pony.orm import Optional, Set, desc, raw_sql, select
+from pony.orm import Optional, Set, desc, select
 
 from acid.db import db
 
-from acid.config import config
 
 class ZuulBuildSet(db.Entity):
-
     _table_ = "zuul_buildset"
     zuul_ref = Optional(str)
     pipeline = Optional(str)
