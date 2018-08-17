@@ -42,7 +42,9 @@ class ZuulBuildSet(db.Entity):
     def branch(self):
         # cannot declarate lenght of string using variable due to ponyORM
         # limitation. It must be a int inside string slice (for pony 0.7.4
-        # and 0.7.5). PLEASE CHANGE FOR OTHER PIPELINES
+        # and 0.7.5). We can take branch name only from ref. Each ref string
+        # starts with refs/heads/. Number 11 cuts ref and leave only branch
+        # name. PLEASE CHANGE FOR OTHER PIPELINES
         return self.ref[11:]
 
     @property
