@@ -26,7 +26,7 @@ class TestZuulConnector(unittest.TestCase):
         with self.assertRaises(ZuulManagerConfig):
             ZuulManager(host="host",
                         username="user",
-                        user_key_file=path_to_test_file("test_user_key"),
+                        user_key_file=path_to_test_file("insecure_user_key"),
                         host_key_file="there/is/no/file",
                         tenant="tenant",
                         trigger="trigger",
@@ -36,7 +36,7 @@ class TestZuulConnector(unittest.TestCase):
     def test_can_set_autoadd_policy(self):
         ZuulManager(host="host",
                     username="user",
-                    user_key_file=path_to_test_file("test_user_key"),
+                    user_key_file=path_to_test_file("insecure_user_key"),
                     host_key_file=path_to_test_file("host_key.pub"),
                     tenant="tenant",
                     trigger="trigger",
@@ -46,7 +46,7 @@ class TestZuulConnector(unittest.TestCase):
     def test_can_set_reject_policy(self):
         ZuulManager(host="host",
                     username="user",
-                    user_key_file=path_to_test_file("test_user_key"),
+                    user_key_file=path_to_test_file("insecure_user_key"),
                     host_key_file=path_to_test_file("host_key.pub"),
                     tenant="tenant",
                     trigger="trigger",
@@ -57,7 +57,7 @@ class TestZuulConnector(unittest.TestCase):
         with self.assertRaises(ZuulManagerConfig):
             ZuulManager(host="host",
                         username="user",
-                        user_key_file=path_to_test_file("test_user_key"),
+                        user_key_file=path_to_test_file("insecure_user_key"),
                         host_key_file=path_to_test_file("host_key.pub"),
                         tenant="tenant",
                         trigger="trigger",
@@ -68,7 +68,7 @@ class TestZuulConnector(unittest.TestCase):
     def test_enqueue_generate_correct_command(self, run_command):
         zuul = ZuulManager(host="host",
                            username="user",
-                           user_key_file=path_to_test_file("test_user_key"),
+                           user_key_file=path_to_test_file("insecure_user_key"),
                            host_key_file=path_to_test_file("host_key.pub"),
                            tenant="tenant",
                            trigger="trigger",
@@ -85,7 +85,7 @@ class TestZuulConnector(unittest.TestCase):
     def test_dequeue_generate_correct_command(self, run_command):
         zuul = ZuulManager(host="host",
                            username="user",
-                           user_key_file=path_to_test_file("test_user_key"),
+                           user_key_file=path_to_test_file("insecure_user_key"),
                            host_key_file=path_to_test_file("host_key.pub"),
                            tenant="tenant",
                            trigger="trigger",
@@ -101,7 +101,7 @@ class TestZuulConnector(unittest.TestCase):
     def test_enqueue_correct_escape_insecure_args(self, run_command):
         zuul = ZuulManager(host="host",
                            username="user",
-                           user_key_file=path_to_test_file("test_user_key"),
+                           user_key_file=path_to_test_file("insecure_user_key"),
                            host_key_file=path_to_test_file("host_key.pub"),
                            tenant="TENANT",
                            trigger="TRIGGER",
@@ -118,7 +118,7 @@ class TestZuulConnector(unittest.TestCase):
     def test_dequeue_correct_escape_insecure_args(self, run_command):
         zuul = ZuulManager(host="host",
                            username="user",
-                           user_key_file=path_to_test_file("test_user_key"),
+                           user_key_file=path_to_test_file("insecure_user_key"),
                            host_key_file=path_to_test_file("host_key.pub"),
                            tenant="TENANT",
                            trigger="TRIGGER",

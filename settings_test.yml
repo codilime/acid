@@ -33,9 +33,9 @@ zuul:
   manager:
     host: '10.10.10.5'
     username: 'vagrant'
-    user_key_file: 'acid/features/zuul_manager/tests/static/test_user_key' # ssh client key
+    user_key_file: 'acid/features/zuul_manager/tests/static/insecure_user_key' # ssh client key
     host_key_file: 'acid/features/zuul_manager/tests/static/host_key.pub' # file with fingerprint from host with zuul
     tenant: 'acid'
     trigger: 'timer'
     project: 'acid-test-dev'
-    policy: 'AutoAddPolicy'
+    policy: 'RejectPolicy'
