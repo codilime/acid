@@ -8,6 +8,7 @@ from acid.db import db
 from acid.config import config
 
 class ZuulBuildSet(db.Entity):
+
     _table_ = "zuul_buildset"
     zuul_ref = Optional(str)
     pipeline = Optional(str)
@@ -41,7 +42,10 @@ class ZuulBuildSet(db.Entity):
 
     @property
     def branch(self):
-        return self.ref[config['buildset']['build_start']:]
+        # cannot declarate lenght of string using variable due to ponyORM
+        # limitation. It must be a int inside string slice (for pony 0.7.4
+        # and 0.7.5). PLEASE CHANGE FOR OTHER PIPELINES
+        return self.ref[11:]
 
     @property
     def duration(self):
