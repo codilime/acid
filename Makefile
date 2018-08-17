@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 
 APP=acid/app.py
-SETTINGS_DEV=settings_dev.yml
+SETTINGS_DEV=settings.yml
 SETTINGS_TEST=settings_test.yml
 
 help:
@@ -15,7 +15,7 @@ install-dev: install ## install required dependencies with test-requirements
 	pip install -r requirements.txt
 	pip install -r test-requirements.txt
 
-clean: clean-build clean-pyc clean-cache clean-session clean-dev-settings clean-venv ## clean all artifacts and cache
+clean: clean-build clean-pyc clean-cache clean-session clean-venv ## clean all artifacts and cache
 
 clean-build: ## remove build artifacts
 	rm -fr build/
@@ -33,9 +33,6 @@ clean-cache: ## remove .cache and .pytest_cache
 
 clean-session: ## remove flask_session files
 	rm -rf flask_session/
-
-clean-dev-settings: ## remove local dev-settings
-	rm $(SETTINGS_DEV)
 
 lint: ## check code style and formatting with flake8
 	flake8
@@ -58,7 +55,7 @@ docs: ## generate Sphinx HTML documentation
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 
-serve: create-settings ## run Flask server in development mode
+serve: ## run Flask server in development mode
 	SETTINGS_PATH=$(SETTINGS_DEV) FLASK_ENV=development FLASK_APP=$(APP) flask run --port 3000
 
 dev-run: ## run vagrant box with Zuul and Gerrit
@@ -80,6 +77,3 @@ venv: clean-venv ## create basic virtual environment
 	pip install --upgrade pip; \
 	pip install setuptools wheel; \
 	$(MAKE) install-dev; \
-
-create-settings: ## create dev settings
-	./bin/create_dev_settings.sh
