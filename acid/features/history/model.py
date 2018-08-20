@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
-from pony.orm import Optional, Set, desc, raw_sql, select
+from pony.orm import Optional, Set, desc, select
 
 from acid.db import db
 
@@ -40,7 +40,12 @@ class ZuulBuildSet(db.Entity):
 
     @property
     def branch(self):
-        return self.ref.split('/')[-1]
+        # cannot declarate lenght of string using variable due to ponyORM
+        # limitation. It must be a int inside string slice (for pony 0.7.4
+        # and 0.7.5). We can take branch name only from ref. Each ref string
+        # starts with refs/heads/. Number 11 cuts ref and leave only branch
+        # name. PLEASE CHANGE FOR OTHER PIPELINES
+        return self.ref[11:]
 
     @property
     def duration(self):
@@ -60,7 +65,7 @@ class ZuulBuildSet(db.Entity):
 
     @classmethod
     def get_branches(cls):
-        branches = select(raw_sql("SUBSTRING_INDEX(ref, '/', -1)") for b in cls)
+        branches = select(b.branch for b in cls)
         return branches
 
     @classmethod
