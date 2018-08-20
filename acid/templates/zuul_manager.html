@@ -29,7 +29,7 @@
                                             <form class="form" method="POST" action="{{ url_for('zuul_manager.manage') }}">
                                                 <input type="hidden" name="branch" value="{{ branch }}">
                                                 <input type="hidden" name="pipeline_name" value="{{ pipeline_name }}">
-                                                <button type="submit" class="btn btn-success" name="action" value="stop">START</button>
+                                                <button type="submit" class="btn btn-success" name="action" value="start">START</button>
                                                 <button type="submit" class="btn btn-danger" name="action" value="stop">STOP</button>
                                             </form>
                                         </td>

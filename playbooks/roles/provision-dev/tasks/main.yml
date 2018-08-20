@@ -99,3 +99,12 @@
 - name: Set VIM as default editor
   become: yes
   shell: update-alternatives --set editor /usr/bin/vim.basic
+
+- name: Copy host public key
+  become: yes
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/ssh/{{ item }}"
+  with_items:
+    - ssh_host_ed25519_key
+    - ssh_host_ed25519_key.pub

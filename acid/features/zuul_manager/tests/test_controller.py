@@ -91,3 +91,31 @@ class TestControlPanel(IntegrationTestCase):
                                         'branch': 'fake-branch',
                                         'action': 'start'})
         self.assertEqual(res.status_code, codes.bad_request)
+
+    def test_starts_build_successful_connect_to_zuul(self, fetch_data):
+        user = UserFactory.get_user(role=UserFactory.ROLE_ADMIN)
+        fetch_data.return_value = user
+        with app.test_request_context():
+            with app.test_client() as client:
+                client.get('/signed_in', follow_redirects=True)
+                res = client.post('/zuul_manager/manage',
+                                  follow_redirects=True,
+                                  data={'pipeline_name': 'periodic-nightly',
+                                        'branch': 'master',
+                                        'action': 'start'})
+        self.assertEqual(res.status_code, codes.ok)
+
+    def test_with_incorect_settings_cant_connect_to_zuul(self, fetch_data):
+        user = UserFactory.get_user(role=UserFactory.ROLE_ADMIN)
+        fetch_data.return_value = user
+        with app.test_request_context():
+            with app.test_client() as client:
+                with mock.patch.dict(config['zuul']['manager'],
+                                     {'username': 'not'}):
+                    client.get('/signed_in', follow_redirects=True)
+                    res = client.post('/zuul_manager/manage',
+                                      follow_redirects=True,
+                                      data={'pipeline_name': 'periodic-nightly',
+                                            'branch': 'master',
+                                            'action': 'start'})
+        self.assertEqual(res.status_code, codes.server_error)
