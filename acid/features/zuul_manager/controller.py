@@ -5,7 +5,7 @@ from flask import Blueprint, abort, redirect, render_template, request, url_for
 
 from acid.config import config
 
-from ..auth.model import get_current_user
+from ..auth.service import login_required
 from .manager import ZuulManager
 
 zuul_manager = Blueprint('zuul_manager', __name__,
@@ -13,21 +13,15 @@ zuul_manager = Blueprint('zuul_manager', __name__,
 
 
 @zuul_manager.route('/zuul_manager')
+@login_required
 def show_panel():
-    current_user = get_current_user()
-    if not current_user or not current_user.is_admin():
-        abort(requests.codes.unauthorized)
-
     pipelines = config['zuul']['build_enqueue']['pipelines']
     return render_template('zuul_manager.html', pipelines=pipelines)
 
 
 @zuul_manager.route('/zuul_manager/manage', methods=['POST'])
+@login_required
 def manage():
-    current_user = get_current_user()
-    if not current_user or not current_user.is_admin():
-        abort(requests.codes.unauthorized)
-
     pipeline_name = request.form.get('pipeline_name')
     branch = request.form.get('branch')
     action = request.form.get('action')
