@@ -16,8 +16,8 @@ buildset:
   page_links: 4
   log_url: 'http://logs.opencontrail.org'
 zuul:
-  url: 'http://127.0.0.1:3000/'
-  status_endpoint: 'static/status.json'
+  url: 'http://10.10.10.5/'
+  status_endpoint: 'status.json'
   pipelines:
     - check
     - gate
