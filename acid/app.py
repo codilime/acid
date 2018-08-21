@@ -34,5 +34,5 @@ app.register_blueprint(zuul_manager)
 
 @app.context_processor
 def template_context():
-    return {'pipenames': config['zuul']['pipelines'],
+    return {'pipeline_names': config['zuul']['pipelines'],
             'current_user': get_current_user()}

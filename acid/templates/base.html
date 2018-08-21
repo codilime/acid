@@ -33,7 +33,7 @@
                 <li class="nav-item dropdown {% if request.path.startswith('/status') %}active{% endif %}">
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Status</a>
                     <div class="dropdown-menu" style="width:auto">
-                        {% for pipeline in pipenames %}
+                        {% for pipeline in pipeline_names %}
                             <a class="dropdown-item"
                                href="{{ url_for('status.show_status', pipename=pipeline) }}">{{ pipeline }}</a>
                         {% endfor %}
