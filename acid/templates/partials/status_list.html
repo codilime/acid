@@ -41,7 +41,7 @@
                                 <tr>
                                     <td>
                                         <a href="{{ job.log_url }}">{{ job.name }}</a> {% if not job.voting %} <span class="badge badge-secondary">non-voting</span>{% endif %}
-                                        {% if job.cancelled %} <span class="badge badge-danger">cancelled</span>{% endif %}
+                                        {% if job.canceled %} <span class="badge badge-danger">canceled</span>{% endif %}
                                         {% if job.retry %} <span class="badge badge-info">retry</span>{% endif %}
                                     </td>
                                     <td>{{ job.worker.name }}</td>
