@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+from functools import wraps
 from urllib.parse import urljoin
 
-from flask import request, session, url_for
+import requests
+
+from flask import abort, request, session, url_for
 
 from openid.consumer import consumer
 from openid.extensions import sreg
@@ -9,7 +12,7 @@ from openid.extensions import sreg
 from acid.config import config
 
 from .exceptions import AuthenticationFailed
-from .model import User
+from .model import User, get_current_user
 
 
 def create_user_session(user):
@@ -18,6 +21,17 @@ def create_user_session(user):
 
 def drop_user_session():
     session.pop('user')
+
+
+def admin_required(wrapped_function):
+    @wraps(wrapped_function)
+    def is_user_admin(*args, **kwargs):
+        current_user = get_current_user()
+        if current_user and current_user.is_admin():
+            return wrapped_function(*args, **kwargs)
+        else:
+            abort(requests.codes.unauthorized)
+    return is_user_admin
 
 
 def fetch_user_data():
