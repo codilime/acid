@@ -9,5 +9,4 @@ class IntegrationTestCase:
 
     @classmethod
     def teardown_class(cls):
-        db.db.rollback()
         db.db.disconnect()

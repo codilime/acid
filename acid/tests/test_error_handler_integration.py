@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-
-from unittest.mock import patch
-
 import pytest
 
 import requests
@@ -13,11 +10,10 @@ from acid.features.history.exceptions import PageOutOfRange
 from acid.tests import IntegrationTestCase
 
 
-@patch('acid.db.connect')
+@pytest.mark.integration
 class TestErrorHandlerIntegration(IntegrationTestCase):
 
-    @pytest.mark.integration
-    def test_client_uses_binded_error_handler(self, _):
+    def test_client_uses_binded_error_handler(self):
         handlers = [ErrorHandler([PageOutOfRange],
                                  'error_404.html',
                                  requests.codes.im_a_teapot)]
@@ -29,7 +25,7 @@ class TestErrorHandlerIntegration(IntegrationTestCase):
         with app.test_client() as client:
             rv = client.get('/builds/144')
 
-        self.assertEqual(requests.codes.im_a_teapot, rv.status_code)
+        assert requests.codes.im_a_teapot == rv.status_code
 
     @staticmethod
     def _update_blueprint():

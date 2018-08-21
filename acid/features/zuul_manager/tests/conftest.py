@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+
 import pytest
 
 from ...auth.tests.conftest import get_user, user_admin, user_guest  # noqa F401
