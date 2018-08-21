@@ -23,7 +23,7 @@ def drop_user_session():
     session.pop('user')
 
 
-def login_required(wrapped_function):
+def admin_required(wrapped_function):
     @wraps(wrapped_function)
     def is_user_admin(*args, **kwargs):
         current_user = get_current_user()
