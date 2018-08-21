@@ -4,12 +4,10 @@ from urllib.parse import urljoin
 
 import requests
 
-from flask import request, session, url_for
+from flask import abort, request, session, url_for
 
 from openid.consumer import consumer
 from openid.extensions import sreg
-
-from werkzeug.exceptions import abort
 
 from acid.config import config
 
