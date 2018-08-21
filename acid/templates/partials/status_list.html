@@ -42,7 +42,7 @@
                             {% for job in buildset.jobs %}
                                 <tr>
                                     <td>
-                                        <a href="{{ job.log_url }}">{{ job.name }}</a> {% if not job.voting %} <span class="badge badge-secondary">non-voting</span>{% endif %}
+                                        <a {% if job.log_url %}href="{{ job.log_url }}"{% endif %}>{{ job.name }}</a> {% if not job.voting %} <span class="badge badge-secondary">non-voting</span>{% endif %}
                                     </td>
                                     <td>{{ job.worker.name }}</td>
                                     <td class="progress-col">
