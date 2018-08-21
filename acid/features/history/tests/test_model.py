@@ -68,7 +68,10 @@ class TestBuildSetPaginated:
         get_for_pipeline = mocker.patch.object(ZuulBuildSet, 'get_for_pipeline')
         data = ['first_element', 'second_element', 'third_element']
 
-        query = self._query_mock(data, mocker)
+        query = mocker.MagicMock()
+        query.__len__ = lambda x: len(data)
+        query.page = mocker.MagicMock()
+        query.page.return_value = data
         get_for_pipeline.return_value = query
 
         buildset = BuildSetsPaginated(pipeline="foo", per_page=20)
@@ -76,11 +79,3 @@ class TestBuildSetPaginated:
 
         assert buildset.page == data
         query.page.assert_called_with(1, 20)
-
-    @staticmethod
-    def _query_mock(data, mocker):
-        query = mocker.MagicMock()
-        query.__len__ = lambda x: len(data)
-        query.page = mocker.MagicMock()
-        query.page.return_value = data
-        return query

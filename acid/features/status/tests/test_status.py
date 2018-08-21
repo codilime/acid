@@ -160,8 +160,8 @@ class TestBuildset:
         assert buildset.remaining_time is None
 
     def test_remaining_wh_multiple_jobs_should_return_longest_time(
-        self, buildset, job_factory):
-        test_jobs = [job_factory() for x in range(3)]
+        self, buildset, many_jobs):
+        test_jobs = many_jobs(3)
         max_time = max(job.time_tracker.remaining for job in test_jobs)
         buildset.jobs = test_jobs
 
@@ -178,8 +178,8 @@ class TestBuildset:
         assert buildset.start_datetime is None
 
     def test_start_with_multiple_job_should_return_earliest_time(self, buildset,
-                                                                 job_factory):
-        test_jobs = [job_factory() for x in range(3)]
+                                                                 many_jobs):
+        test_jobs = many_jobs(3)
         min_time = min(job.time_tracker.start for job in test_jobs)
         buildset.jobs = test_jobs
         expected = epoch_to_datetime(min_time)
@@ -201,8 +201,8 @@ class TestBuildset:
         assert buildset.status == expected
 
     def test_status_with_failing_non_voting_job_should_success(self, buildset,
-                                                               job_factory):
-        test_jobs = [job_factory() for _ in model.Job.FAILING_RESULTS]
+                                                               many_jobs):
+        test_jobs = many_jobs(len(model.Job.FAILING_RESULTS))
         for job, job_result in zip(test_jobs, model.Job.FAILING_RESULTS):
             job.result = job_result
             job.voting = False
@@ -212,10 +212,10 @@ class TestBuildset:
         assert buildset.status == expected
 
     def test_status_wo_failing_and_voting_jobs_should_have_success_status(
-        self, buildset, job_factory):
+            self, buildset, many_jobs):
         example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
 
-        test_jobs = [job_factory() for _ in example_succeeding_job_results]
+        test_jobs = many_jobs(len(example_succeeding_job_results))
         for job, job_result in zip(test_jobs, example_succeeding_job_results):
             job.result = job_result
         buildset.jobs = test_jobs
@@ -224,10 +224,10 @@ class TestBuildset:
         assert buildset.status == expected
 
     def test_status_with_only_succeeding_voting_jobs_should_have_success(
-        self, buildset, job_factory):
+        self, buildset, many_jobs):
         example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
 
-        test_jobs = [job_factory() for _ in example_succeeding_job_results]
+        test_jobs = many_jobs(len(example_succeeding_job_results))
         for job, job_result in zip(test_jobs, example_succeeding_job_results):
             job.result = job_result
             job.voting = True
@@ -237,10 +237,10 @@ class TestBuildset:
         assert buildset.status == expected
 
     def test_status_with_mixed_non_voting_jobs_should_have_success_status(
-        self, buildset, job_factory):
+        self, buildset, many_jobs):
         job_results = ["SUCCESS", "ERROR", "SKIPPED"]
 
-        test_jobs = [job_factory() for _ in job_results]
+        test_jobs = many_jobs(len(job_results))
         for job, job_result in zip(test_jobs, job_results):
             job.result = job_result
             job.voting = False
@@ -250,10 +250,10 @@ class TestBuildset:
         assert buildset.status == expected
 
     def test_status_with_mixed_voting_jobs_should_have_fail_status(
-        self, buildset, job_factory):
+        self, buildset, many_jobs):
         job_results = ["SUCCESS", "ERROR", "SKIPPED"]
 
-        test_jobs = [job_factory() for _ in job_results]
+        test_jobs = many_jobs(len(job_results))
         for job, job_result in zip(test_jobs, job_results):
             job.result = job_result
             job.voting = True
@@ -273,8 +273,8 @@ class TestBuildset:
         assert buildset.progress == expected
 
     def test_progress_with_multiple_jobs_should_return_expected(self, buildset,
-                                                                job_factory):
-        test_jobs = [job_factory() for x in range(3)]
+                                                                many_jobs):
+        test_jobs = many_jobs(3)
         buildset.jobs = test_jobs
         expected = 100 / len(test_jobs)
         assert buildset.progress == expected

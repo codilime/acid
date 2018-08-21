@@ -19,19 +19,19 @@ def time_tracker():
 
 
 @pytest.fixture
-def job(job_factory):
-    return job_factory()
+def job():
+    return Job(name="test_name", result="test_result",
+               url="http://fake_url", report_url="http://fake_url",
+               canceled=False, voting=False, retry=False,
+               worker={"name": "fake_name"},
+               time_tracker=time_tracker())
 
 
 @pytest.fixture
-def job_factory():
-    def _job_factory():
-        return Job(name="test_name", result="test_result",
-                   url="http://fake_url", report_url="http://fake_url",
-                   canceled=False, voting=False, retry=False,
-                   worker={"name": "fake_name"},
-                   time_tracker=time_tracker())
-    return _job_factory
+def many_jobs():
+    def _many_jobs(count):
+        return [job() for _ in range(count)]
+    return _many_jobs
 
 
 @pytest.fixture
