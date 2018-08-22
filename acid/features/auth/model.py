@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import current_app, session
 
-from acid.config import read_yaml
+from acid.settings_reader import read_yaml
 
 
 def get_current_user():

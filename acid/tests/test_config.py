@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from acid.config import read_yaml
+from acid.settings_reader import read_yaml
 
 
 @pytest.mark.unit

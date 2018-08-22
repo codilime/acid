@@ -5,7 +5,7 @@ from flask import Flask
 
 from flask_session import Session
 
-from acid.config import read_yaml
+from acid.settings_reader import read_yaml
 from acid.controller import error_handlers
 from acid.features.auth.controller import auth
 from acid.features.auth.model import get_current_user
