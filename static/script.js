@@ -22,6 +22,7 @@ function enableAutoRefresh () { // eslint-disable-line no-unused-vars
     $('#auto-refresh').click()
   }
   $('#auto-refresh').on('change', function (event) {
+    RefreshF = localStorage.getItem('refresh_f')
     if (RefreshF === 'is_on') {
       localStorage.setItem('refresh_f', 'is_off')
     } else if (RefreshF === 'is_off') {
