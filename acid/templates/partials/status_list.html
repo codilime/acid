@@ -9,7 +9,7 @@
                             {{ buildset.name }}
                         </button>
                         Zuul ref: {{ buildset.ref }}
-                        <a href="{{ buildset.review_url }}">{{ buildset.buildset_id }}</a>
+                        <a href="{{ buildset.review_url }}">{% if buildset.buildset_id %}ID: {{ buildset.buildset_id[:-2] }}{% endif %}</a>
                         <div class="progress big-progress mt-1 mb-1">
                             {{ buildset_progress(buildset) }}
                         </div>
