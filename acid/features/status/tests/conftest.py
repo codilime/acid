@@ -28,10 +28,10 @@ def job():
 
 
 @pytest.fixture
-def many_jobs():
-    def _many_jobs(count):
+def jobs():
+    def jobs(count):
         return [job() for _ in range(count)]
-    return _many_jobs
+    return jobs
 
 
 @pytest.fixture
