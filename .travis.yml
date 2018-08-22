@@ -18,4 +18,4 @@ matrix:
       script: tox -e py37
     - name: "StandradJS linter for static/*.js"
       install: npm install -g standard
-      script: standard "static/*.js" --global $ --global moment
+      script: standard "static/*.js" --global $ --global moment --global localStorage
