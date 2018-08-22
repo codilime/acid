@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 import pytest
 
-from acid.config import config
+from flask import current_app
+
+from acid.tests import TestWithAppContext
 
 from ..model import User
 
 
 @pytest.mark.unit
-class TestUserModel:
+class TestUserModel(TestWithAppContext):
     def test_create_user_obj(self):
         User(full_name="Test User", email="test.user@acid.test")
 
@@ -22,6 +24,7 @@ class TestUserModel:
         assert user.is_admin() is False
 
     def test_raise_exception_if_user_yml_not_exist(self, user_guest, mocker):
-        mocker.patch.dict(config['default'], {'users_file': 'nofile'})
+        mocker.patch.dict(current_app.config['default'], {
+                          'users_file': 'nofile'})
         with pytest.raises(FileNotFoundError):
             user_guest.is_admin()

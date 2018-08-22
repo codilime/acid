@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import pytest
 
-from acid.config import config
+from flask import current_app
+
+from acid.tests import TestWithAppContext
 
 from .. import model
 from ..time_utils import (epoch_to_datetime, milliseconds_to_seconds,
@@ -43,7 +45,7 @@ class TestTimeTracker:
 
 
 @pytest.mark.unit
-class TestJob:
+class TestJob(TestWithAppContext):
     def test_create_should_return_expected_data(self):
         job_data = {"url": "http://fake_url",
                     "start_time": 1, "elapsed_time": 1,
@@ -102,7 +104,7 @@ class TestJob:
         job.result = None
         job.url = "fake_endpoint"
         expected = "http://fake_url/fake_endpoint"
-        mocker.patch.dict(config['zuul'], {'url': zuul_url})
+        mocker.patch.dict(current_app.config['zuul'], {'url': zuul_url})
         assert job.log_url == expected
 
     def _assert_jobs_equal(self, job1, job2):
