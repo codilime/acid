@@ -11,7 +11,7 @@ $(function () {
   })
 })
 
-function RefreshMe () { // eslint-disable-line no-unused-vars
+function enableAutoRefresh () { // eslint-disable-line no-unused-vars
   var RefreshF = localStorage.getItem('refresh_f')
   $('#auto-refresh-li').removeClass('d-none')
   window.setInterval(refresh, 30000)
