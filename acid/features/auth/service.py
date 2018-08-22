@@ -4,12 +4,10 @@ from urllib.parse import urljoin
 
 import requests
 
-from flask import abort, request, session, url_for
+from flask import abort, current_app, request, session, url_for
 
 from openid.consumer import consumer
 from openid.extensions import sreg
-
-from acid.config import config
 
 from .exceptions import AuthenticationFailed
 from .model import User, get_current_user
@@ -52,7 +50,8 @@ def fetch_user_data():
 
 def start_openid_auth():
     oid_consumer = consumer.Consumer(session, None)
-    oid_request = oid_consumer.begin(config['default']['openid_provider'])
+    oid_request = oid_consumer.begin(
+        current_app.config['default']['openid_provider'])
 
     user_data_request = sreg.SRegRequest(required=['email', 'fullname'])
     oid_request.addExtension(user_data_request)

@@ -2,7 +2,7 @@
 from time import time
 from collections import namedtuple
 
-from acid.config import config
+from flask import current_app
 
 from .time_utils import (epoch_to_datetime, milliseconds_to_seconds,
                          seconds_to_time)
@@ -139,7 +139,7 @@ class Job:
     def log_url(self):
         if self.result:
             return self.report_url
-        return f'{config["zuul"]["url"].rstrip("/")}/{self.url}'
+        return f'{current_app.config["zuul"]["url"].rstrip("/")}/{self.url}'
 
 
 class TimeTracker:
