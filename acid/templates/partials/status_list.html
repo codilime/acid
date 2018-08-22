@@ -34,15 +34,15 @@
                                     <th scope="col">Start time</th>
                                     <th scope="col">Duration</th>
                                     <th scope="col">Remaining</th>
-                                    <th scope="col">Canceled</th>
-                                    <th scope="col">Retry</th>
                                 </tr>
                             </thead>
                             <tbody>
                             {% for job in buildset.jobs %}
                                 <tr>
                                     <td>
-                                        <a {% if job.log_url %}href="{{ job.log_url }}"{% endif %}>{{ job.name }}</a> {% if not job.voting %} <span class="badge badge-secondary">non-voting</span>{% endif %}
+                                        <a href="{{ job.log_url }}">{{ job.name }}</a> {% if not job.voting %} <span class="badge badge-secondary">non-voting</span>{% endif %}
+                                        {% if job.canceled %} <span class="badge badge-danger">canceled</span>{% endif %}
+                                        {% if job.retry %} <span class="badge badge-info">retry</span>{% endif %}
                                     </td>
                                     <td>{{ job.worker.name }}</td>
                                     <td class="progress-col">
@@ -53,8 +53,6 @@
                                     <td>{{ local_datetime(job.time_tracker.start_to_datetime) }}</td>
                                     <td>{{ show_object_or_na(job.time_tracker.elapsed_to_time) }}</td>
                                     <td>{{ show_object_or_na(job.time_tracker.remaining_to_time) }}</td>
-                                    <td>{{ show_yes_no(job.cancelled) }}</td>
-                                    <td>{{ show_yes_no(job.retry) }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
