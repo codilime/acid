@@ -12,10 +12,10 @@ $(function () {
   })
 })
 
-function refresh_me() {
+function RefreshMe () {
   var RefreshF = localStorage.getItem('refresh_f')
   $('#auto-refresh-li').removeClass('d-none')
-  window.setInterval(refresh, 2000)
+  window.setInterval(refresh, 30000)
   if (RefreshF == null) {
     localStorage.setItem('refresh_f', 'is_off')
   }
@@ -35,5 +35,4 @@ function refresh_me() {
       window.location.reload()
     }
   }
-
 }
