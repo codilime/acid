@@ -1,73 +1,49 @@
 # -*- coding: utf-8 -*-
-import unittest
-from unittest import mock
-
 import pytest
 
 from acid.config import config
 
-from . import fixtures
 from .. import model
 from ..time_utils import (epoch_to_datetime, milliseconds_to_seconds,
                           seconds_to_time)
 
 
 @pytest.mark.unit
-class TestTimeTracker(unittest.TestCase):
-    def test_none_start_to_datetime_should_return_none(self):
-        tt = fixtures.time_tracker()
-        tt.start = None
-        result = tt.start_to_datetime
-        self.assertIsNone(result)
+class TestTimeTracker:
+    def test_none_start_to_datetime_should_return_none(self, time_tracker):
+        time_tracker.start = None
+        assert time_tracker.start_to_datetime is None
 
-    def test_none_elapsed_to_time_should_return_none(self):
-        tt = fixtures.time_tracker()
-        tt.elapsed = None
-        result = tt.elapsed_to_time
-        self.assertIsNone(result)
+    def test_none_elapsed_to_time_should_return_none(self, time_tracker):
+        time_tracker.elapsed = None
+        assert time_tracker.elapsed_to_time is None
 
-    def test_none_remaining_to_time_should_return_none(self):
-        tt = fixtures.time_tracker()
-        tt.remaining = None
-        result = tt.remaining_to_time
-        self.assertIsNone(result)
+    def test_none_remaining_to_time_should_return_none(self, time_tracker):
+        time_tracker.remaining = None
+        assert time_tracker.remaining_to_time is None
 
-    def test_zero_remaining_to_time_should_return_zero(self):
-        tt = fixtures.time_tracker()
-        tt.remaining = 0
-        result = tt.remaining_to_time
+    def test_zero_remaining_to_time_should_return_zero(self, time_tracker):
+        time_tracker.remaining = 0
         expected = seconds_to_time(0)
-        self.assertEqual(result, expected)
+        assert time_tracker.remaining_to_time == expected
 
-    def test_zero_start_to_datetime_should_return_data(self):
-        tt = fixtures.time_tracker()
-        result = tt.start_to_datetime
-        expected = epoch_to_datetime(tt.start)
-        self.assertEqual(result, expected)
+    def test_zero_start_to_datetime_should_return_data(self, time_tracker):
+        expected = epoch_to_datetime(time_tracker.start)
+        assert time_tracker.start_to_datetime == expected
 
-    def test_hour_elapsed_to_time_should_return_data(self):
-        tt = fixtures.time_tracker()
-        result = tt.elapsed_to_time
-        expected = seconds_to_time(milliseconds_to_seconds(tt.elapsed))
-        self.assertEqual(result, expected)
+    def test_hour_elapsed_to_time_should_return_data(self, time_tracker):
+        expected = seconds_to_time(milliseconds_to_seconds(
+            time_tracker.elapsed))
+        assert time_tracker.elapsed_to_time == expected
 
-    def test_hour_remaining_to_time_should_return_data(self):
-        tt = fixtures.time_tracker()
-        result = tt.remaining_to_time
-        expected = seconds_to_time(milliseconds_to_seconds(tt.remaining))
-        self.assertEqual(result, expected)
+    def test_hour_remaining_to_time_should_return_data(self, time_tracker):
+        expected = seconds_to_time(milliseconds_to_seconds(
+            time_tracker.remaining))
+        assert time_tracker.remaining_to_time == expected
 
 
 @pytest.mark.unit
-class TestJob(unittest.TestCase):
-    def compare_jobs(self, job1, job2, msg=None):
-        self.assertDictEqual(job1.time_tracker.__dict__,
-                             job2.time_tracker.__dict__, msg=msg)
-
-        job1.time_tracker = job2.time_tracker = None
-
-        self.assertDictEqual(job1.__dict__, job2.__dict__, msg=msg)
-
+class TestJob:
     def test_create_should_return_expected_data(self):
         job_data = {"url": "http://fake_url",
                     "start_time": 1, "elapsed_time": 1,
@@ -90,77 +66,60 @@ class TestJob(unittest.TestCase):
                                                                 estimated=1))
 
         return_job = model.Job.create(job=job_data)
+        self._assert_jobs_equal(expected_job, return_job)
 
-        self.addTypeEqualityFunc(model.Job, self.compare_jobs)
-        self.assertEquals(expected_job, return_job)
-
-    def test_no_remaining_should_return_100(self):
-        test_job = fixtures.job()
-        test_job.time_tracker.remaining = 0
+    def test_no_remaining_should_return_100(self, job):
+        job.time_tracker.remaining = 0
         expected = 100
-        result = test_job.progress
-        self.assertEqual(result, expected)
+        assert job.progress == expected
 
-    def test_no_estimated_should_return_0(self):
-        test_job = fixtures.job()
-        test_job.time_tracker.estimated = 0
+    def test_no_estimated_should_return_0(self, job):
+        job.time_tracker.estimated = 0
         expected = 0
-        result = test_job.progress
-        self.assertEqual(result, expected)
+        assert job.progress == expected
 
-    def test_none_remaining_should_return_0(self):
-        test_job = fixtures.job()
-        test_job.time_tracker.remaining = None
+    def test_none_remaining_should_return_0(self, job):
+        job.time_tracker.remaining = None
         expected = 0
-        result = test_job.progress
-        self.assertEqual(result, expected)
+        assert job.progress == expected
 
-    def test_valid_progress_should_return_data(self):
-        test_job = fixtures.job()
-        test_job.time_tracker.remaining = 1000
-        test_job.time_tracker.estimated = 10
+    def test_valid_progress_should_return_data(self, job):
+        job.time_tracker.remaining = 1000
+        job.time_tracker.estimated = 10
         expected = 90
-        result = test_job.progress
-        self.assertEqual(result, expected)
+        assert job.progress == expected
 
-    def test_nonempty_result_should_return_data(self):
-        test_job = fixtures.job()
-        test_job.result = "test"
-        test_job.report_url = "http://fake_url"
+    def test_nonempty_result_should_return_data(self, job):
+        job.result = "test"
+        job.report_url = "http://fake_url"
         expected = "http://fake_url"
-        result = test_job.log_url
-        self.assertEqual(result, expected)
+        assert job.log_url == expected
 
-    def test_empty_result_with_multiple_slashes_should_return_url(self):
-        test_job = fixtures.job()
-        test_job.result = None
-        test_job.url = "fake_endpoint"
+    @pytest.mark.parametrize("zuul_url", ['http://fake_url/////',
+                                          'http://fake_url'])
+    def test_empty_result_should_return_url_with_correct_slashes(self, zuul_url,
+                                                                 job, mocker):
+        job.result = None
+        job.url = "fake_endpoint"
         expected = "http://fake_url/fake_endpoint"
-        with mock.patch.dict(config['zuul'], {'url': 'http://fake_url/////'}):
-            result = test_job.log_url
-        self.assertEqual(result, expected)
+        mocker.patch.dict(config['zuul'], {'url': zuul_url})
+        assert job.log_url == expected
 
-    def test_empty_result_wo_slashes_should_return_url(self):
-        test_job = fixtures.job()
-        test_job.result = None
-        test_job.url = "fake_endpoint"
-        expected = "http://fake_url/fake_endpoint"
-        with mock.patch.dict(config['zuul'], {'url': 'http://fake_url'}):
-            result = test_job.log_url
-        self.assertEqual(result, expected)
+    def _assert_jobs_equal(self, job1, job2):
+        assert job1.time_tracker.__dict__ == job2.time_tracker.__dict__
+        job1.time_tracker = job2.time_tracker = None
+        assert job1.__dict__ == job2.__dict__
 
 
 @pytest.mark.unit
-class TestBuildset(unittest.TestCase):
-    def compare_buildsets(self, buildset1, buildset2, msg=None):
+class TestBuildset:
+    def _assert_buildset_equal(self, buildset1, buildset2):
         # assumes buildset has empty job list
-        self.assertDictEqual(buildset1.owner, buildset2.owner, msg=msg)
-
+        assert buildset1.owner == buildset2.owner
         buildset1.owner = buildset2.owner = None
+        assert buildset1.__dict__ == buildset2.__dict__
 
-        self.assertDictEqual(buildset1.__dict__, buildset2.__dict__, msg=msg)
-
-    def test_create_should_return_expected_data(self):
+    def test_create_should_return_expected_data(self, buildset):
         buildset_data = {"url": "http://fake_url",
                          "owner": {'name': 'John smith'}, "jobs": [],
                          "item_ahead": None, "live": True,
@@ -169,209 +128,166 @@ class TestBuildset(unittest.TestCase):
                          "id": "12345,6", "active": True, "zuul_ref": "12345",
                          "enqueue_time": 0}
 
-        expected_buildset = fixtures.buildset()
+        expected_buildset = buildset
         expected_buildset.enqueue_time = 0
 
         result_buildset = model.Buildset.create(buildset=buildset_data)
 
-        self.addTypeEqualityFunc(model.Buildset, self.compare_buildsets)
-        self.assertEquals(expected_buildset, result_buildset)
+        self._assert_buildset_equal(expected_buildset, result_buildset)
 
-    def test_none_elapsed_time_should_return_0(self):
-        test_buildset = fixtures.buildset()
-        test_buildset.enqueue_time = None
+    @pytest.mark.parametrize("enq_time", [None, 0])
+    def test_no_enqueue_elapsed_time_should_return_0(self, enq_time, buildset):
+        buildset.enqueue_time = enq_time
         expected = 0
-        result = test_buildset.elapsed_time
-        self.assertEqual(result, expected)
+        assert buildset.elapsed_time == expected
 
-    def test_zero_elapsed_time_should_return_0(self):
-        test_buildset = fixtures.buildset()
-        test_buildset.enqueue_time = 0
-        expected = 0
-        result = test_buildset.elapsed_time
-        self.assertEqual(result, expected)
-
-    @mock.patch.object(model, 'time')
-    def test_valid_elapsed_time_should_return_expected_time(self, time):
-        test_buildset = fixtures.buildset()
+    def test_valid_elapsed_time_should_return_expected_time(self, buildset,
+                                                            mocker):
+        time = mocker.patch.object(model, 'time')
         fixed_time = 1532004145.20974
         time.return_value = fixed_time
-        result = test_buildset.elapsed_time
-        expected = seconds_to_time(fixed_time - test_buildset.enqueue_time)
-        self.assertEqual(result, expected)
+        expected = seconds_to_time(fixed_time - buildset.enqueue_time)
+        assert buildset.elapsed_time == expected
 
-    def test_remaining_wo_jobs_should_return_none(self):
-        test_buildset = fixtures.buildset()
-        test_buildset.jobs = []
-        result = test_buildset.remaining_time
-        self.assertIsNone(result)
+    def test_remaining_wo_jobs_should_return_none(self, buildset):
+        buildset.jobs = []
+        assert buildset.remaining_time is None
 
-    def test_remaining_with_job_wo_remaining_should_return_none(self):
-        test_buildset = fixtures.buildset()
-        test_job = fixtures.job()
-        test_job.time_tracker.remaining = None
-        test_buildset.jobs = [test_job]
-        result = test_buildset.remaining_time
-        self.assertIsNone(result)
+    def test_remaining_with_job_wo_remaining_should_return_none(self, job,
+                                                                buildset):
+        job.time_tracker.remaining = None
+        buildset.jobs = [job]
+        assert buildset.remaining_time is None
 
-    def test_remaining_with_multiple_jobs_should_return_longest_time(self):
-        test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job() for x in range(3)]
+    def test_remaining_wh_multiple_jobs_should_return_longest_time(
+        self, buildset, jobs):
+        test_jobs = jobs(3)
         max_time = max(job.time_tracker.remaining for job in test_jobs)
-        test_buildset.jobs = test_jobs
-        result = test_buildset.remaining_time
+        buildset.jobs = test_jobs
+
         expected = seconds_to_time(milliseconds_to_seconds(max_time))
-        self.assertEqual(result, expected)
+        assert buildset.remaining_time == expected
 
-    def test_start_wo_jobs_should_return_none(self):
-        test_buildset = fixtures.buildset()
-        test_buildset.jobs = []
-        result = test_buildset.start_datetime
-        self.assertIsNone(result)
+    def test_start_wo_jobs_should_return_none(self, buildset):
+        buildset.jobs = []
+        assert buildset.start_datetime is None
 
-    def test_start_with_job_wo_start_should_return_none(self):
-        test_buildset = fixtures.buildset()
-        test_job = fixtures.job()
-        test_job.time_tracker.start = None
-        test_buildset.jobs = [test_job]
-        result = test_buildset.start_datetime
-        self.assertIsNone(result)
+    def test_start_with_job_wo_start_should_return_none(self, buildset, job):
+        job.time_tracker.start = None
+        buildset.jobs = [job]
+        assert buildset.start_datetime is None
 
-    def test_start_with_multiple_jobs_should_return_earliest_time(self):
-        test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job() for x in range(3)]
+    def test_start_with_multiple_job_should_return_earliest_time(self, buildset,
+                                                                 jobs):
+        test_jobs = jobs(3)
         min_time = min(job.time_tracker.start for job in test_jobs)
-        test_buildset.jobs = test_jobs
-        result = test_buildset.start_datetime
+        buildset.jobs = test_jobs
         expected = epoch_to_datetime(min_time)
-        self.assertEqual(result, expected)
+        assert buildset.start_datetime == expected
 
-    def test_status_wo_jobs_should_have_enqueued_status(self):
-        test_buildset = fixtures.buildset()
-        test_buildset.jobs = []
+    def test_status_wo_jobs_should_have_enqueued_status(self, buildset):
+        buildset.jobs = []
         expected = 'Enqueued'
-        result = test_buildset.status
-        self.assertEqual(result, expected)
+        assert buildset.status == expected
 
-    def test_status_with_any_failing_voting_job_should_have_fail_status(self):
-        test_buildset = fixtures.buildset()
-        test_job = fixtures.job()
-        test_job.voting = True
-        test_buildset.jobs = [test_job]
+    @pytest.mark.parametrize("failing", model.Job.FAILING_RESULTS)
+    def test_status_wh_any_failing_voting_job_should_have_fail_status(
+            self, failing, job, buildset):
+        job.voting = True
+        job.result = failing
+        buildset.jobs = [job]
+
         expected = "Failing"
+        assert buildset.status == expected
 
-        for failing_result in model.Job.FAILING_RESULTS:
-            test_job.result = failing_result
-            result = test_buildset.status
-            self.assertEqual(result, expected)
-
-    def test_status_with_failing_non_voting_job_should_success(self):
-        test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job() for _ in model.Job.FAILING_RESULTS]
+    def test_status_with_failing_non_voting_job_should_success(self, buildset,
+                                                               jobs):
+        test_jobs = jobs(len(model.Job.FAILING_RESULTS))
         for job, job_result in zip(test_jobs, model.Job.FAILING_RESULTS):
             job.result = job_result
             job.voting = False
-        test_buildset.jobs = test_jobs
+        buildset.jobs = test_jobs
 
-        result = test_buildset.status
         expected = "Succeeding"
-        self.assertEqual(result, expected)
+        assert buildset.status == expected
 
-    def test_status_wo_failing_and_voting_jobs_should_have_success_status(self):
+    def test_status_wo_failing_and_voting_jobs_should_have_success_status(
+            self, buildset, jobs):
         example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
 
-        test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job() for _ in example_succeeding_job_results]
+        test_jobs = jobs(len(example_succeeding_job_results))
         for job, job_result in zip(test_jobs, example_succeeding_job_results):
             job.result = job_result
-        test_buildset.jobs = test_jobs
+        buildset.jobs = test_jobs
 
-        result = test_buildset.status
         expected = "Succeeding"
-        self.assertEqual(result, expected)
+        assert buildset.status == expected
 
-    def test_status_with_only_succeeding_voting_jobs_should_have_success(self):
+    def test_status_with_only_succeeding_voting_jobs_should_have_success(
+            self, buildset, jobs):
         example_succeeding_job_results = ["SUCCESS", "SKIPPED"]
 
-        test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job() for _ in example_succeeding_job_results]
+        test_jobs = jobs(len(example_succeeding_job_results))
         for job, job_result in zip(test_jobs, example_succeeding_job_results):
             job.result = job_result
             job.voting = True
-        test_buildset.jobs = test_jobs
+        buildset.jobs = test_jobs
 
-        result = test_buildset.status
         expected = "Succeeding"
-        self.assertEqual(result, expected)
+        assert buildset.status == expected
 
-    def test_status_with_mixed_non_voting_jobs_should_have_success_status(self):
+    def test_status_with_mixed_non_voting_jobs_should_have_success_status(
+            self, buildset, jobs):
         job_results = ["SUCCESS", "ERROR", "SKIPPED"]
 
-        test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job() for _ in job_results]
-
+        test_jobs = jobs(len(job_results))
         for job, job_result in zip(test_jobs, job_results):
             job.result = job_result
             job.voting = False
-        test_buildset.jobs = test_jobs
+        buildset.jobs = test_jobs
 
-        result = test_buildset.status
         expected = "Succeeding"
-        self.assertEqual(result, expected)
+        assert buildset.status == expected
 
-    def test_status_with_mixed_voting_jobs_should_have_fail_status(self):
+    def test_status_with_mixed_voting_jobs_should_have_fail_status(
+            self, buildset, jobs):
         job_results = ["SUCCESS", "ERROR", "SKIPPED"]
 
-        test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job() for _ in job_results]
-
+        test_jobs = jobs(len(job_results))
         for job, job_result in zip(test_jobs, job_results):
             job.result = job_result
             job.voting = True
-        test_buildset.jobs = test_jobs
+        buildset.jobs = test_jobs
 
-        result = test_buildset.status
         expected = "Failing"
-        self.assertEqual(result, expected)
+        assert buildset.status == expected
 
-    def test_progress_wo_jobs_should_return_100(self):
-        test_buildset = fixtures.buildset()
-        test_buildset.jobs = []
+    def test_progress_wo_jobs_should_return_100(self, buildset):
+        buildset.jobs = []
         expected = 100
-        result = test_buildset.progress
-        self.assertEqual(result, expected)
+        assert buildset.progress == expected
 
-    def test_progress_with_one_job_should_return_100(self):
-        test_buildset = fixtures.buildset()
-        test_job = fixtures.job()
-        test_buildset.jobs = [test_job]
+    def test_progress_with_one_job_should_return_100(self, buildset, job):
+        buildset.jobs = [job]
         expected = 100
-        result = test_buildset.progress
-        self.assertEqual(result, expected)
+        assert buildset.progress == expected
 
-    def test_progress_with_multiple_jobs_should_return_expected(self):
-        test_buildset = fixtures.buildset()
-        test_jobs = [fixtures.job() for x in range(3)]
-        test_buildset.jobs = test_jobs
+    def test_progress_with_multiple_jobs_should_return_expected(self, buildset,
+                                                                jobs):
+        test_jobs = jobs(3)
+        buildset.jobs = test_jobs
         expected = 100 / len(test_jobs)
-        result = test_buildset.progress
-        self.assertEqual(result, expected)
+        assert buildset.progress == expected
 
-    def test_none_enqueue_should_return_none(self):
-        test_buildset = fixtures.buildset()
-        test_buildset.enqueue_time = None
-        result = test_buildset.enqueue
-        self.assertIsNone(result)
+    def test_none_enqueue_should_return_none(self, buildset):
+        buildset.enqueue_time = None
+        assert buildset.enqueue is None
 
-    def test_zero_enqueue_should_return_current_date(self):
-        test_buildset = fixtures.buildset()
-        test_buildset.enqueue_time = 0
-        result = test_buildset.enqueue
+    def test_zero_enqueue_should_return_current_date(self, buildset):
+        buildset.enqueue_time = 0
         expected = epoch_to_datetime(0)
-        self.assertEqual(result, expected)
+        assert buildset.enqueue == expected
 
-    def test_valid_enqueue_should_return_expected(self):
-        test_buildset = fixtures.buildset()
-        result = test_buildset.enqueue
-        expected = epoch_to_datetime(test_buildset.enqueue_time)
-        self.assertEqual(result, expected)
+    def test_valid_enqueue_should_return_expected(self, buildset):
+        expected = epoch_to_datetime(buildset.enqueue_time)
+        assert buildset.enqueue == expected

@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-import unittest
-
 from acid import db
 
 
-class IntegrationTestCase(unittest.TestCase):
+class IntegrationTestCase:
     @classmethod
-    def setUpClass(cls):
+    def setup_class(cls):
         db.connect()
 
     @classmethod
-    def tearDownClass(cls):
+    def teardown_class(cls):
         db.db.disconnect()

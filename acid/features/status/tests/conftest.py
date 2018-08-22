@@ -2,13 +2,15 @@
 import os
 import json
 from random import randint
-from unittest.mock import MagicMock
+
+import pytest
 
 from acid.config import config
 
 from ..model import Buildset, Job, TimeTracker
 
 
+@pytest.fixture
 def time_tracker():
     return TimeTracker(start=randint(1000, 100000),  # noqa
                        elapsed=randint(1000, 100000),  # noqa
@@ -16,6 +18,7 @@ def time_tracker():
                        estimated=randint(1000, 100000))  # noqa
 
 
+@pytest.fixture
 def job():
     return Job(name="test_name", result="test_result",
                url="http://fake_url", report_url="http://fake_url",
@@ -24,6 +27,14 @@ def job():
                time_tracker=time_tracker())
 
 
+@pytest.fixture
+def jobs():
+    def jobs(count):
+        return [job() for _ in range(count)]
+    return jobs
+
+
+@pytest.fixture
 def buildset():
     return Buildset(name="test_name", buildset_id="12345,6", jobs=[],
                     enqueue_time=randint(1000, 100000),  # noqa
@@ -31,17 +42,25 @@ def buildset():
                     review_url="http://fake_url")
 
 
-def status_request(filename=None, status_code=200):
+@pytest.fixture
+def status_request(mocker):
     current_dir = os.path.dirname(os.path.realpath(__file__))
-    filename = filename or config['zuul']['status_endpoint']
-    result = MagicMock()
-    result.status_code = status_code
-    with open(f'{current_dir}/static/{filename}.json') as json_data:
-        result.json = MagicMock(return_value=json.load(json_data))
-    return MagicMock(return_value=result)
+
+    def _status_request(filename=None, status_code=200):
+        filename = filename or config['zuul']['status_endpoint']
+        result = mocker.MagicMock()
+        result.status_code = status_code
+        with open(f'{current_dir}/static/{filename}.json') as json_data:
+            result.json = mocker.MagicMock(return_value=json.load(json_data))
+        return mocker.MagicMock(return_value=result)
+
+    return _status_request
 
 
-def load_status_data(name):
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    with open(f'{current_dir}/static/{name}.json', "r") as data:
-        return json.load(data)
+@pytest.fixture
+def load_status_data():
+    def _load_status_data(name):
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        with open(f'{current_dir}/static/{name}.json', "r") as data:
+            return json.load(data)
+    return _load_status_data
