@@ -11,7 +11,6 @@ from ..model import ZuulBuild, ZuulBuildSet
 @db_session
 @pytest.fixture
 def zuul_build_set(mocker):
-    mocker.patch('pony.orm.core.commit')
     return ZuulBuildSet(zuul_ref='Zef2180cdc7ff440daefe48d85ed91b48',
                         pipeline='periodic-nightly',
                         project='acid-test-dev',

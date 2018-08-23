@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from acid.tests import IntegrationTestCase
+from acid.tests import DatabaseTestCase
 
 from ..exceptions import PageOutOfRange
 from ..service import BuildSetsPaginated
@@ -11,7 +11,7 @@ from ..model import ZuulBuildSet
 
 
 @pytest.mark.integration
-class TestZuulBuildSet(IntegrationTestCase):
+class TestZuulBuildSet(DatabaseTestCase):
     def test_start_datetime_should_return_lowest_time(self, zuul_build_set):
         expected = datetime(2018, 2, 23, 22, 0, 0)
         assert zuul_build_set.start_datetime == expected
