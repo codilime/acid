@@ -17,10 +17,10 @@ def fetch_json_data(endpoint):
     return res.json()
 
 
-def pipelines_stats(pipelines):
+def pipelines_stats(pipelines, showed_pipelines):
     pipeline_stats = []
     for pipeline in pipelines:
-        if pipeline['name'] in current_app.config['zuul']['pipelines']:
+        if pipeline['name'] in showed_pipelines:
             buildsets_count = 0
             for queue in pipeline['change_queues']:
                 heads = queue.get('heads')
@@ -40,6 +40,5 @@ def make_queues(pipelines, pipename):
         raise PipelineNotFound(f'Pipe "{pipename}" not found.')
 
 
-def status_endpoint():
-    return str(f'{current_app.config["zuul"]["url"].rstrip("/")}/'
-               f'{current_app.config["zuul"]["status_endpoint"]}')
+def status_endpoint(zuul_url, zuul_endpoint):
+    return str(f'{zuul_url.rstrip("/")}/{zuul_endpoint}')

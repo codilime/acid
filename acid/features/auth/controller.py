@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import requests
 
-from flask import Blueprint, redirect, url_for
+from flask import Blueprint, current_app, redirect, url_for
 
 from acid.controller import error_handlers
 from acid.error_handler import ErrorHandler, bind_error_handlers
@@ -14,7 +14,8 @@ auth = Blueprint('auth', __name__, template_folder='../../templates')
 
 @auth.route('/sign_in')
 def sign_in():
-    redirect_url = service.start_openid_auth()
+    redirect_url = service.start_openid_auth(
+        current_app.config['default']['openid_provider'])
     return redirect(redirect_url)
 
 
