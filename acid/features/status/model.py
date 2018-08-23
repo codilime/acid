@@ -2,8 +2,6 @@
 from time import time
 from collections import namedtuple
 
-from flask import current_app
-
 from .time_utils import (epoch_to_datetime, milliseconds_to_seconds,
                          seconds_to_time)
 
@@ -20,12 +18,12 @@ class Queue:
         return len(self.buildsets)
 
     @classmethod
-    def create(cls, queue):
+    def create(cls, queue, zuul_url):
         buildsets = []
         if len(queue['heads']) > 0:
             for head in queue['heads']:
                 for buildset in head:
-                    buildsets.append(Buildset.create(buildset))
+                    buildsets.append(Buildset.create(buildset, zuul_url))
         return cls(queue['name'], buildsets)
 
 
@@ -44,9 +42,9 @@ class Buildset:
         return len(self.jobs)
 
     @classmethod
-    def create(cls, buildset):
+    def create(cls, buildset, zuul_url):
         return cls(name=buildset['project'], buildset_id=buildset['id'],
-                   jobs=[Job.create(j) for j in buildset['jobs']],
+                   jobs=[Job.create(j, zuul_url) for j in buildset['jobs']],
                    enqueue_time=buildset['enqueue_time'],
                    review_url=buildset['url'], owner=buildset['owner'],
                    ref=buildset['zuul_ref'])
@@ -104,7 +102,7 @@ class Job:
     FAILING_RESULTS = ('FAILURE', 'POST_FAILURE', 'RETRY_LIMIT', 'ERROR')
 
     def __init__(self, name, time_tracker, result, url, report_url, canceled,
-                 voting, retry, worker):
+                 voting, retry, worker, zuul_url):
         self.name = name
         self.time_tracker = time_tracker
         self.result = result
@@ -114,13 +112,14 @@ class Job:
         self.voting = voting
         self.retry = retry
         self.worker = worker
+        self._zuul_url = zuul_url
 
     @classmethod
-    def create(cls, job):
+    def create(cls, job, zuul_url):
         return cls(name=job['name'], result=job['result'], url=job['url'],
                    report_url=job['report_url'], canceled=job['canceled'],
                    voting=job['voting'], retry=job['retry'],
-                   worker=job['worker'],
+                   worker=job['worker'], zuul_url=zuul_url,
                    time_tracker=TimeTracker(job['start_time'],
                                             job['elapsed_time'],
                                             job['remaining_time'],
@@ -139,7 +138,7 @@ class Job:
     def log_url(self):
         if self.result:
             return self.report_url
-        return f'{current_app.config["zuul"]["url"].rstrip("/")}/{self.url}'
+        return f'{self._zuul_url.rstrip("/")}/{self.url}'
 
 
 class TimeTracker:

@@ -23,7 +23,7 @@ def job():
     return Job(name="test_name", result="test_result",
                url="http://fake_url", report_url="http://fake_url",
                canceled=False, voting=False, retry=False,
-               worker={"name": "fake_name"},
+               worker={"name": "fake_name"}, zuul_url="http://zuul_url",
                time_tracker=time_tracker())
 
 

@@ -31,10 +31,11 @@ def pipelines_stats(pipelines, showed_pipelines):
     return pipeline_stats
 
 
-def make_queues(pipelines, pipename):
+def make_queues(pipelines, pipename, zuul_url):
     for pipeline in pipelines:
         if pipeline['name'] == pipename:
-            return [Queue.create(q) for q in pipeline['change_queues']]
+            return [Queue.create(q, zuul_url)
+                    for q in pipeline['change_queues']]
     else:
         current_app.logger.error(f'Pipe "{pipename}" not found.')
         raise PipelineNotFound(f'Pipe "{pipename}" not found.')

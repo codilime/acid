@@ -94,10 +94,10 @@ class TestServiceMakeQueues(TestWithAppContext):
         resources = load_status_data(name='status_no_queues')
         with pytest.raises(KeyError):
             service.make_queues(pipelines=resources['pipelines'],
-                                pipename='check')
+                                pipename='check', zuul_url='http://zuul_url')
 
     def test_raises_when_no_pipeline(self, load_status_data):
         resources = load_status_data(name='status_no_pipelines')
         with pytest.raises(PipelineNotFound):
             service.make_queues(pipelines=resources['pipelines'],
-                                pipename='check')
+                                pipename='check', zuul_url='http://zuul_url')

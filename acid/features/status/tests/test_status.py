@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
 
-from flask import current_app
-
-from acid.tests import TestWithAppContext
-
 from .. import model
 from ..time_utils import (epoch_to_datetime, milliseconds_to_seconds,
                           seconds_to_time)
@@ -45,7 +41,7 @@ class TestTimeTracker:
 
 
 @pytest.mark.unit
-class TestJob(TestWithAppContext):
+class TestJob:
     def test_create_should_return_expected_data(self):
         job_data = {"url": "http://fake_url",
                     "start_time": 1, "elapsed_time": 1,
@@ -62,12 +58,13 @@ class TestJob(TestWithAppContext):
                                  report_url="http://fake_url",
                                  canceled=False, voting=False, retry=False,
                                  worker={"name": "fake_name"},
+                                 zuul_url="http://zuul_url",
                                  time_tracker=model.TimeTracker(start=1,
                                                                 elapsed=1,
                                                                 remaining=1,
                                                                 estimated=1))
 
-        return_job = model.Job.create(job=job_data)
+        return_job = model.Job.create(job=job_data, zuul_url="http://zuul_url")
         self._assert_jobs_equal(expected_job, return_job)
 
     def test_no_remaining_should_return_100(self, job):
@@ -102,9 +99,9 @@ class TestJob(TestWithAppContext):
     def test_empty_result_should_return_url_with_correct_slashes(self, zuul_url,
                                                                  job, mocker):
         job.result = None
+        job._zuul_url = zuul_url
         job.url = "fake_endpoint"
         expected = "http://fake_url/fake_endpoint"
-        mocker.patch.dict(current_app.config['zuul'], {'url': zuul_url})
         assert job.log_url == expected
 
     def _assert_jobs_equal(self, job1, job2):
@@ -133,7 +130,8 @@ class TestBuildset:
         expected_buildset = buildset
         expected_buildset.enqueue_time = 0
 
-        result_buildset = model.Buildset.create(buildset=buildset_data)
+        result_buildset = model.Buildset.create(buildset=buildset_data,
+                                                zuul_url="http://zuul_url")
 
         self._assert_buildset_equal(expected_buildset, result_buildset)
 
