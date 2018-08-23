@@ -12,21 +12,20 @@ $(function () {
 })
 
 function enableAutoRefresh () { // eslint-disable-line no-unused-vars
-  var RefreshF = localStorage.getItem('refresh_f')
+  let refreshFlag = sessionStorage.getItem('refreshTag')
   $('#auto-refresh-li').removeClass('d-none')
-  window.setInterval(refresh, 30000)
-  if (RefreshF == null) {
-    localStorage.setItem('refresh_f', 'is_off')
+  window.setInterval(refresh, 15000)
+  if (refreshFlag == null) {
+    sessionStorage.setItem('refreshTag', 'is_off')
   }
-  if (RefreshF === 'is_on' && !$('#auto-refresh').is(':checked')) {
+  if (refreshFlag === 'is_on' && !$('#auto-refresh').is(':checked')) {
     $('#auto-refresh').click()
   }
   $('#auto-refresh').on('change', function (event) {
-    RefreshF = localStorage.getItem('refresh_f')
-    if (RefreshF === 'is_on') {
-      localStorage.setItem('refresh_f', 'is_off')
-    } else if (RefreshF === 'is_off') {
-      localStorage.setItem('refresh_f', 'is_on')
+    if (sessionStorage.getItem('refreshTag') === 'is_on') {
+      sessionStorage.setItem('refreshTag', 'is_off')
+    } else {
+      sessionStorage.setItem('refreshTag', 'is_on')
     }
   })
 
