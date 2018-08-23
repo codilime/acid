@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, request
+from flask import Blueprint, current_app, render_template, request
 
 from pony.orm import db_session
 
 from acid import db
-from acid.config import config
 
 from .service import BuildSetsFiltered, BuildSetsPaginated, pagination
 
@@ -15,10 +14,10 @@ builds = Blueprint('builds', __name__, template_folder='../../templates')
 @builds.route('/builds/<int:page>')
 @db_session
 def show_builds_history(page=1):
-    per_page = config['buildset']['per_page']
-    pipeline = config['default']['pipename']
-    page_links = config['buildset']['page_links']
-    buildset_log_url = config['buildset']['log_url']
+    per_page = current_app.config['buildset']['per_page']
+    pipeline = current_app.config['default']['pipename']
+    page_links = current_app.config['buildset']['page_links']
+    buildset_log_url = current_app.config['buildset']['log_url']
 
     db.connect()
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from flask import session
+from flask import current_app, session
 
-from acid.config import Config, config
+from acid.yaml_utils import read_yaml
 
 
 def get_current_user():
@@ -17,5 +17,5 @@ class User:
         self.email = email
 
     def is_admin(self):
-        user_roles = Config(config['default']['users_file'])
+        user_roles = read_yaml(current_app.config['default']['users_file'])
         return self.email in user_roles['admins']

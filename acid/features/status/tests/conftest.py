@@ -5,7 +5,7 @@ from random import randint
 
 import pytest
 
-from acid.config import config
+from flask import current_app
 
 from ..model import Buildset, Job, TimeTracker
 
@@ -23,7 +23,7 @@ def job():
     return Job(name="test_name", result="test_result",
                url="http://fake_url", report_url="http://fake_url",
                canceled=False, voting=False, retry=False,
-               worker={"name": "fake_name"},
+               worker={"name": "fake_name"}, zuul_url="http://zuul_url",
                time_tracker=time_tracker())
 
 
@@ -47,7 +47,7 @@ def status_request(mocker):
     current_dir = os.path.dirname(os.path.realpath(__file__))
 
     def _status_request(filename=None, status_code=200):
-        filename = filename or config['zuul']['status_endpoint']
+        filename = filename or current_app.config['zuul']['status_endpoint']
         result = mocker.MagicMock()
         result.status_code = status_code
         with open(f'{current_dir}/static/{filename}.json') as json_data:

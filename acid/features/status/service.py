@@ -3,8 +3,6 @@ import requests
 
 from flask import current_app
 
-from acid.config import config
-
 from .exceptions import PipelineNotFound, RemoteServerError
 from .model import PipelineStat, Queue
 
@@ -19,10 +17,10 @@ def fetch_json_data(endpoint):
     return res.json()
 
 
-def pipelines_stats(pipelines):
+def pipelines_stats(pipelines, showed_pipelines):
     pipeline_stats = []
     for pipeline in pipelines:
-        if pipeline['name'] in config['zuul']['pipelines']:
+        if pipeline['name'] in showed_pipelines:
             buildsets_count = 0
             for queue in pipeline['change_queues']:
                 heads = queue.get('heads')
@@ -33,15 +31,15 @@ def pipelines_stats(pipelines):
     return pipeline_stats
 
 
-def make_queues(pipelines, pipename):
+def make_queues(pipelines, pipename, zuul_url):
     for pipeline in pipelines:
         if pipeline['name'] == pipename:
-            return [Queue.create(q) for q in pipeline['change_queues']]
+            return [Queue.create(q, zuul_url)
+                    for q in pipeline['change_queues']]
     else:
         current_app.logger.error(f'Pipe "{pipename}" not found.')
         raise PipelineNotFound(f'Pipe "{pipename}" not found.')
 
 
-def status_endpoint():
-    return str(f'{config["zuul"]["url"].rstrip("/")}/'
-               f'{config["zuul"]["status_endpoint"]}')
+def status_endpoint(zuul_url, zuul_endpoint):
+    return str(f'{zuul_url.rstrip("/")}/{zuul_endpoint}')

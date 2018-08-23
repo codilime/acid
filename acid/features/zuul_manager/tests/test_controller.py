@@ -5,8 +5,9 @@ import pytest
 
 from requests import codes
 
+from flask import current_app
+
 from acid.app import app
-from acid.config import config
 from acid.tests import IntegrationTestCase
 
 from ...auth import service as auth_service
@@ -18,9 +19,8 @@ class TestControlPanel(IntegrationTestCase):
         user = get_user('admin')
         fetch_data = mocker.patch.object(auth_service, 'fetch_user_data')
         fetch_data.return_value = user
-        with app.test_request_context():
-            with app.test_client() as client:
-                res = client.get('/zuul_manager', follow_redirects=True)
+        with app.test_client() as client:
+            res = client.get('/zuul_manager', follow_redirects=True)
 
         assert res.status_code == codes.unauthorized
         assert b'Zuul manager' not in res.data
@@ -29,10 +29,9 @@ class TestControlPanel(IntegrationTestCase):
         user = get_user('admin')
         fetch_data = mocker.patch.object(auth_service, 'fetch_user_data')
         fetch_data.return_value = user
-        with app.test_request_context():
-            with app.test_client() as client:
-                client.get('/signed_in', follow_redirects=True)
-                res = client.get('/zuul_manager', follow_redirects=True)
+        with app.test_client() as client:
+            client.get('/signed_in', follow_redirects=True)
+            res = client.get('/zuul_manager', follow_redirects=True)
 
         assert res.status_code == codes.ok
         # Remove newline characters for easier regex parsing
@@ -41,8 +40,8 @@ class TestControlPanel(IntegrationTestCase):
         # in config. Regex looks inside of body tag in order to ensure it's
         # displayed in specific site content and not in other elements.
         pattern = '<body>.*'
-        for pipelines in config['zuul']['build_enqueue']['pipelines']:
-            for pipeline, branches in pipelines.items():
+        for pipes in current_app.config['zuul']['build_enqueue']['pipelines']:
+            for pipeline, branches in pipes.items():
                 for branch in branches:
                     pattern += '.*'.join([pipeline, branch, 'START', 'STOP.*'])
         pattern += '</body>'
@@ -54,10 +53,9 @@ class TestControlPanel(IntegrationTestCase):
         user = get_user('admin')
         fetch_data = mocker.patch.object(auth_service, 'fetch_user_data')
         fetch_data.return_value = user
-        with app.test_request_context():
-            with app.test_client() as client:
-                client.get('/signed_in', follow_redirects=True)
-                res = client.get('/zuul_manager', follow_redirects=True)
+        with app.test_client() as client:
+            client.get('/signed_in', follow_redirects=True)
+            res = client.get('/zuul_manager', follow_redirects=True)
 
         assert res.status_code == codes.ok
         # Remove newline characters for easier regex parsing
@@ -71,10 +69,9 @@ class TestControlPanel(IntegrationTestCase):
         user = get_user('admin')
         fetch_data = mocker.patch.object(auth_service, 'fetch_user_data')
         fetch_data.return_value = user
-        with app.test_request_context():
-            with app.test_client() as client:
-                client.get('/signed_in', follow_redirects=True)
-                res = client.get('/zuul_manager', follow_redirects=True)
+        with app.test_client() as client:
+            client.get('/signed_in', follow_redirects=True)
+            res = client.get('/zuul_manager', follow_redirects=True)
 
         assert res.status_code == codes.ok
         # Remove newline characters for easier regex parsing
@@ -87,28 +84,26 @@ class TestControlPanel(IntegrationTestCase):
         user = get_user('admin')
         fetch_data = mocker.patch.object(auth_service, 'fetch_user_data')
         fetch_data.return_value = user
-        with app.test_request_context():
-            with app.test_client() as client:
-                client.get('/signed_in', follow_redirects=True)
-                res = client.post('/zuul_manager/manage',
-                                  follow_redirects=True,
-                                  data={'pipeline_name': 'fake-pipeline',
-                                        'branch': 'fake-branch',
-                                        'action': 'start'})
+        with app.test_client() as client:
+            client.get('/signed_in', follow_redirects=True)
+            res = client.post('/zuul_manager/manage',
+                              follow_redirects=True,
+                              data={'pipeline_name': 'fake-pipeline',
+                                    'branch': 'fake-branch',
+                                    'action': 'start'})
         assert res.status_code == codes.bad_request
 
     def test_starts_build_successful_connect_to_zuul(self, get_user, mocker):
         user = get_user('admin')
         fetch_data = mocker.patch.object(auth_service, 'fetch_user_data')
         fetch_data.return_value = user
-        with app.test_request_context():
-            with app.test_client() as client:
-                client.get('/signed_in', follow_redirects=True)
-                res = client.post('/zuul_manager/manage',
-                                  follow_redirects=True,
-                                  data={'pipeline_name': 'periodic-nightly',
-                                        'branch': 'master',
-                                        'action': 'start'})
+        with app.test_client() as client:
+            client.get('/signed_in', follow_redirects=True)
+            res = client.post('/zuul_manager/manage',
+                              follow_redirects=True,
+                              data={'pipeline_name': 'periodic-nightly',
+                                    'branch': 'master',
+                                    'action': 'start'})
         assert res.status_code == codes.ok
 
     def test_with_incorrect_settings_cant_connect_to_zuul(self, get_user,
@@ -116,14 +111,13 @@ class TestControlPanel(IntegrationTestCase):
         user = get_user('admin')
         fetch_data = mocker.patch.object(auth_service, 'fetch_user_data')
         fetch_data.return_value = user
-        with app.test_request_context():
-            with app.test_client() as client:
-                mocker.patch.dict(config['zuul']['manager'],
-                                  {'username': 'not'})
-                client.get('/signed_in', follow_redirects=True)
-                res = client.post('/zuul_manager/manage',
-                                  follow_redirects=True,
-                                  data={'pipeline_name': 'periodic-nightly',
-                                        'branch': 'master',
-                                        'action': 'start'})
+        with app.test_client() as client:
+            mocker.patch.dict(current_app.config['zuul']['manager'],
+                              {'username': 'not'})
+            client.get('/signed_in', follow_redirects=True)
+            res = client.post('/zuul_manager/manage',
+                              follow_redirects=True,
+                              data={'pipeline_name': 'periodic-nightly',
+                                    'branch': 'master',
+                                    'action': 'start'})
         assert res.status_code == codes.server_error

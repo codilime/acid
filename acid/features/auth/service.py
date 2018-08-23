@@ -9,8 +9,6 @@ from flask import abort, request, session, url_for
 from openid.consumer import consumer
 from openid.extensions import sreg
 
-from acid.config import config
-
 from .exceptions import AuthenticationFailed
 from .model import User, get_current_user
 
@@ -50,9 +48,9 @@ def fetch_user_data():
     return User(full_name=user_data['fullname'], email=user_data['email'])
 
 
-def start_openid_auth():
+def start_openid_auth(provider):
     oid_consumer = consumer.Consumer(session, None)
-    oid_request = oid_consumer.begin(config['default']['openid_provider'])
+    oid_request = oid_consumer.begin(provider)
 
     user_data_request = sreg.SRegRequest(required=['email', 'fullname'])
     oid_request.addExtension(user_data_request)
