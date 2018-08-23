@@ -6,13 +6,15 @@ import pytest
 import requests
 
 from acid.app import app
+from acid.tests import DatabaseTestCase
 
 
 @pytest.mark.integration
-class TestBuildHistory:
+class TestBuildHistory(DatabaseTestCase):
     client = app.test_client()
 
-    def test_show_history_filtered_by_branch(self):
+    def test_show_history_filtered_by_branch(self, populate_database):
+        populate_database(branch='master')
         rv = self.client.get('/builds/1?branch=master')
         # Here we use regular expression to evade possible
         # changes in styling of the input form.

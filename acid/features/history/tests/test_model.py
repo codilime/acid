@@ -10,8 +10,9 @@ from ..service import BuildSetsPaginated
 from ..model import ZuulBuildSet
 
 
-@pytest.mark.integration
+@pytest.mark.unit
 class TestZuulBuildSet(DatabaseTestCase):
+    # (kam193) TODO: randomize times
     def test_start_datetime_should_return_lowest_time(self, zuul_build_set):
         expected = datetime(2018, 2, 23, 22, 0, 0)
         assert zuul_build_set.start_datetime == expected

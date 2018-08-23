@@ -12,16 +12,6 @@ class TestWithAppContext:
         self._ctx.pop()
 
 
-class IntegrationTestCase(TestWithAppContext):
-    def setup_method(self, method):
-        super().setup_method(method)
-        db.connect()
-
-    def teardown_method(self, method):
-        db.db.disconnect()
-        super().teardown_method(method)
-
-
 class DatabaseTestCase:
     def setup_method(self, method):
         try:
@@ -33,3 +23,13 @@ class DatabaseTestCase:
     def teardown_method(self, method):
         db.db.drop_all_tables(with_all_data=True)
         db.db.create_tables()
+
+
+class IntegrationTestCase(TestWithAppContext, DatabaseTestCase):
+    def setup_method(self, method):
+        super().setup_method(method)
+        db.connect()
+
+    def teardown_method(self, method):
+        db.db.disconnect()
+        super().teardown_method(method)
