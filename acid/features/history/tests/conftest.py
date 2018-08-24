@@ -17,7 +17,7 @@ def zuul_builds(mocker):
 
 @pytest.fixture
 def make_buildset():
-    def _make_buildset(build_number, branch='master'):
+    def _make_buildset(build_number=104, branch='master'):
         buildset = ZuulBuildSet(zuul_ref='Zef2180cdc7ff440daefe48d85ed91b48',
                                 pipeline='periodic-nightly',
                                 project='acid-test-dev',

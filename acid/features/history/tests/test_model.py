@@ -12,10 +12,10 @@ from ..service import BuildSetsPaginated
 from ..model import ZuulBuildSet
 
 
-@db_session
 @pytest.mark.unit
 class TestZuulBuildSet(DatabaseTestCase):
     # (kam193) TODO: randomize times
+    @db_session
     def test_start_datetime_should_return_lowest_time(self, make_buildset):
         buildset = make_buildset(build_number=104)
         for index, build in enumerate(buildset.builds):
@@ -23,6 +23,21 @@ class TestZuulBuildSet(DatabaseTestCase):
         expected = datetime(2016, 1, 1, 1, 1, 1)
         assert buildset.start_datetime == expected
 
+    @db_session
+    def test_start_datetime_return_none_when_no_end_time(self, make_buildset):
+        buildset = make_buildset(build_number=104)
+        for index, build in enumerate(buildset.builds):
+            build.end_time = None
+        assert  buildset.start_datetime is None
+
+    @db_session
+    def test_end_datetime_return_none_when_no_start_time(self, make_buildset):
+        buildset = make_buildset(build_number=104)
+        for index, build in enumerate(buildset.builds):
+            build.start_time = None
+        assert  buildset.end_datetime is None
+
+    @db_session
     def test_end_datetime_should_return_highest_time(self, make_buildset):
         buildset = make_buildset(build_number=104)
         for index, build in enumerate(buildset.builds):
@@ -30,31 +45,68 @@ class TestZuulBuildSet(DatabaseTestCase):
         expected = datetime(2016 + len(buildset.builds) - 1, 1, 1, 1, 1, 1)
         assert buildset.end_datetime == expected
 
+    @db_session
     def test_branch_should_return_branch_name(self, make_buildset):
         buildset = make_buildset(branch='master')
         assert buildset.branch == 'master'
 
+    @db_session
     def test_duration_should_return_timedelta(self, make_buildset):
         buildset = make_buildset()
         expected = timedelta(0, 6900)
         assert buildset.duration == expected
 
+    @db_session
     def test_duration_wo_start_should_return_null(self, make_buildset, mocker):
         start = mocker.patch.object(ZuulBuildSet, 'start_datetime')
         start.__get__ = mocker.Mock(return_value=None)
         buildset = make_buildset()
         assert buildset.duration is None
 
+    @db_session
     def test_duration_wo_end_should_return_null(self, make_buildset, mocker):
         end = mocker.patch.object(ZuulBuildSet, 'end_datetime')
         end.__get__ = mocker.Mock(return_value=None)
         buildset = make_buildset()
         assert buildset.duration is None
 
+    @db_session
     def test_build_number_should_return_int(self, make_buildset):
         buildset = make_buildset(build_number=104)
         assert buildset.build_number == 104
 
+    @db_session
+    def test_build_number_return_none_if_no_build_number(self, make_buildset):
+        buildset = make_buildset(build_number=None)
+        assert buildset.build_number is None
+
+    @db_session
+    def test_get_branches_return_branches(self, make_buildset):
+        make_buildset(branch='master')
+        make_buildset(branch='gimp')
+        branches = ZuulBuildSet.get_branches()[:]
+        expected = ['master', 'gimp']
+        assert branches == expected
+
+    @db_session
+    def test_get_for_pipeline_return_pipelines(self, populate_database):
+        buildsets = populate_database(count=2)
+        buildsets[0].pipeline = "one"
+        return_buildsets = ZuulBuildSet.get_for_pipeline(pipeline='one')[:]
+        expected = [buildsets[0]]
+        assert  return_buildsets == expected
+
+    @db_session
+    def test_get_filtered_if_return_branches(self, populate_database):
+        buildsets = populate_database()
+        for index, buildset in enumerate(buildsets):
+            buildset.ref = 'refs/heads/gimp'
+        filtered_buildsets = ZuulBuildSet.get_filtered(
+            pipeline='periodic-nightly',
+            branch='master',
+            build='105')[:]
+        expected = [buildsets[0]]
+        assert filtered_buildsets == expected
 
 @pytest.mark.unit
 class TestBuildSetPaginated:
