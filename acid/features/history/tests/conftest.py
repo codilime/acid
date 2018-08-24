@@ -9,14 +9,15 @@ from ..model import ZuulBuild, ZuulBuildSet
 
 
 @pytest.fixture
-def zuul_build_set(mocker):
+def zuul_build_set():
     return make_buildset(build_number=104)
 
 
 @pytest.fixture
 def zuul_builds(mocker):
     mocker.patch('pony.orm.core.commit')
-    return [make_build(104, 5010), make_build(104, 5010)]
+    return [make_build(build_number=104, buildset_id=5010),
+            make_build(build_number=104, buildset_id=5010)]
 
 
 @db_session
@@ -25,15 +26,15 @@ def make_buildset(build_number, branch='master'):
                             pipeline='periodic-nightly',
                             project='acid-test-dev',
                             change=None, patchset=None,
-                            ref='refs/heads/master',
+                            ref=f'refs/heads/{branch}',
                             message='Build succeeded.',
                             tenant='acid',
                             result='SUCCESS',
                             ref_url='http://acid.test/gitweb/',
                             oldrev='', newrev='')
     commit()
-    make_build(build_number, buildset.id)
-    make_build(build_number, buildset.id)
+    make_build(build_number=build_number, buildset_id=buildset.id)
+    make_build(build_number=build_number, buildset_id=buildset.id)
     return buildset
 
 
@@ -53,6 +54,8 @@ def make_build(build_number, buildset_id):
 @pytest.fixture
 def populate_database():
     def _populate_database(count=10, branch='master', start_build_number=105):
-        return [make_buildset(branch, start_build_number + x)
+        return [make_buildset(build_number=str(start_build_number + x),
+                              branch=branch)
                 for x in range(count)]
+
     return _populate_database
