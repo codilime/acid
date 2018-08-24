@@ -19,7 +19,6 @@ class TestBuildHistory(DatabaseTestCase):
         # Here we use regular expression to evade possible
         # changes in styling of the input form.
         reg_exp = b'<option[^>]+ selected="selected"[^>]>master</option>'
-        print(rv.data)
         assert re.search(reg_exp, rv.data) is not None
 
     def test_show_history_filtered_by_build_number(self):
