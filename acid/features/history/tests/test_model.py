@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
 
+from pony.orm import db_session
+
 import pytest
 
 from acid.tests import DatabaseTestCase
@@ -10,37 +12,48 @@ from ..service import BuildSetsPaginated
 from ..model import ZuulBuildSet
 
 
+@db_session
 @pytest.mark.unit
 class TestZuulBuildSet(DatabaseTestCase):
     # (kam193) TODO: randomize times
-    def test_start_datetime_should_return_lowest_time(self, zuul_build_set):
-        expected = datetime(2018, 2, 23, 22, 0, 0)
-        assert zuul_build_set.start_datetime == expected
+    def test_start_datetime_should_return_lowest_time(self, make_buildset):
+        buildset = make_buildset(build_number=104)
+        for index, build in enumerate(buildset.builds):
+            build.start_time = datetime(2016 + index, 1, 1, 1, 1, 1)
+        expected = datetime(2016, 1, 1, 1, 1, 1)
+        assert buildset.start_datetime == expected
 
-    def test_end_datetime_should_return_highest_time(self, zuul_build_set):
-        expected = datetime(2018, 2, 23, 23, 55, 0)
-        assert zuul_build_set.end_datetime == expected
+    def test_end_datetime_should_return_highest_time(self, make_buildset):
+        buildset = make_buildset(build_number=104)
+        for index, build in enumerate(buildset.builds):
+            build.end_time = datetime(2016 + index, 1, 1, 1, 1, 1)
+        expected = datetime(2016 + len(buildset.builds) - 1, 1, 1, 1, 1, 1)
+        assert buildset.end_datetime == expected
 
-    def test_branch_should_return_branch_name(self, zuul_build_set):
-        assert zuul_build_set.branch == 'master'
+    def test_branch_should_return_branch_name(self, make_buildset):
+        buildset = make_buildset(branch='master')
+        assert buildset.branch == 'master'
 
-    def test_duration_should_return_timedelta(self, zuul_build_set):
+    def test_duration_should_return_timedelta(self, make_buildset):
+        buildset = make_buildset()
         expected = timedelta(0, 6900)
-        assert zuul_build_set.duration == expected
+        assert buildset.duration == expected
 
-    def test_duration_wo_start_should_return_null(self, zuul_build_set, mocker):
+    def test_duration_wo_start_should_return_null(self, make_buildset, mocker):
         start = mocker.patch.object(ZuulBuildSet, 'start_datetime')
         start.__get__ = mocker.Mock(return_value=None)
-        assert zuul_build_set.duration is None
+        buildset = make_buildset()
+        assert buildset.duration is None
 
-    def test_duration_wo_end_should_return_null(self, zuul_build_set, mocker):
+    def test_duration_wo_end_should_return_null(self, make_buildset, mocker):
         end = mocker.patch.object(ZuulBuildSet, 'end_datetime')
         end.__get__ = mocker.Mock(return_value=None)
-        assert zuul_build_set.duration is None
+        buildset = make_buildset()
+        assert buildset.duration is None
 
-    def test_build_number_should_return_int(self, zuul_build_set):
-        expected = 104
-        assert zuul_build_set.build_number == expected
+    def test_build_number_should_return_int(self, make_buildset):
+        buildset = make_buildset(build_number=104)
+        assert buildset.build_number == 104
 
 
 @pytest.mark.unit
