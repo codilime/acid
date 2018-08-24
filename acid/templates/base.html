@@ -47,6 +47,18 @@
                         <a class="nav-link" href="{{ url_for('zuul_manager.show_panel') }}">Zuul manager</a>
                     </li>
                 {% endif %}
+                <li>
+                    <div class="ml-5"></div>
+                </li>
+                <li id="auto-refresh-li" class="nav-itemn d-none">
+                    <div id="auto-refresh-div" class="row text disable">
+                        <span class="mr-2 navbar-text ">auto refresh</span>
+                        <label class="switch mt-2">
+                            <input id="auto-refresh" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </li>
             </ul>
             <ul class="navbar-nav pull-right">
                 {% if current_user %}
@@ -76,5 +88,6 @@
         crossorigin="anonymous"></script>
 <script src="{{ url_for('static', filename='bootstrap-4.1.1-dist/js/bootstrap.min.js') }}"></script>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+{% block scripts %}{% endblock %}
 </body>
 </html>
