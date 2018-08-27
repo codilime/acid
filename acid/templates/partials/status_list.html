@@ -7,7 +7,7 @@
                 <div class="card-header clickable" id="heading{{ buildset.ref }}" data-toggle="collapse" data-target="#collapse{{ buildset.ref }}">
                         <div>{{ buildset.name }}</div>
                         <div>Zuul ref: {{ buildset.ref }}</div>
-                        <div class="no-collapsable">
+                        <div class="no-collapsible">
                             {% if buildset.buildset_id %}
                             <a href="{{ buildset.review_url }}">ID: {{ buildset.buildset_id }}</a>
                             {% endif %}
