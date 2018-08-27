@@ -97,7 +97,7 @@ class TestZuulBuildSet(DatabaseTestCase):
         assert  return_buildsets == expected
 
     @db_session
-    def test_get_filtered_if_return_branches(self, populate_database):
+    def test_get_filtered_if_branch_is_not_in_branches(self, populate_database):
         buildsets = populate_database()
         for index, buildset in enumerate(buildsets):
             buildset.ref = 'refs/heads/gimp'
@@ -107,6 +107,28 @@ class TestZuulBuildSet(DatabaseTestCase):
             build='105')[:]
         expected = [buildsets[0]]
         assert filtered_buildsets == expected
+
+    @db_session
+    def test_get_filtered_if_build_is_None(self, populate_database):
+        buildsets = populate_database()
+        filtered_buildsets = ZuulBuildSet.get_filtered(
+            pipeline='periodic-nightly',
+            branch='master',
+            build=None)[:]
+        expected = buildsets[::-1]
+        assert filtered_buildsets == expected
+
+    @pytest.mark.parametrize("kwargs,expected", [
+        ({}, timedelta(0, 6900)),
+        ({"start_time": None}, None),
+        ({"end_time": None}, None),
+        ({"start_time": None, "end_time": None}, None)
+    ])
+    @db_session
+    def test_duration_return_value_if_start_and_end_present(self, zuul_build,
+                                                            kwargs, expected):
+        build = zuul_build(**kwargs)
+        assert build.duration == expected
 
 @pytest.mark.unit
 class TestBuildSetPaginated:

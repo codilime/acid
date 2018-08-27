@@ -14,10 +14,24 @@ def zuul_builds(mocker):
     return [make_build(build_number=104, buildset_id=5010),
             make_build(build_number=104, buildset_id=5010)]
 
+@pytest.fixture
+def zuul_build(mocker):
+    mocker.patch('pony.orm.core.commit')
+    def _make_build(build_number=104,
+                    buildset_id=5010,
+                    start_time=datetime(2018, 2, 23, 22, 0, 0),
+                    end_time=datetime(2018, 2, 23, 23, 55, 0)):
+        build = make_build(build_number=build_number,
+                           buildset_id=buildset_id,
+                           start_time=start_time,
+                           end_time=end_time)
+        return build
+
+    return _make_build
 
 @pytest.fixture
 def make_buildset():
-    def _make_buildset(build_number=104, branch='master'):
+    def _make_buildset(build_number=104, branch='master', number_of_builds=2):
         buildset = ZuulBuildSet(zuul_ref='Zef2180cdc7ff440daefe48d85ed91b48',
                                 pipeline='periodic-nightly',
                                 project='acid-test-dev',
@@ -29,21 +43,23 @@ def make_buildset():
                                 ref_url='http://acid.test/gitweb/',
                                 oldrev='', newrev='')
         commit()
-        make_build(build_number=build_number, buildset_id=buildset.id)
-        make_build(build_number=build_number, buildset_id=buildset.id)
+        for each in range(0,number_of_builds):
+            make_build(build_number=build_number, buildset_id=buildset.id)
         return buildset
 
     return _make_buildset
 
 
 @db_session
-def make_build(build_number, buildset_id):
+def make_build(build_number, buildset_id,
+               start_time=datetime(2018, 2, 23, 22, 0, 0),
+               end_time=datetime(2018, 2, 23, 23, 55, 0)):
     return ZuulBuild(buildset_id=buildset_id,
                      uuid='86394a77c99f45aba0e299b660214a9c',
                      job_name='acid-build-nightly',
                      result='SUCCESS',
-                     start_time=datetime(2018, 2, 23, 22, 0, 0),
-                     end_time=datetime(2018, 2, 23, 23, 55, 0),
+                     start_time=start_time,
+                     end_time=end_time,
                      voting=True,
                      log_url=f'http://logs.acid.test/{build_number}/865548a7/',
                      node_name='first_node')
