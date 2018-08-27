@@ -4,7 +4,7 @@
     {% for buildset in queue.buildsets %}
         <div class="accordion">
             <div class="card">
-                <div class="card-header" id="heading{{ buildset.ref }}" data-toggle="collapse" data-target="#collapse{{ buildset.ref }}">
+                <div class="card-header clickable" id="heading{{ buildset.ref }}" data-toggle="collapse" data-target="#collapse{{ buildset.ref }}">
                         <div>{{ buildset.name }}</div>
                         <div>Zuul ref: {{ buildset.ref }}</div>
                         <div class="no-collapsable">
