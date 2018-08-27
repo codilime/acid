@@ -4,14 +4,14 @@
     {% for buildset in queue.buildsets %}
         <div class="accordion">
             <div class="card">
-                <div class="card-header" id="heading{{ buildset.ref }}">
-                        <button class="btn" type="button" data-toggle="collapse" data-target="#collapse{{ buildset.ref }}">
-                            {{ buildset.name }}
-                        </button>
-                        Zuul ref: {{ buildset.ref }}
-                        {% if buildset.buildset_id %}
+                <div class="card-header" id="heading{{ buildset.ref }}" data-toggle="collapse" data-target="#collapse{{ buildset.ref }}">
+                        <div>{{ buildset.name }}</div>
+                        <div>Zuul ref: {{ buildset.ref }}</div>
+                        <div class="no-collapsable">
+                            {% if buildset.buildset_id %}
                             <a href="{{ buildset.review_url }}">ID: {{ buildset.buildset_id }}</a>
-                        {% endif %}
+                            {% endif %}
+                        </div>
                         <div class="progress big-progress mt-1 mb-1">
                             {{ buildset_progress(buildset) }}
                         </div>
