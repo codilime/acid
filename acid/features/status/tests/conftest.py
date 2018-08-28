@@ -7,7 +7,7 @@ import pytest
 
 from flask import current_app
 
-from ..model import Buildset, Job, TimeTracker
+from ..model import Buildset, Job, TimeTracker, Queue
 
 
 @pytest.fixture
@@ -64,3 +64,11 @@ def load_status_data():
         with open(f'{current_dir}/static/{name}.json', "r") as data:
             return json.load(data)
     return _load_status_data
+
+@pytest.fixture
+def queue(load_status_data):
+    resources = load_status_data(
+        name='status_pipeline_with_couple_buildsets_in_queue')
+    queue = Queue.create(
+        resources['pipelines'][0]['change_queues'][0], 'http://zuul_url')
+    return queue
