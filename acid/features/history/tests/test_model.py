@@ -26,16 +26,16 @@ class TestZuulBuildSet(DatabaseTestCase):
     @db_session
     def test_start_datetime_return_none_when_no_end_time(self, make_buildset):
         buildset = make_buildset(build_number=104)
-        for index, build in enumerate(buildset.builds):
+        for build in buildset.builds:
             build.end_time = None
-        assert  buildset.start_datetime is None
+        assert buildset.start_datetime is None
 
     @db_session
     def test_end_datetime_return_none_when_no_start_time(self, make_buildset):
         buildset = make_buildset(build_number=104)
-        for index, build in enumerate(buildset.builds):
+        for build in buildset.builds:
             build.start_time = None
-        assert  buildset.end_datetime is None
+        assert buildset.end_datetime is None
 
     @db_session
     def test_end_datetime_should_return_highest_time(self, make_buildset):
@@ -94,12 +94,12 @@ class TestZuulBuildSet(DatabaseTestCase):
         buildsets[0].pipeline = "one"
         return_buildsets = ZuulBuildSet.get_for_pipeline(pipeline='one')[:]
         expected = [buildsets[0]]
-        assert  return_buildsets == expected
+        assert return_buildsets == expected
 
     @db_session
     def test_get_filtered_if_branch_is_not_in_branches(self, populate_database):
         buildsets = populate_database()
-        for index, buildset in enumerate(buildsets):
+        for buildset in buildsets:
             buildset.ref = 'refs/heads/gimp'
         filtered_buildsets = ZuulBuildSet.get_filtered(
             pipeline='periodic-nightly',
@@ -109,7 +109,7 @@ class TestZuulBuildSet(DatabaseTestCase):
         assert filtered_buildsets == expected
 
     @db_session
-    def test_get_filtered_if_build_is_None(self, populate_database):
+    def test_get_filtered_if_build_is_none(self, populate_database):
         buildsets = populate_database()
         filtered_buildsets = ZuulBuildSet.get_filtered(
             pipeline='periodic-nightly',
@@ -129,6 +129,7 @@ class TestZuulBuildSet(DatabaseTestCase):
                                                             kwargs, expected):
         build = zuul_build(**kwargs)
         assert build.duration == expected
+
 
 @pytest.mark.unit
 class TestBuildSetPaginated:

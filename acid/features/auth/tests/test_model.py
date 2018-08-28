@@ -29,7 +29,7 @@ class TestUserModel(TestWithAppContext):
         with pytest.raises(FileNotFoundError):
             user_guest.is_admin()
 
-    def test_get_current_user_return_none_when_session_not_exist(self,mocker):
+    def test_get_current_user_return_none_when_session_not_exist(self, mocker):
         mocker.patch('acid.features.auth.model.session', None)
         assert get_current_user() is None
 

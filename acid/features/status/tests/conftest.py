@@ -7,7 +7,7 @@ import pytest
 
 from flask import current_app
 
-from ..model import Buildset, Job, TimeTracker, Queue
+from ..model import Buildset, Job, Queue, TimeTracker
 
 
 @pytest.fixture
@@ -64,6 +64,7 @@ def load_status_data():
         with open(f'{current_dir}/static/{name}.json', "r") as data:
             return json.load(data)
     return _load_status_data
+
 
 @pytest.fixture
 def queue(load_status_data):

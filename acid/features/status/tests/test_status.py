@@ -297,9 +297,10 @@ class TestBuildset:
         test_buildset.jobs = ['master', 'gimp']
         assert test_buildset.__len__() == 2
 
+
 @pytest.mark.unit
 class TestQueue:
-    def test_queue_should_return_valid_queue(self,queue):
+    def test_queue_should_return_valid_queue(self, queue):
         test_queue = queue
         buildsets_ref = []
         for each in test_queue.buildsets:
@@ -309,6 +310,6 @@ class TestQueue:
                     'Z75c2d6f5e9834689a58bf8d476b98ff2']
         assert buildsets_ref == expected
 
-    def test_queue_return_len(self,queue):
+    def test_queue_return_len(self, queue):
         test_queue = queue
         assert test_queue.__len__() == 3

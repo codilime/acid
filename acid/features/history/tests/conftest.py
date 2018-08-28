@@ -14,6 +14,7 @@ def zuul_builds(mocker):
     return [make_build(build_number=104, buildset_id=5010),
             make_build(build_number=104, buildset_id=5010)]
 
+
 @pytest.fixture
 def zuul_build(mocker):
     mocker.patch('pony.orm.core.commit')
@@ -29,6 +30,7 @@ def zuul_build(mocker):
 
     return _make_build
 
+
 @pytest.fixture
 def make_buildset():
     def _make_buildset(build_number=104, branch='master', number_of_builds=2):
@@ -43,7 +45,7 @@ def make_buildset():
                                 ref_url='http://acid.test/gitweb/',
                                 oldrev='', newrev='')
         commit()
-        for each in range(0,number_of_builds):
+        for _each in range(0, number_of_builds):
             make_build(build_number=build_number, buildset_id=buildset.id)
         return buildset
 
