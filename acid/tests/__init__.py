@@ -27,9 +27,9 @@ class DatabaseTestCase:
 
 class IntegrationTestCase(TestWithAppContext, DatabaseTestCase):
     def setup_method(self, method):
-        super().setup_method(method)
-        db.connect()
+        TestWithAppContext.setup_method(self, method)
+        DatabaseTestCase.setup_method(self, method)
 
     def teardown_method(self, method):
-        db.db.disconnect()
-        super().teardown_method(method)
+        DatabaseTestCase.teardown_method(self, method)
+        TestWithAppContext.teardown_method(self, method)
