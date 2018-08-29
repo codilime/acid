@@ -63,17 +63,17 @@
         {% if job.result %}
             {% set bar_width = buildset.progress %}
             {% if job.result == 'SUCCESS' %}
-                {% set bg_class = 'bg-success' %}
+                {% set bg_class = 'bg-ok' %}
             {% elif job.result == 'FAILURE' %}
-                {% set bg_class = 'bg-danger' %}
+                {% set bg_class = 'bg-fail' %}
             {% elif job.result %}
-                {% set bg_class = 'bg-warning' %}
+                {% set bg_class = 'bg-unknown' %}
             {% endif %}
         {% elif job.time_tracker.start%}
-            {% set bg_class = 'bg-info' %}
+            {% set bg_class = 'bg-running' %}
             {% set bar_width = buildset.progress * job.progress / 100 %}
         {% endif %}
-        <div class="progress-bar {{ bg_class }}" role="progressbar" title="{{ job.name }}" style="width:{{ bar_width }}%"></div>
+        <span class="{{ bg_class }}" role="progressbar" title="{{ job.name }}" style="width:{{ bar_width }}%"></span>
     {% endfor %}
 {% endmacro %}
 
@@ -82,32 +82,32 @@
     {% if job.time_tracker.start %}
         {% if job.result == 'SUCCESS' %}
             {% set job_status = job.result %}
-            {% set bg_class = "bg-success" %}
+            {% set bg_class = "bg-ok" %}
         {% elif job.result == 'FAILURE' %}
             {% set job_status = job.result %}
-            {% set bg_class = "bg-danger" %}
+            {% set bg_class = "bg-fail" %}
         {% elif job.result %}
             {% set job_status = job.result %}
-            {% set bg_class = "bg-warning" %}
+            {% set bg_class = "bg-unknown" %}
         {% else %}
-            {% set bg_class = "bg-info" %}
+            {% set bg_class = "bg-running" %}
             {% set bar_width = job.progress %}
         {% endif %}
     {% else %}
         {% if job.result %}
             {% set job_status = job.result %}
-            {% set bg_class = "bg-warning" %}
+            {% set bg_class = "bg-unknown" %}
         {% else %}
             {% set job_status = 'QUEUED' %}
-            {% set bg_class = 'bg-secondary' %}
+            {% set bg_class = 'bg-queued' %}
         {% endif %}
     {% endif %}
-    <div class="progress-bar {{ bg_class }}" role="progressbar" style="width:{{ bar_width }}%">{{ job_status }}</div>
+    <div class="progress-bar {{bg_class}}" role="progressbar" style="width:{{ bar_width }}%; font-size:1.1em">{{ job_status }}</div>
 {% endmacro %}
 
 {% macro buildset_status(buildset) %}
     {% if buildset.status == 'Succeeding'%}
-       <span class="badge badge-success" title="Succeeding">Succeeding</span>
+        <span class="badge badge-success" title="Succeeding">Succeeding</span>
     {% elif buildset.status == 'Failing' %}
         <span class="badge badge-danger" title="Failed because at least one job failed">Failing</span>
     {% else %}
