@@ -36,7 +36,7 @@ function enableAutoRefresh () { // eslint-disable-line no-unused-vars
   }
 }
 
-$( ".clickable" ).click(function() {
-  $( this ).toggleClass( "unfold" )
-    $( this ).parent().toggleClass( "XD" )
+$('.clickable').click(function () {
+  $(this).toggleClass('unfold')
+  $(this).parent().toggleClass('active-border')
 })

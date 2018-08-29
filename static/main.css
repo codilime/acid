@@ -152,6 +152,6 @@ input:checked + .slider:before {
     background-color: #BED6E5;
 }
 
-.XD {
+.active-border {
     border: 1px solid #4A90E2;
 }

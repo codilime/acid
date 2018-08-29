@@ -38,8 +38,8 @@
         </div>
     </div>
     {% for buildset in buildsets.page %}
-        <div class="accordion buildset-border justify-content-center mb-4">
-            <div class="col-12 card-header collapsible buildset-bg clickable" id="heading{{ buildset.id }}" data-toggle="collapse" data-target="#collapse{{ buildset.id }}">
+        <div class="accordion buildset-border justify-content-center mb-4 {% if request.args.unfold %}active-border{% endif %}">
+            <div class="col-12 card-header collapsible buildset-bg clickable {% if request.args.unfold %}unfold{% endif %}" id="heading{{ buildset.id }}" data-toggle="collapse" data-target="#collapse{{ buildset.id }}">
                 <div class="row mb-2 mt-2">
                     <div class="col-1"><i class="fas fa-angle-down fa-2x"></i></div>
                     <div class="col-1">{{ buildset.branch }}</div>
@@ -64,7 +64,7 @@
                     </div>
                 </div>
             </div>
-            <div id="collapse{{ buildset.id }}" class="collapse" data-parent="#accordion">
+            <div id="collapse{{ buildset.id }}" class="collapse{% if request.args.unfold %} show{% endif %}" data-parent="#accordion">
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table col-12">
