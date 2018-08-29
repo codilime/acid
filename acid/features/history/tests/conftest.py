@@ -11,6 +11,7 @@ from ..model import ZuulBuild, ZuulBuildSet
 @pytest.fixture
 def zuul_builds(mocker):
     mocker.patch('pony.orm.core.commit')
+
     return [make_build(build_number=104, buildset_id=5010),
             make_build(build_number=104, buildset_id=5010)]
 
