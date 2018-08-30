@@ -1,0 +1,5 @@
+---
+# Playbook for deploy clean ACID to hosts
+- hosts: acid-server
+  roles:
+    - deploy-acid

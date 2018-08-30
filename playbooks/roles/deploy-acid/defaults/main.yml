@@ -1,0 +1,18 @@
+---
+# List of additional files to copy to acid/ dir on server
+# Use to e.g. deploy settings.yml, public key for ZuulManager etc.
+files_to_copy: []
+
+flask_env: "development"
+acid_port: 80
+
+# Configuration for database
+
+# dbhost: 127.0.0.1
+# dbport: 3303
+# dbuser: root
+# dbname: "mysql"
+
+# Secret data: on production set those by ansible cli
+# dbpassword: PASSWORD_TO_DB
+# secret_key: SECRET_KEY_TO_SECURE_SESSION
