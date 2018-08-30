@@ -34,4 +34,8 @@ function enableAutoRefresh () { // eslint-disable-line no-unused-vars
       window.location.reload()
     }
   }
+  $('.clickable').click(function () {
+    $(this).toggleClass('unfold')
+    $(this).parent().toggleClass('active-border')
+  })
 }

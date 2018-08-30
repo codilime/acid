@@ -2,64 +2,76 @@
 {% block content %}
     <h4 class="mt-2 mb-2">Queue: {{ queue.name }}</h4>
     {% for buildset in queue.buildsets %}
-        <div class="accordion">
-            <div class="card">
-                <div class="card-header clickable" id="heading{{ buildset.ref }}" data-toggle="collapse" data-target="#collapse{{ buildset.ref }}">
-                        <div>{{ buildset.name }}</div>
-                        <div>Zuul ref: {{ buildset.ref }}</div>
-                        <div class="no-collapsible">
+        <div class="accordion buildset-border justify-content-center mb-2">
+            <div class="card-header collapsible buildset-bg clickable" id="heading{{ buildset.ref }}" data-toggle="collapse" data-target="#collapse{{ buildset.ref }}">
+                    <div class="col-12 mb-2 mt-2">
+                        <span class="col-1"><i class="fas fa-angle-down fa-2x"></i></span>
+                        <strong>{{ buildset.name }}</strong>
+                        <span class="col-2"><strong>Zuul ref:</strong> {{ buildset.ref }}</span>
+                        <span class="separator"></span>
+                        <span class="col-1 no-collapsible">
                             {% if buildset.buildset_id %}
-                            <a href="{{ buildset.review_url }}">ID: {{ buildset.buildset_id }}</a>
+                                <strong><a href="{{ buildset.review_url }}">ID: {{ buildset.buildset_id }}</a></strong>
                             {% endif %}
-                        </div>
-                        <div class="progress big-progress mt-1 mb-1">
+                        </span>
+                    </div>
+                    <div class="col-12 mb-2 mt-2">
+                        <div class="col-1 progress big-progress mt-2">
                             {{ buildset_progress(buildset) }}
                         </div>
-                        <h6>
-                            Status: {{ buildset_status(buildset) }}
-                            Elapsed time: {{ buildset.elapsed_time }}
-                            Remaining time: {{ show_object_or_na(buildset.remaining_time) }}
-                            Start time: {{ local_datetime(buildset.start_datetime) }}
-                            Enqueue time: {{ local_datetime(buildset.enqueue) }}
-                            Owner: {{ buildset.owner.name }} {{ buildset.owner.email }}
-                        </h6>
-                </div>
-                <div id="collapse{{ buildset.ref }}" class="collapse" data-parent="#accordion">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Job name</th>
-                                    <th scope="col">Worker</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Start time</th>
-                                    <th scope="col">Duration</th>
-                                    <th scope="col">Remaining</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for job in buildset.jobs %}
-                                <tr>
-                                    <td>
-                                        <a href="{{ job.log_url }}">{{ job.name }}</a> {% if not job.voting %} <span class="badge badge-secondary">non-voting</span>{% endif %}
-                                        {% if job.canceled %} <span class="badge badge-danger">canceled</span>{% endif %}
-                                        {% if job.retry %} <span class="badge badge-info">retry</span>{% endif %}
-                                    </td>
-                                    <td>{{ job.worker.name }}</td>
-                                    <td class="progress-col">
-                                        <div class="progress bg-grey">
-                                            {{ job_progress(job) }}
-                                        </div>
-                                    </td>
-                                    <td>{{ local_datetime(job.time_tracker.start_to_datetime) }}</td>
-                                    <td>{{ show_object_or_na(job.time_tracker.elapsed_to_time) }}</td>
-                                    <td>{{ show_object_or_na(job.time_tracker.remaining_to_time) }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                            </table>
-                        </div>
+                        <span class="ml-4"></span>
+                        <span class="ml-4"><strong>Status:</strong> {{ buildset_status(buildset) }}</span>
+                        <span class="ml-4"><strong>Elapsed time:</strong> {{ buildset.elapsed_time }}</span>
+                        <span class="ml-4"><strong>Remaining time:</strong> {{ show_object_or_na(buildset.remaining_time) }}</span>
+                        <span class="ml-4"><strong>Start time:</strong> {{ local_datetime(buildset.start_datetime) }}</span>
+                        <span class="ml-4"><strong>Enqueue time:</strong> {{ local_datetime(buildset.enqueue) }}</span>
+                        <span class="ml-4"><strong>Owner:</strong> {{ buildset.owner.name }} {{ buildset.owner.email }}</span>
+                    </div>
+            </div>
+            <div id="collapse{{ buildset.ref }}" class="collapse" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table col-12">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-4 normal">JOB NAME</th>
+                                <th scope="col" class="col-1 normal">WORKER</th>
+                                <th scope="col" class="col-1 normal">STATUS</th>
+                                <th scope="col" class="col-2 normal">START TIME</th>
+                                <th scope="col" class="col-2 normal">DURATION</th>
+                                <th scope="col" class="col-2 normal">REMAINING</th>
+                                <th scope="col" class="col-1 normal">LOG</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for job in buildset.jobs %}
+                            <tr>
+                                <td class="col-4">
+                                    {{ job.name }}
+                                    {% if not job.voting %} <span class="badge badge-secondary">non-voting</span>{% endif %}
+                                    {% if job.canceled %} <span class="badge badge-danger">canceled</span>{% endif %}
+                                    {% if job.retry %} <span class="badge badge-info">retry</span>{% endif %}
+                                </td>
+                                <td class="col-1">{{ job.worker.name }}</td>
+                                <td class="progress-col col-1">
+                                    <div class="progress small-progress">
+                                        {{ job_progress(job) }}
+                                    </div>
+                                </td>
+                                <td class="col-2">{{ local_datetime(job.time_tracker.start_to_datetime) }}</td>
+                                <td class="col-2">{{ show_object_or_na(job.time_tracker.elapsed_to_time) }}</td>
+                                <td class="col-2">{{ show_object_or_na(job.time_tracker.remaining_to_time) }}</td>
+                                <td class="col-1">
+                                    {% if job.url %}
+                                        <a href="{{ job.log_url }}"><i class="far fa-file-alt fa-2x" style="color:blue;"></i></a>
+                                    {% else %}
+                                        <i class="far fa-file-alt fa-2x" style="color:grey;"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

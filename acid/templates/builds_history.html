@@ -7,9 +7,9 @@
             <h1>Builds history for {{ buildsets.pipeline }}</h1>
         </div>
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
+
+    <div class="container mb-5">
+        <div class="row justify-content-center">
                 <form class="form-inline" action="{{ url_for('builds.show_builds_history') }}">
                     <div class="form-group mr-sm-2">
                         <select class="custom-select form-control mb-2 mr-sm-2" name="branch">
@@ -18,83 +18,105 @@
                                 <option {% if branch == request.args.branch %} selected="selected" {% endif %}>{{ branch }}</option>
                             {% endfor %}
                         </select>
-                        <input type="text" name="build" class="form-control mb-2 mr-sm-2"
-                               id="buildFilter" placeholder="Build"
-                               value="{{ request.args.build or '' }}">
+                        <input type="text" name="build" class="form-control mb-2 mr-sm-2" id="buildFilter" placeholder="Build" value="{{ request.args.build or '' }}">
                         <button type="submit" class="btn btn-primary mb-2 mr-sm-2">Filter</button>
                     </div>
                 </form>
-            </div>
         </div>
     </div>
-    <div class="container mt-5 mb-5">
-        <div class="row build-table table-head">
-            <div class="col ml-2">Branch</div>
-            <div class="col">Build number</div>
-            <div class="col">Duration</div>
-            <div class="col">Started</div>
-            <div class="col">Finished</div>
-            <div class="col text-center">Result</div>
-            <div class="col text-center">Permalink</div>
-        </div>
-        {% for b in buildsets.page %}
-        <div class="row hover-row build-table clickable {% if not request.args.unfold %}collapsed{% endif %}"
-             data-toggle="collapse" data-target="#collapse-{{ b.id }}">
-            <div class="dropdown-toggle"></div>
-            <div class="col">{{ b.branch }}</div>
-            <div class="col">
-                <a class="no-collapsible"
-                   href="{{ buildsets_log_url }}/{{ buildsets.pipeline }}/review.opencontrail.org/{{ b.branch }}/{{ b.build_number }}/"
-                   title="Open logs">{{ show_object_or_na(b.build_number) }}</a>
-            </div>
-            <div class="col">{{ show_object_or_na(b.duration) }}</div>
-            <div class="col">{{ local_datetime(b.start_datetime) }}</div>
-            <div class="col">{{ local_datetime(b.end_datetime) }}</div>
-            <div class="col text-center">
-                <span class="badge {% if b.result == 'SUCCESS' %} badge-success {% else %} badge-danger {% endif %}">{{ b.result }}</span>
-            </div>
-            <div class="col text-center">
-                <a class="btn btn-outline-primary" href="{{ url_for('builds.show_builds_history', branch=b.branch, build=b.build_number, unfold=true) }}">permalink</a>
-            </div>
-        </div>
-        <div class="collapse row justify-content-md-center p-3 {% if request.args.unfold %}show{% endif %}"
-             id="collapse-{{ b.id }}">
-            <div class="col-12">
-                <div
-                    class="row build-table text-white bg-secondary font-weight-bold">
-                    <div class="col-5">Job name</div>
-                    <div class="col">Duration</div>
-                    <div class="col-2">Start time</div>
-                    <div class="col-2">End time</div>
-                    <div class="col">Result</div>
-                </div>
-                {% for job in b.builds %}
-                <div class="row build-table bg-light">
-                    <div class="col-5"
-                         title=" This job is {% if not job.voting %}not {% endif %}voting ">
-                        <a href="{{ job.log_url }}" title="Open log">{{ job.job_name }}</a>{% if not job.voting %}
-                        <span class="badge badge-secondary">non-voting</span>{% endif %}
+    <table class="table col-12">
+        <tr>
+            <td class="col-1 normal"></td>
+            <td class="col-2 normal"><strong>BRANCH</strong></td>
+            <td class="col-1 normal"><strong>BUILD</strong></td>
+            <td class="col-1 normal"><strong>DURATION</strong></td>
+            <td class="col-2 normal"><strong>START TIME</strong></td>
+            <td class="col-2 normal"><strong>END TIME</strong></td>
+            <td class="col-1 normal"><strong>RESULT</strong></td>
+            <td class="col-1 normal"><strong>LOG</strong></td>
+            <td class="col-1 normal"><strong>PERMALINK</strong></td>
+        </tr>
+    </table>
+    {% for buildset in buildsets.page %}
+        <div class="accordion buildset-border justify-content-center mb-4 {% if request.args.unfold %}active-border{% endif %}">
+            <div class="col-12 card-header collapsible buildset-bg clickable {% if request.args.unfold %}unfold{% endif %}" id="heading{{ buildset.id }}" data-toggle="collapse" data-target="#collapse{{ buildset.id }}">
+                <div class="row mb-2 mt-2">
+                    <div class="col-1"><i class="fas fa-angle-down fa-2x"></i></div>
+                    <div class="col-2">{{ buildset.branch }}</div>
+                    <div class="col-1">{{ show_object_or_na(buildset.build_number) }}</div>
+                    <div class="col-1">{{ show_object_or_na(buildset.duration) }}</div>
+                    <div class="col-2">{{ local_datetime(buildset.start_datetime)  }}</div>
+                    <div class="col-2">{{ local_datetime(buildset.end_datetime)  }}</div>
+                    <div class="col-1">
+                        <span class="badge {% if buildset.result == 'SUCCESS' %} badge-success {% else %} badge-danger {% endif %}">{{ buildset.result }}</span>
                     </div>
-                    <div class="col">{{ show_object_or_na(job.duration) }}</div>
-                    <div class="col-2">{{ local_datetime(job.start_time) }}</div>
-                    <div class="col-2">{{ local_datetime(job.end_time) }}</div>
-                    <div class="col">
-                        <span class="badge {% if job.result == 'SUCCESS' %} badge-success
-                                        {% elif job.result == 'FAILURE' %} badge-danger
-                                        {% elif job.result == 'SKIPPED' %} badge-info
-                                        {% else %} badge-warning
-                                        {% endif %} ">{{ job.result }}</span>
+                    <div class="col-1" >
+                        {% if buildset.build_number %}
+                            <a class="no-collapsible" href="{{ buildsets_log_url }}/{{ buildsets.pipeline }}/review.opencontrail.org/{{ buildset.branch }}/{{ buildset.build_number }}/" title="Open logs"><i class="far fa-file-alt fa-2x" style="color:blue;"></i></a>
+                        {% else %}
+                            <i class="far fa-file-alt fa-2x inactive"></i>
+                        {% endif %}
+                    </div>
+                    <div class="col-1">
+                        <span class="col text-center">
+                            <a class="no-collapsible" href="{{ url_for('builds.show_builds_history', branch=buildset.branch, build=buildset.build_number, unfold=true) }}"><i class="fas fa-link fa-2x"></i></a>
+                        </span>
                     </div>
                 </div>
-                {% endfor %}
+            </div>
+            <div id="collapse{{ buildset.id }}" class="collapse{% if request.args.unfold %} show{% endif %}" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table col-12">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="col-4 normal"><strong>JOB NAME</strong></th>
+                                    <th scope="col" class="col-1 normal"><strong>DURATION</strong></th>
+                                    <th scope="col" class="col-2 normal"><strong>START TIME</strong></th>
+                                    <th scope="col" class="col-2 normal"><strong>END TIME</strong></th>
+                                    <th scope="col" class="col-1 normal"><strong>RESULT</strong></th>
+                                    <th scope="col" class="col-1 normal"><strong>LOG</strong></th>
+                                    <th scope="col" class="col-1 normal"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for job in buildset.builds %}
+                                    <tr>
+                                        <td class="col-4" title="This job is {% if not job.voting %}not {% endif %}voting ">
+                                            {{ job.job_name }}{% if not job.voting %}<span class="badge badge-secondary ml-2">non-voting</span>{% endif %}
+                                        </td>
+                                        <td class="col-1">{{ show_object_or_na(job.duration) }}</td>
+                                        <td class="col-2">{{ local_datetime(job.start_time) }}</td>
+                                        <td class="col-2">{{ local_datetime(job.end_time) }}</td>
+                                        <td class="col-1">
+                                            <span class="badge {% if job.result == 'SUCCESS' %} badge-success
+                                                               {% elif job.result == 'FAILURE' %} badge-danger
+                                                               {% elif job.result == 'SKIPPED' %} badge-info
+                                                               {% else %} badge-warning
+                                                               {% endif %}">{{ job.result }}
+                                            </span>
+                                        </td>
+                                        <td class="col-1">
+                                            {% if job.log_url.startswith('http') %}
+                                                <a href="{{ job.log_url }}" title="Open log"><i class="far fa-file-alt fa-2x"></i></a>
+                                            {% else %}
+                                                <i class="far fa-file-alt fa-2x inactive"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td class="col-1"></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-        {% endfor %}
-        {% if buildsets | length < 1 %}
-        <div class="alert alert-info m-3" role="alert">
-            There is no data to show
-        </div>
-        {% endif %}
+    {% endfor %}
+    {% if buildsets | length < 1 %}
+    <div class="alert alert-info m-3" role="alert">
+        There is no data to show
     </div>
+    {% endif %}
     {{ show_pagination(paginator) }}
 {% endblock %}
