@@ -24,25 +24,25 @@
                 </form>
         </div>
     </div>
-    <div class="col-12">
-        <div class="row mb-4">
-            <div class="col-1 normal"></div>
-            <div class="col-1 normal"><strong>BRANCH</strong></div>
-            <div class="col-1 normal"><strong>BUILD</strong></div>
-            <div class="col-1 normal"><strong>DURATION</strong></div>
-            <div class="col-2 normal"><strong>START TIME</strong></div>
-            <div class="col-2 normal"><strong>END TIME</strong></div>
-            <div class="col-1 normal"><strong>RESULT</strong></div>
-            <div class="col-1 normal"><strong>LOG</strong></div>
-            <div class="col-1 normal"><strong>PERMALINK</strong></div>
-        </div>
-    </div>
+    <table class="table col-12">
+        <tr>
+            <td class="col-1 normal"></td>
+            <td class="col-2 normal"><strong>BRANCH</strong></td>
+            <td class="col-1 normal"><strong>BUILD</strong></td>
+            <td class="col-1 normal"><strong>DURATION</strong></td>
+            <td class="col-2 normal"><strong>START TIME</strong></td>
+            <td class="col-2 normal"><strong>END TIME</strong></td>
+            <td class="col-1 normal"><strong>RESULT</strong></td>
+            <td class="col-1 normal"><strong>LOG</strong></td>
+            <td class="col-1 normal"><strong>PERMALINK</strong></td>
+        </tr>
+    </table>
     {% for buildset in buildsets.page %}
         <div class="accordion buildset-border justify-content-center mb-4 {% if request.args.unfold %}active-border{% endif %}">
             <div class="col-12 card-header collapsible buildset-bg clickable {% if request.args.unfold %}unfold{% endif %}" id="heading{{ buildset.id }}" data-toggle="collapse" data-target="#collapse{{ buildset.id }}">
                 <div class="row mb-2 mt-2">
                     <div class="col-1"><i class="fas fa-angle-down fa-2x"></i></div>
-                    <div class="col-1">{{ buildset.branch }}</div>
+                    <div class="col-2">{{ buildset.branch }}</div>
                     <div class="col-1">{{ show_object_or_na(buildset.build_number) }}</div>
                     <div class="col-1">{{ show_object_or_na(buildset.duration) }}</div>
                     <div class="col-2">{{ local_datetime(buildset.start_datetime)  }}</div>
@@ -71,20 +71,21 @@
                             <thead>
                                 <tr>
                                     <th scope="col" class="col-4 normal"><strong>JOB NAME</strong></th>
-                                    <th scope="col" class="col-2 normal"><strong>DURATION</strong></th>
+                                    <th scope="col" class="col-1 normal"><strong>DURATION</strong></th>
                                     <th scope="col" class="col-2 normal"><strong>START TIME</strong></th>
                                     <th scope="col" class="col-2 normal"><strong>END TIME</strong></th>
                                     <th scope="col" class="col-1 normal"><strong>RESULT</strong></th>
                                     <th scope="col" class="col-1 normal"><strong>LOG</strong></th>
+                                    <th scope="col" class="col-1 normal"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for job in buildset.builds %}
                                     <tr>
-                                        <td class="col-4" title=" This job is {% if not job.voting %}not {% endif %}voting ">
+                                        <td class="col-4" title="This job is {% if not job.voting %}not {% endif %}voting ">
                                             {{ job.job_name }}{% if not job.voting %}<span class="badge badge-secondary ml-2">non-voting</span>{% endif %}
                                         </td>
-                                        <td class="col-2">{{ show_object_or_na(job.duration) }}</td>
+                                        <td class="col-1">{{ show_object_or_na(job.duration) }}</td>
                                         <td class="col-2">{{ local_datetime(job.start_time) }}</td>
                                         <td class="col-2">{{ local_datetime(job.end_time) }}</td>
                                         <td class="col-1">
@@ -96,12 +97,13 @@
                                             </span>
                                         </td>
                                         <td class="col-1">
-                                            {% if job.log_url.startswith('http://') %}
+                                            {% if job.log_url.startswith('http') %}
                                                 <a href="{{ job.log_url }}" title="Open log"><i class="far fa-file-alt fa-2x"></i></a>
                                             {% else %}
                                                 <i class="far fa-file-alt fa-2x inactive"></i>
                                             {% endif %}
                                         </td>
+                                        <td class="col-1"></td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
