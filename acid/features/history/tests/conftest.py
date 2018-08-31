@@ -24,9 +24,11 @@ def make_build(build_number=104, buildset_id=5010, start_time=0, end_time=0):
                      log_url=f'http://logs.acid.test/{build_number}/865548a7/',
                      node_name='first_node')
 
+
 @pytest.fixture
 def make_buildset():
-    def _make_buildset(build_number=104, branch='master', number_of_builds=5, start_time=0, end_time=0):
+    def _make_buildset(build_number=104, branch='master', number_of_builds=5,
+                       start_time=0, end_time=0):
         buildset = ZuulBuildSet(zuul_ref='Zef2180cdc7ff440daefe48d85ed91b48',
                                 pipeline='periodic-nightly',
                                 project='acid-test-dev',
@@ -42,9 +44,9 @@ def make_buildset():
             start_time = datetime(2018, 2, 23, 22, 0, 0)
         if (end_time == 0):
             end_time = datetime(2018, 2, 23, 23, 55, 0)
-        try:
+        if (start_time and end_time):
             time_diff = (end_time - start_time).total_seconds()
-        except:
+        else:
             time_diff = 0
         starting_times = [start_time]
         ending_times = [end_time]
@@ -65,8 +67,9 @@ def make_buildset():
 
     return _make_buildset
 
+
 @pytest.fixture
-def create_database_with_buildsets():
+def database_with_buildsets():
     def _create_database_with_buildsets(count=10, branch='master',
                                         start_build_number=105):
         return [make_buildset()(build_number=str(start_build_number + x),

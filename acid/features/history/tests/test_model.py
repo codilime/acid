@@ -88,16 +88,18 @@ class TestZuulBuildSet(DatabaseTestCase):
         assert branches == expected
 
     @db_session
-    def test_get_for_pipeline_return_pipelines(self, create_database_with_buildsets):
-        database = create_database_with_buildsets(count=2)
+    def test_get_for_pipeline_return_pipelines(self,
+                                               database_with_buildsets):
+        database = database_with_buildsets(count=2)
         database[0].pipeline = "one"
         return_buildsets = list(ZuulBuildSet.get_for_pipeline(pipeline='one'))
         expected = [database[0]]
         assert return_buildsets == expected
 
     @db_session
-    def test_get_filtered_if_branch_is_not_in_branches(self, create_database_with_buildsets):
-        database = create_database_with_buildsets()
+    def test_get_filtered_if_branch_is_not_in_branches(self,
+                                                       database_with_buildsets):
+        database = database_with_buildsets()
         for buildset in database:
             buildset.ref = 'refs/heads/gimp'
         filtered_buildsets = list(ZuulBuildSet.get_filtered(
@@ -108,8 +110,9 @@ class TestZuulBuildSet(DatabaseTestCase):
         assert filtered_buildsets == expected
 
     @db_session
-    def test_get_filtered_if_build_is_none(self, create_database_with_buildsets):
-        buildsets = create_database_with_buildsets()
+    def test_get_filtered_if_build_is_none(self,
+                                           database_with_buildsets):
+        buildsets = database_with_buildsets()
         filtered_buildsets = list(ZuulBuildSet.get_filtered(
             pipeline='periodic-nightly',
             branch='master',
@@ -126,11 +129,11 @@ class TestZuulBuildSet(DatabaseTestCase):
     @db_session
     def test_duration_return_value(self, make_buildset, start_time, end_time,
                                    expected):
-        buildset = make_buildset(number_of_builds=1,start_time=start_time,end_time=end_time)
+        buildset = make_buildset(number_of_builds=1, start_time=start_time,
+                                 end_time=end_time)
         builds_duration = [b.duration for b in buildset.builds][0]
         print(builds_duration)
         assert builds_duration == expected
-
 
 
 @pytest.mark.unit
