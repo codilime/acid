@@ -35,9 +35,8 @@ function enableAutoRefresh () { // eslint-disable-line no-unused-vars
   })
 
   function refresh () {
-      if ($('#auto-refresh').is(':checked')) {
-          window.location.reload()
-      }
+    if ($('#auto-refresh').is(':checked')) {
+      window.location.reload()
+    }
   }
 }
-
