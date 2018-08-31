@@ -1,5 +1,12 @@
 ---
 # Playbook for deploy clean ACID to hosts
 - hosts: acid-server
+  gather_facts: no
+  pre_tasks:
+    # Ubuntu/bionic64 ships without python2 which causes Ansible to fail on gather_facts
+    - name: Install python2 for Ansible
+      raw: test -e /usr/bin/python || (sudo apt -y update && sudo apt install -y python-minimal)
+    # "Setup" action will gather facts after python2 has been installed
+    - action: setup
   roles:
     - deploy-acid
