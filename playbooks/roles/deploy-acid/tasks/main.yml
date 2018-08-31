@@ -1,0 +1,44 @@
+---
+- name: Install packages
+  become: yes
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - supervisor
+    - python3-venv
+
+- name: Clone ACID repository
+  git:
+    repo: 'https://github.com/codilime/acid.git'
+    dest: "{{ ansible_env.HOME }}/acid"
+    force: yes
+
+- name: Create virtualenv and install python package
+  shell: |
+    python3.6 -m venv .venv; \
+    . .venv/bin/activate; \
+    pip install --upgrade pip; \
+    pip install setuptools wheel; \
+    pip install -r requirements.txt; \
+    pip install gunicorn
+  args:
+    chdir: "{{ ansible_env.HOME }}/acid"
+
+- name: Setup sueprvisor configuration
+  become: yes
+  template:
+    src: templates/supervisor_acid.conf
+    dest: /etc/supervisor/conf.d/acid.conf
+
+- name: Create directories for ACID logs
+  become: yes
+  file:
+    path: /var/log/acid
+    state: directory
+
+- name: Restart supervisor
+  become: yes
+  service:
+    name: supervisor
+    state: restarted

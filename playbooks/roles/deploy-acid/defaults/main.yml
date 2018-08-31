@@ -1,0 +1,9 @@
+---
+acid_port: 80
+
+ENVS:
+  - FLASK_ENV=development
+  - TESTING=0
+  - DBHOST=127.0.0.1
+  - DBUSER=root
+  - DBPASS=root

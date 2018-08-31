@@ -8,7 +8,7 @@
   shell: |
     set -e
     set -x
-    ansible-playbook -vv -i inventory.yml install-zuul.yml
+    ansible-playbook -vv -i vagrant-inventory.yml install-zuul.yml
   args:
     chdir: /opt/app/playbooks
     executable: /bin/bash
