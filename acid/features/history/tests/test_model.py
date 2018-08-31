@@ -88,28 +88,28 @@ class TestZuulBuildSet(DatabaseTestCase):
         assert branches == expected
 
     @db_session
-    def test_get_for_pipeline_return_pipelines(self, populate_database):
-        buildsets = populate_database(count=2)
-        buildsets[0].pipeline = "one"
+    def test_get_for_pipeline_return_pipelines(self, create_database_with_buildsets):
+        database = create_database_with_buildsets(count=2)
+        database[0].pipeline = "one"
         return_buildsets = list(ZuulBuildSet.get_for_pipeline(pipeline='one'))
-        expected = [buildsets[0]]
+        expected = [database[0]]
         assert return_buildsets == expected
 
     @db_session
-    def test_get_filtered_if_branch_is_not_in_branches(self, populate_database):
-        buildsets = populate_database()
-        for buildset in buildsets:
+    def test_get_filtered_if_branch_is_not_in_branches(self, create_database_with_buildsets):
+        database = create_database_with_buildsets()
+        for buildset in database:
             buildset.ref = 'refs/heads/gimp'
         filtered_buildsets = list(ZuulBuildSet.get_filtered(
             pipeline='periodic-nightly',
             branch='master',
             build='105'))
-        expected = [buildsets[0]]
+        expected = [database[0]]
         assert filtered_buildsets == expected
 
     @db_session
-    def test_get_filtered_if_build_is_none(self, populate_database):
-        buildsets = populate_database()
+    def test_get_filtered_if_build_is_none(self, create_database_with_buildsets):
+        buildsets = create_database_with_buildsets()
         filtered_buildsets = list(ZuulBuildSet.get_filtered(
             pipeline='periodic-nightly',
             branch='master',
@@ -124,11 +124,12 @@ class TestZuulBuildSet(DatabaseTestCase):
         (None, None, None)
     ])
     @db_session
-    def test_duration_return_value_if_start_and_end_present(self, zuul_build,
-                                                            start_time,
-                                                            end_time, expected):
-        build = zuul_build(start_time=start_time, end_time=end_time)
-        assert build.duration == expected
+    def test_duration_return_value(self, make_buildset, start_time, end_time,
+                                   expected):
+        buildset = make_buildset(number_of_builds=1,start_time=start_time,end_time=end_time)
+        builds_duration = [b.duration for b in buildset.builds][0]
+        print(builds_duration)
+        assert builds_duration == expected
 
 
 
