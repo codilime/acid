@@ -33,6 +33,7 @@ class TestUserModel(TestWithAppContext):
         mocker.patch('acid.features.auth.model.session', None)
         assert get_current_user() is None
 
-    def test_get_current_user_return_proper_user_when_session(self, mocker):
+    def test_get_current_user_return_proper_user_when_session_exist(self,
+                                                                    mocker):
         mocker.patch('acid.features.auth.model.session', {'user': 'test_user'})
         assert get_current_user() == 'test_user'

@@ -20,9 +20,12 @@ def zuul_builds(mocker):
 def zuul_build(mocker):
     mocker.patch('pony.orm.core.commit')
 
-    def _make_build(build_number=104, buildset_id=5010, **kwargs):
-        start_time = kwargs.get('start_time', datetime(2018, 2, 23, 22, 0, 0))
-        end_time = kwargs.get('end_time', datetime(2018, 2, 23, 23, 55, 0))
+    def _make_build(build_number=104, buildset_id=5010, start_time=0,
+                    end_time=0):
+        if (start_time == 0):
+            start_time = datetime(2018, 2, 23, 22, 0, 0)
+        if (end_time == 0):
+            end_time = datetime(2018, 2, 23, 23, 55, 0)
         build = make_build(build_number=build_number,
                            buildset_id=buildset_id,
                            start_time=start_time,
@@ -46,7 +49,7 @@ def make_buildset():
                                 ref_url='http://acid.test/gitweb/',
                                 oldrev='', newrev='')
         commit()
-        for _each in range(0, number_of_builds):
+        for _ in range(number_of_builds):
             make_build(build_number=build_number, buildset_id=buildset.id)
         return buildset
 
@@ -54,9 +57,11 @@ def make_buildset():
 
 
 @db_session
-def make_build(build_number, buildset_id, **kwargs):
-    start_time = kwargs.get('start_time', datetime(2018, 2, 23, 22, 0, 0))
-    end_time = kwargs.get('end_time', datetime(2018, 2, 23, 23, 55, 0))
+def make_build(build_number, buildset_id, start_time=0, end_time=0):
+    if (start_time == 0):
+        start_time = datetime(2018, 2, 23, 22, 0, 0)
+    if (end_time == 0):
+        end_time = datetime(2018, 2, 23, 23, 55, 0)
     return ZuulBuild(buildset_id=buildset_id,
                      uuid='86394a77c99f45aba0e299b660214a9c',
                      job_name='acid-build-nightly',

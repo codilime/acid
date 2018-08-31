@@ -14,10 +14,9 @@ from ..model import ZuulBuildSet
 
 @pytest.mark.unit
 class TestZuulBuildSet(DatabaseTestCase):
-    # (kam193) TODO: randomize times
     @db_session
     def test_start_datetime_should_return_lowest_time(self, make_buildset):
-        buildset = make_buildset(build_number=104)
+        buildset = make_buildset()
         for index, build in enumerate(buildset.builds):
             build.start_time = datetime(2016 + index, 1, 1, 1, 1, 1)
         expected = datetime(2016, 1, 1, 1, 1, 1)
@@ -25,21 +24,21 @@ class TestZuulBuildSet(DatabaseTestCase):
 
     @db_session
     def test_start_datetime_return_none_when_no_end_time(self, make_buildset):
-        buildset = make_buildset(build_number=104)
+        buildset = make_buildset()
         for build in buildset.builds:
             build.end_time = None
         assert buildset.start_datetime is None
 
     @db_session
     def test_end_datetime_return_none_when_no_start_time(self, make_buildset):
-        buildset = make_buildset(build_number=104)
+        buildset = make_buildset()
         for build in buildset.builds:
             build.start_time = None
         assert buildset.end_datetime is None
 
     @db_session
     def test_end_datetime_should_return_highest_time(self, make_buildset):
-        buildset = make_buildset(build_number=104)
+        buildset = make_buildset()
         for index, build in enumerate(buildset.builds):
             build.end_time = datetime(2016 + index, 1, 1, 1, 1, 1)
         expected = datetime(2016 + len(buildset.builds) - 1, 1, 1, 1, 1, 1)
@@ -84,7 +83,7 @@ class TestZuulBuildSet(DatabaseTestCase):
     def test_get_branches_return_branches(self, make_buildset):
         make_buildset(branch='master')
         make_buildset(branch='gimp')
-        branches = ZuulBuildSet.get_branches()[:]
+        branches = list(ZuulBuildSet.get_branches())
         expected = ['master', 'gimp']
         assert branches == expected
 
@@ -92,7 +91,7 @@ class TestZuulBuildSet(DatabaseTestCase):
     def test_get_for_pipeline_return_pipelines(self, populate_database):
         buildsets = populate_database(count=2)
         buildsets[0].pipeline = "one"
-        return_buildsets = ZuulBuildSet.get_for_pipeline(pipeline='one')[:]
+        return_buildsets = list(ZuulBuildSet.get_for_pipeline(pipeline='one'))
         expected = [buildsets[0]]
         assert return_buildsets == expected
 
@@ -101,34 +100,36 @@ class TestZuulBuildSet(DatabaseTestCase):
         buildsets = populate_database()
         for buildset in buildsets:
             buildset.ref = 'refs/heads/gimp'
-        filtered_buildsets = ZuulBuildSet.get_filtered(
+        filtered_buildsets = list(ZuulBuildSet.get_filtered(
             pipeline='periodic-nightly',
             branch='master',
-            build='105')[:]
+            build='105'))
         expected = [buildsets[0]]
         assert filtered_buildsets == expected
 
     @db_session
     def test_get_filtered_if_build_is_none(self, populate_database):
         buildsets = populate_database()
-        filtered_buildsets = ZuulBuildSet.get_filtered(
+        filtered_buildsets = list(ZuulBuildSet.get_filtered(
             pipeline='periodic-nightly',
             branch='master',
-            build=None)[:]
+            build=None))
         expected = buildsets[::-1]
         assert filtered_buildsets == expected
 
-    @pytest.mark.parametrize("kwargs,expected", [
-        ({}, timedelta(0, 6900)),
-        ({"start_time": None}, None),
-        ({"end_time": None}, None),
-        ({"start_time": None, "end_time": None}, None)
+    @pytest.mark.parametrize("start_time, end_time ,expected", [
+        (0, 0, timedelta(0, 6900)),
+        (0, None, None),
+        (None, 0, None),
+        (None, None, None)
     ])
     @db_session
     def test_duration_return_value_if_start_and_end_present(self, zuul_build,
-                                                            kwargs, expected):
-        build = zuul_build(**kwargs)
+                                                            start_time,
+                                                            end_time, expected):
+        build = zuul_build(start_time=start_time, end_time=end_time)
         assert build.duration == expected
+
 
 
 @pytest.mark.unit
