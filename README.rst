@@ -6,18 +6,24 @@ More information about Zuul Gating system you can find at: https://zuul-ci.org/d
 
 ACID CI Dashboard is under APACHE 2.0 LICENSE, for more info check LICENSE.
 
-HOW TO INSTALL
---------------
+TOOLS AND LIBRARIES NEEDED
+--------------------------
 
 ACID require Python 3.6.x. and Python3.6-venv.
 Please make sure you have `Python 3.6` and `Python 3.6-venv` version in your OS.
+
+For creating virtual enviroment Ansible and Vagrant are used. Make sure you have these installed as well as libvirt library.
+
+
+HOW TO INSTALL
+--------------
 
 Create new virtual environment and install all dependencies
 
 .. code:: console
 
    $ make venv
-   $ . ./venv/bin/activate
+   $ . .venv/bin/activate
 
 Run vagrant for remote services like Zuul and Gerrit for development purposes.
 
