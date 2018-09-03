@@ -17,9 +17,7 @@ class TestZuulBuildSet(DatabaseTestCase):
     @db_session
     def test_start_datetime_should_return_lowest_time(self, make_buildset):
         buildset = make_buildset()
-        for index, build in enumerate(buildset.builds):
-            build.start_time = datetime(2016 + index, 1, 1, 1, 1, 1)
-        expected = datetime(2016, 1, 1, 1, 1, 1)
+        expected = datetime(2018, 2, 23, 22, 0, 0)
         assert buildset.start_datetime == expected
 
     @db_session
@@ -39,9 +37,7 @@ class TestZuulBuildSet(DatabaseTestCase):
     @db_session
     def test_end_datetime_should_return_highest_time(self, make_buildset):
         buildset = make_buildset()
-        for index, build in enumerate(buildset.builds):
-            build.end_time = datetime(2016 + index, 1, 1, 1, 1, 1)
-        expected = datetime(2016 + len(buildset.builds) - 1, 1, 1, 1, 1, 1)
+        expected = datetime(2018, 2, 23, 23, 55, 0)
         assert buildset.end_datetime == expected
 
     @db_session
@@ -120,21 +116,27 @@ class TestZuulBuildSet(DatabaseTestCase):
         expected = buildsets[::-1]
         assert filtered_buildsets == expected
 
+    @db_session
+    def test_duration_return_value(self, make_buildset):
+        buildset = make_buildset(number_of_builds=1,
+                                 start_time='2018-02-23 22:00:00',
+                                 end_time='2018-02-23 23:55:00')
+        builds_duration = list(buildset.builds)[0].duration
+        expected = timedelta(0, 6900)
+        assert builds_duration == expected
+
     @pytest.mark.parametrize("start_time, end_time ,expected", [
-        (0, 0, timedelta(0, 6900)),
-        (0, None, None),
-        (None, 0, None),
+        ('2018-02-23 22:00:00', None, None),
+        (None, '2018-02-23 23:55:00', None),
         (None, None, None)
     ])
     @db_session
-    def test_duration_return_value(self, make_buildset, start_time, end_time,
+    def test_duration_return_none(self, make_buildset, start_time, end_time,
                                    expected):
         buildset = make_buildset(number_of_builds=1, start_time=start_time,
                                  end_time=end_time)
-        builds_duration = [b.duration for b in buildset.builds][0]
-        print(builds_duration)
+        builds_duration = list(buildset.builds)[0].duration
         assert builds_duration == expected
-
 
 @pytest.mark.unit
 class TestBuildSetPaginated:
