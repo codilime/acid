@@ -7,6 +7,8 @@ from pony.orm import commit, db_session
 
 from ..model import ZuulBuild, ZuulBuildSet
 
+import random
+
 TIME_START = '2018-02-23 22:00:00'
 TIME_END = '2018-02-23 23:55:00'
 
@@ -26,38 +28,35 @@ def make_build(start_time, end_time, build_number=104, buildset_id=5010):
 
 @pytest.fixture
 def make_buildset():
-
     def return_starting_and_ending_times(start_time, end_time, builds_number):
+        starting_times = []
+        ending_times = []
         try:
             start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
-        except:
+        except TypeError:
             start_time = None
         try:
             end_time = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
-        except:
+        except TypeError:
             end_time = None
 
-        if (start_time and end_time):
-            time_diff = (end_time - start_time).total_seconds()
+        if start_time and end_time:
+            time_delta = int((end_time - start_time).total_seconds())/2
         else:
-            time_diff = 0
-
-        starting_times = [start_time]
-        ending_times = [end_time]
-
-        if builds_number > 1:
-            time_step = (time_diff / 2) / builds_number
-            for each in range(1, builds_number):
-                if start_time:
-                    start = start_time + each * timedelta(seconds=time_step)
-                else:
-                    start = None
-                starting_times.append(start)
-                if end_time:
-                    end = end_time - each * timedelta(seconds=time_step)
-                else:
-                    end = None
-                ending_times.append(end)
+            time_delta = 3600
+        random_seconds = random.sample(range(1, time_delta), builds_number - 1)
+        if start_time:
+            starting_times = [start_time + timedelta(seconds=random_second) for
+                              random_second in random_seconds]
+            starting_times = [start_time] + starting_times
+        elif not start_time:
+            starting_times = [None] * builds_number
+        if end_time:
+            ending_times = [end_time - timedelta(seconds=random_second) for
+                            random_second in random_seconds]
+            ending_times = [end_time] + ending_times
+        elif not end_time:
+            ending_times = [None] * builds_number
 
         return starting_times, ending_times
 

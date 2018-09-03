@@ -20,25 +20,33 @@ class TestZuulBuildSet(DatabaseTestCase):
         expected = datetime(2018, 2, 23, 22, 0, 0)
         assert buildset.start_datetime == expected
 
+    @pytest.mark.parametrize("start_time, end_time ,expected", [
+        ('2018-02-23 22:00:00', None, None),
+        (None, '2018-02-23 23:55:00', None),
+        (None, None, None)
+    ])
     @db_session
-    def test_start_datetime_return_none_when_no_end_time(self, make_buildset):
-        buildset = make_buildset()
-        for build in buildset.builds:
-            build.end_time = None
-        assert buildset.start_datetime is None
-
-    @db_session
-    def test_end_datetime_return_none_when_no_start_time(self, make_buildset):
-        buildset = make_buildset()
-        for build in buildset.builds:
-            build.start_time = None
-        assert buildset.end_datetime is None
+    def test_start_datetime_return_none(self,make_buildset,
+                                        start_time,end_time, expected):
+        buildset = make_buildset(start_time=start_time,end_time=end_time)
+        assert buildset.start_datetime is expected
 
     @db_session
     def test_end_datetime_should_return_highest_time(self, make_buildset):
         buildset = make_buildset()
         expected = datetime(2018, 2, 23, 23, 55, 0)
         assert buildset.end_datetime == expected
+
+    @pytest.mark.parametrize("start_time, end_time ,expected", [
+        ('2018-02-23 22:00:00', None, None),
+        (None, '2018-02-23 23:55:00', None),
+        (None, None, None)
+    ])
+    @db_session
+    def test_end_datetime_return_none(self,make_buildset,
+                                        start_time,end_time, expected):
+        buildset = make_buildset(start_time=start_time,end_time=end_time)
+        assert buildset.end_datetime is expected
 
     @db_session
     def test_branch_should_return_branch_name(self, make_buildset):
@@ -51,19 +59,19 @@ class TestZuulBuildSet(DatabaseTestCase):
         expected = timedelta(0, 6900)
         assert buildset.duration == expected
 
-    @db_session
-    def test_duration_wo_start_should_return_null(self, make_buildset, mocker):
-        start = mocker.patch.object(ZuulBuildSet, 'start_datetime')
-        start.__get__ = mocker.Mock(return_value=None)
-        buildset = make_buildset()
-        assert buildset.duration is None
-
-    @db_session
-    def test_duration_wo_end_should_return_null(self, make_buildset, mocker):
-        end = mocker.patch.object(ZuulBuildSet, 'end_datetime')
-        end.__get__ = mocker.Mock(return_value=None)
-        buildset = make_buildset()
-        assert buildset.duration is None
+    # @db_session
+    # def test_duration_wo_start_should_return_null(self, make_buildset, mocker):
+    #     start = mocker.patch.object(ZuulBuildSet, 'start_datetime')
+    #     start.__get__ = mocker.Mock(return_value=None)
+    #     buildset = make_buildset()
+    #     assert buildset.duration is None
+    #
+    # @db_session
+    # def test_duration_wo_end_should_return_null(self, make_buildset, mocker):
+    #     end = mocker.patch.object(ZuulBuildSet, 'end_datetime')
+    #     end.__get__ = mocker.Mock(return_value=None)
+    #     buildset = make_buildset()
+    #     assert buildset.duration is None
 
     @db_session
     def test_build_number_should_return_int(self, make_buildset):
@@ -132,7 +140,8 @@ class TestZuulBuildSet(DatabaseTestCase):
     ])
     @db_session
     def test_duration_return_none(self, make_buildset, start_time, end_time,
-                                   expected):
+                                   expected
+                                  ):
         buildset = make_buildset(number_of_builds=1, start_time=start_time,
                                  end_time=end_time)
         builds_duration = list(buildset.builds)[0].duration
