@@ -149,7 +149,7 @@ input:checked + .slider:before {
 
 /* auto-refresh button */
 .unfold {
-    background-color: #BED6E5;
+    background-color: #EDEDED;
 }
 
 .active-border {

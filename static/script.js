@@ -9,6 +9,11 @@ $(function () {
   $('.no-collapsible').on('click', function (event) {
     event.stopImmediatePropagation()
   })
+
+  $('.clickable').click(function () {
+    $(this).toggleClass('unfold')
+    $(this).parent().toggleClass('active-border')
+  })
 })
 
 function enableAutoRefresh () { // eslint-disable-line no-unused-vars
@@ -34,8 +39,4 @@ function enableAutoRefresh () { // eslint-disable-line no-unused-vars
       window.location.reload()
     }
   }
-  $('.clickable').click(function () {
-    $(this).toggleClass('unfold')
-    $(this).parent().toggleClass('active-border')
-  })
 }
