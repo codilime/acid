@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import time
+import datetime
 
 import pytest
 
@@ -30,68 +30,42 @@ def make_build(start_time, end_time, build_number=104, buildset_id=5010):
 def make_buildset():
     def return_starting_and_ending_times(start_time, end_time, builds_number):
 
+        def validate_timestamp(timestamp):
+            if isinstance(timestamp, datetime.datetime):
+                return timestamp
+            else:
+                try:
+                    return datetime.datetime.strptime(
+                        timestamp, '%Y-%m-%d %H:%M:%S')
+                except (TypeError, ValueError):
+                    return None
 
+        def date_to_epoch(t_stamp):
+            return int(t_stamp.strftime("%s")) if t_stamp else None
 
-        # def validate_start_and_end_time(start, end):
-        #     try:
-        #         start_time = time.strptime(start, '%Y-%m-%d %H:%M:%S')
-        #     except TypeError:
-        #         start_time = None
-        #     try:
-        #         end_time = time.strptime(end, '%Y-%m-%d %H:%M:%S')
-        #     except TypeError:
-        #         end_time = None
-        #
-        #     return start_time, end_time
-        #
-        # def epoch_from_date(t_stamp):
-        #     return int(time.mktime(t_stamp)) + 3600 if t_stamp else None
-        #
-        # def date_from_epoch(t_epoch):
-        #     return time.strftime('%Y-%m-%d %H:%M:%S',
-        #                          time.gmtime(t_epoch)) if t_epoch else None
-        #
-        # def return_random_epoch_times(start, end, n):
-        #     def randoms_seconds(begin, end, n):
-        #         if begin and end:
-        #             delta = int((end - begin) / 2)
-        #         else:
-        #             delta = 3600
-        #
-        #         return random.sample(range(1, delta), n - 1)
-        #
-        #     def generate_random_times(random_table, start, end, n):
-        #         if start:
-        #             start_list = [start + random_second for
-        #                           random_second in random_table]
-        #             start_list = [start] + start_list
-        #         else:
-        #             start_list = [None] * n
-        #
-        #         if end:
-        #             end_list = [end - random_second for
-        #                         random_second in random_table]
-        #             end_list = [end] + end_list
-        #         else:
-        #             end_list = [None] * n
-        #
-        #         return start_list, end_list
-        #
-        #     random_seconds = randoms_seconds(start, end, n)
-        #     starting_times, ending_times = generate_random_times(random_seconds,
-        #                                                          start, end, n)
-        #
-        #     return starting_times, ending_times
-        #
-        #
-        #
-        # start_time, end_time = validate_start_and_end_time(start_time, end_time)
-        # start_time, end_time = map(epoch_from_date, (start_time, end_time))
-        # starting_times, ending_times = return_random_epoch_times(start_time,
-        #                                                          end_time,
-        #                                                          builds_number)
-        # starting_times = map(date_from_epoch, starting_times)
-        # ending_times = map(date_from_epoch, ending_times)
+        def epoch_to_date(t_epoch):
+            return datetime.datetime.fromtimestamp(t_epoch).strftime(
+                '%Y-%m-%d %H:%M:%S') if t_epoch else None
+
+        def epoch_table_between_epochs(start_e, end_e, n):
+            if (n > 1 and (start_e and end_e)):
+                epoch_d = int((end_e - start_e) / (3 + 2 * (n - 2)))
+                epoch_list = [e for e in
+                              range(start_e + epoch_d, end_e, epoch_d)][1:]
+                return sorted(epoch_list)
+            else:
+                return [None]*(n-1)*2
+
+        start_time, end_time = map(validate_timestamp, (start_time, end_time))
+        start_time, end_time = map(date_to_epoch, (start_time, end_time))
+
+        all_epoch_times = epoch_table_between_epochs(start_time, end_time,
+                                                     builds_number)
+        all_epoch_times = [start_time] + all_epoch_times + [end_time]
+        all_epoch_times = list(map(epoch_to_date, all_epoch_times))
+
+        starting_times = all_epoch_times[:builds_number]
+        ending_times = all_epoch_times[builds_number:]
 
         return starting_times, ending_times
 
