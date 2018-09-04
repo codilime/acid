@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, timedelta
+import time
 
 import pytest
 
@@ -29,34 +29,69 @@ def make_build(start_time, end_time, build_number=104, buildset_id=5010):
 @pytest.fixture
 def make_buildset():
     def return_starting_and_ending_times(start_time, end_time, builds_number):
-        starting_times = []
-        ending_times = []
-        try:
-            start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
-        except TypeError:
-            start_time = None
-        try:
-            end_time = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
-        except TypeError:
-            end_time = None
 
-        if start_time and end_time:
-            time_delta = int((end_time - start_time).total_seconds())/2
-        else:
-            time_delta = 3600
-        random_seconds = random.sample(range(1, time_delta), builds_number - 1)
-        if start_time:
-            starting_times = [start_time + timedelta(seconds=random_second) for
-                              random_second in random_seconds]
-            starting_times = [start_time] + starting_times
-        elif not start_time:
-            starting_times = [None] * builds_number
-        if end_time:
-            ending_times = [end_time - timedelta(seconds=random_second) for
-                            random_second in random_seconds]
-            ending_times = [end_time] + ending_times
-        elif not end_time:
-            ending_times = [None] * builds_number
+
+
+        # def validate_start_and_end_time(start, end):
+        #     try:
+        #         start_time = time.strptime(start, '%Y-%m-%d %H:%M:%S')
+        #     except TypeError:
+        #         start_time = None
+        #     try:
+        #         end_time = time.strptime(end, '%Y-%m-%d %H:%M:%S')
+        #     except TypeError:
+        #         end_time = None
+        #
+        #     return start_time, end_time
+        #
+        # def epoch_from_date(t_stamp):
+        #     return int(time.mktime(t_stamp)) + 3600 if t_stamp else None
+        #
+        # def date_from_epoch(t_epoch):
+        #     return time.strftime('%Y-%m-%d %H:%M:%S',
+        #                          time.gmtime(t_epoch)) if t_epoch else None
+        #
+        # def return_random_epoch_times(start, end, n):
+        #     def randoms_seconds(begin, end, n):
+        #         if begin and end:
+        #             delta = int((end - begin) / 2)
+        #         else:
+        #             delta = 3600
+        #
+        #         return random.sample(range(1, delta), n - 1)
+        #
+        #     def generate_random_times(random_table, start, end, n):
+        #         if start:
+        #             start_list = [start + random_second for
+        #                           random_second in random_table]
+        #             start_list = [start] + start_list
+        #         else:
+        #             start_list = [None] * n
+        #
+        #         if end:
+        #             end_list = [end - random_second for
+        #                         random_second in random_table]
+        #             end_list = [end] + end_list
+        #         else:
+        #             end_list = [None] * n
+        #
+        #         return start_list, end_list
+        #
+        #     random_seconds = randoms_seconds(start, end, n)
+        #     starting_times, ending_times = generate_random_times(random_seconds,
+        #                                                          start, end, n)
+        #
+        #     return starting_times, ending_times
+        #
+        #
+        #
+        # start_time, end_time = validate_start_and_end_time(start_time, end_time)
+        # start_time, end_time = map(epoch_from_date, (start_time, end_time))
+        # starting_times, ending_times = return_random_epoch_times(start_time,
+        #                                                          end_time,
+        #                                                          builds_number)
+        # starting_times = map(date_from_epoch, starting_times)
+        # ending_times = map(date_from_epoch, ending_times)
 
         return starting_times, ending_times
 
