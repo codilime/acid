@@ -11,6 +11,52 @@ TIME_START = '2018-02-23 22:00:00'
 TIME_END = '2018-02-23 23:55:00'
 
 
+def date_to_epoch(t_stamp):
+    return int(t_stamp.strftime("%s")) if t_stamp else None
+
+
+def epoch_to_date(t_epoch):
+    return datetime.datetime.fromtimestamp(t_epoch).strftime(
+        '%Y-%m-%d %H:%M:%S') if t_epoch else None
+
+
+def validate_timestamp(timestamp):
+    if isinstance(timestamp, datetime.datetime):
+        return timestamp
+    else:
+        try:
+            return datetime.datetime.strptime(
+                timestamp, '%Y-%m-%d %H:%M:%S')
+        except (TypeError, ValueError):
+            return None
+
+
+def epoch_table_between_epochs(start_e, end_e, n):
+    if (n > 1 and (start_e and end_e)):
+        epoch_d = int((end_e - start_e) / (3 + 2 * (n - 2)))
+        epoch_list = [e for e in
+                      range(start_e + epoch_d, end_e, epoch_d)][1:]
+        return sorted(epoch_list)
+    else:
+        return [None] * (n - 1) * 2
+
+
+def return_starting_and_ending_times(start_time, end_time, no_of_builds):
+
+    start_time, end_time = map(validate_timestamp, (start_time, end_time))
+    start_time, end_time = map(date_to_epoch, (start_time, end_time))
+
+    all_epoch_times = epoch_table_between_epochs(start_time, end_time,
+                                                 no_of_builds)
+    all_epoch_times = [start_time] + all_epoch_times + [end_time]
+    all_epoch_times = list(map(epoch_to_date, all_epoch_times))
+
+    starting_times = all_epoch_times[:no_of_builds]
+    ending_times = all_epoch_times[no_of_builds:]
+
+    return starting_times, ending_times
+
+
 @db_session
 def make_build(start_time, end_time, build_number=104, buildset_id=5010):
 
@@ -27,47 +73,6 @@ def make_build(start_time, end_time, build_number=104, buildset_id=5010):
 
 @pytest.fixture
 def make_buildset():
-    def return_starting_and_ending_times(start_time, end_time, no_of_builds):
-
-        def validate_timestamp(timestamp):
-            if isinstance(timestamp, datetime.datetime):
-                return timestamp
-            else:
-                try:
-                    return datetime.datetime.strptime(
-                        timestamp, '%Y-%m-%d %H:%M:%S')
-                except (TypeError, ValueError):
-                    return None
-
-        def date_to_epoch(t_stamp):
-            return int(t_stamp.strftime("%s")) if t_stamp else None
-
-        def epoch_to_date(t_epoch):
-            return datetime.datetime.fromtimestamp(t_epoch).strftime(
-                '%Y-%m-%d %H:%M:%S') if t_epoch else None
-
-        def epoch_table_between_epochs(start_e, end_e, n):
-            if (n > 1 and (start_e and end_e)):
-                epoch_d = int((end_e - start_e) / (3 + 2 * (n - 2)))
-                epoch_list = [e for e in
-                              range(start_e + epoch_d, end_e, epoch_d)][1:]
-                return sorted(epoch_list)
-            else:
-                return [None] * (n - 1) * 2
-
-        start_time, end_time = map(validate_timestamp, (start_time, end_time))
-        start_time, end_time = map(date_to_epoch, (start_time, end_time))
-
-        all_epoch_times = epoch_table_between_epochs(start_time, end_time,
-                                                     no_of_builds)
-        all_epoch_times = [start_time] + all_epoch_times + [end_time]
-        all_epoch_times = list(map(epoch_to_date, all_epoch_times))
-
-        starting_times = all_epoch_times[:no_of_builds]
-        ending_times = all_epoch_times[no_of_builds:]
-
-        return starting_times, ending_times
-
     def _make_buildset(build_number=104, branch='master', number_of_builds=5,
                        start_time=TIME_START, end_time=TIME_END):
         buildset = ZuulBuildSet(zuul_ref='Zef2180cdc7ff440daefe48d85ed91b48',
