@@ -26,16 +26,16 @@ class TestZuulBuildSet(DatabaseTestCase):
         (None, None, None)
     ])
     @db_session
-    def test_start_datetime_return_none(self,make_buildset,
-                                        start_time,end_time, expected):
-        buildset = make_buildset(start_time=start_time,end_time=end_time)
+    def test_start_datetime_return_none(self, make_buildset,
+                                        start_time, end_time, expected):
+        buildset = make_buildset(start_time=start_time, end_time=end_time)
         assert buildset.start_datetime is expected
 
     @db_session
     def test_end_datetime_should_return_highest_time(self, make_buildset):
         buildset = make_buildset()
         expected = datetime(2018, 2, 23, 23, 55, 0)
-        print(buildset.end_datetime )
+        print(buildset.end_datetime)
         assert buildset.end_datetime == expected
 
     @pytest.mark.parametrize("start_time, end_time ,expected", [
@@ -44,9 +44,9 @@ class TestZuulBuildSet(DatabaseTestCase):
         (None, None, None)
     ])
     @db_session
-    def test_end_datetime_return_none(self,make_buildset,
-                                        start_time,end_time, expected):
-        buildset = make_buildset(start_time=start_time,end_time=end_time)
+    def test_end_datetime_return_none(self, make_buildset, start_time, end_time,
+                                      expected):
+        buildset = make_buildset(start_time=start_time, end_time=end_time)
         assert buildset.end_datetime is expected
 
     @db_session
@@ -141,12 +141,12 @@ class TestZuulBuildSet(DatabaseTestCase):
     ])
     @db_session
     def test_duration_return_none(self, make_buildset, start_time, end_time,
-                                   expected
-                                  ):
+                                  expected):
         buildset = make_buildset(number_of_builds=1, start_time=start_time,
                                  end_time=end_time)
         builds_duration = list(buildset.builds)[0].duration
         assert builds_duration == expected
+
 
 @pytest.mark.unit
 class TestBuildSetPaginated:

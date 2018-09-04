@@ -7,10 +7,9 @@ from pony.orm import commit, db_session
 
 from ..model import ZuulBuild, ZuulBuildSet
 
-import random
-
 TIME_START = '2018-02-23 22:00:00'
 TIME_END = '2018-02-23 23:55:00'
+
 
 @db_session
 def make_build(start_time, end_time, build_number=104, buildset_id=5010):
@@ -28,7 +27,7 @@ def make_build(start_time, end_time, build_number=104, buildset_id=5010):
 
 @pytest.fixture
 def make_buildset():
-    def return_starting_and_ending_times(start_time, end_time, builds_number):
+    def return_starting_and_ending_times(start_time, end_time, no_of_builds):
 
         def validate_timestamp(timestamp):
             if isinstance(timestamp, datetime.datetime):
@@ -54,18 +53,18 @@ def make_buildset():
                               range(start_e + epoch_d, end_e, epoch_d)][1:]
                 return sorted(epoch_list)
             else:
-                return [None]*(n-1)*2
+                return [None] * (n - 1) * 2
 
         start_time, end_time = map(validate_timestamp, (start_time, end_time))
         start_time, end_time = map(date_to_epoch, (start_time, end_time))
 
         all_epoch_times = epoch_table_between_epochs(start_time, end_time,
-                                                     builds_number)
+                                                     no_of_builds)
         all_epoch_times = [start_time] + all_epoch_times + [end_time]
         all_epoch_times = list(map(epoch_to_date, all_epoch_times))
 
-        starting_times = all_epoch_times[:builds_number]
-        ending_times = all_epoch_times[builds_number:]
+        starting_times = all_epoch_times[:no_of_builds]
+        ending_times = all_epoch_times[no_of_builds:]
 
         return starting_times, ending_times
 
@@ -85,7 +84,7 @@ def make_buildset():
 
         start_times, end_times = return_starting_and_ending_times(
             start_time=start_time, end_time=end_time,
-            builds_number=number_of_builds)
+            no_of_builds=number_of_builds)
 
         for index in range(number_of_builds):
             make_build(build_number=build_number, buildset_id=buildset.id,
