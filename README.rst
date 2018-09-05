@@ -12,7 +12,7 @@ TOOLS AND LIBRARIES NEEDED
 ACID require Python 3.6.x. and Python3.6-venv.
 Please make sure you have `Python 3.6` and `Python 3.6-venv` version in your OS.
 
-For creating virtual enviroment Ansible and Vagrant are used. Make sure you have these installed as well as libvirt library.
+For creating virtual enviroment `Ansible` and `Vagrant` tools are used. Make sure you have these installed as well as `libvirt` library.
 
 
 HOW TO INSTALL
@@ -32,9 +32,8 @@ Run vagrant for remote services like Zuul and Gerrit for development purposes.
     $ make dev-run
 
 
-Run ACID
+RUN ACID
 --------
-
 
 .. code:: console
 
@@ -74,3 +73,10 @@ You can also use tox to run tests against Python 3.6 and 3.7
 
     $ . .venv/bin/activate
     $ tox
+
+KNOWN ISSUES
+------------
+
+After running :code:`$ make dev-run` integration test (and possibly all connection to ZUUL) will fail.
+
+Current fix is to add read permissions for file :code:`/etc/zuul/zuul.conf` and manually start service :code:`zuul-scheduler` in virtual machine.
