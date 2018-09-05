@@ -9,7 +9,7 @@ ACID CI Dashboard is under APACHE 2.0 LICENSE, for more info check LICENSE.
 TOOLS AND LIBRARIES NEEDED
 --------------------------
 
-ACID require Python 3.6.x. and Python3.6-venv.
+ACID requires Python 3.6.x. and Python3.6-venv.
 Please make sure you have `Python 3.6` and `Python 3.6-venv` version in your OS.
 
 For creating virtual enviroment `Ansible` and `Vagrant` tools are used. Make sure you have these installed as well as `libvirt` library.
@@ -77,6 +77,6 @@ You can also use tox to run tests against Python 3.6 and 3.7
 KNOWN ISSUES
 ------------
 
-After running :code:`$ make dev-run` integration test (and possibly all connection to ZUUL) will fail.
+After running :code:`$ make dev-run` integration test (and possibly all connections to ZUUL) will fail.
 
-Current fix is to add read permissions for file :code:`/etc/zuul/zuul.conf` and manually start service :code:`zuul-scheduler` in virtual machine.
+Current fix is to add read permissions for file :code:`/etc/zuul/zuul.conf` and manually start :code:`zuul-scheduler` service inside 'vagrant'.
