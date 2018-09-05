@@ -14,9 +14,11 @@ TIME_END = '2018-02-23 23:55:00'
 def datetime_to_seconds(t_stamp):
     return int(t_stamp.strftime("%s")) if t_stamp else None
 
+
 def seconds_to_datetime(t_epoch):
     return datetime.datetime.fromtimestamp(t_epoch).strftime(
         '%Y-%m-%d %H:%M:%S') if t_epoch else None
+
 
 def convert_to_timestamp(timestamp):
     if isinstance(timestamp, datetime.datetime):
@@ -28,13 +30,14 @@ def convert_to_timestamp(timestamp):
         except (TypeError, ValueError):
             return None
 
+
 def seconds_table_between_range(start_e, end_e, n):
     if n > 1:
         if start_e and end_e:
             # calculating step value to generate n-1 elements. We gonna
             # add end_time in the end, that's why n-1. This is math thats
             # calculate needed step for range to get n-1 elements.
-            epoch_d = int((end_e - start_e) / (2*(n-1)+1))
+            epoch_d = int((end_e - start_e) / (2 * (n - 1) + 1))
             epoch_list = [e for e in
                           range(start_e, end_e, epoch_d)]
             # drop last elements if range return even number of elements
@@ -43,14 +46,15 @@ def seconds_table_between_range(start_e, end_e, n):
                 epoch_list = epoch_list[:-1]
             return sorted(epoch_list)
         else:
-            return [None] * (2*(n - 1) +1)
+            return [None] * (2 * (n - 1) + 1)
     else:
         return [start_e]
+
 
 def return_starting_and_ending_times(start_time, end_time, no_of_builds):
 
     if no_of_builds < 1:
-        return [],[]
+        return [], []
 
     start_time, end_time = map(convert_to_timestamp, (start_time, end_time))
     start_time, end_time = map(datetime_to_seconds, (start_time, end_time))
