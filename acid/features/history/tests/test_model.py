@@ -20,7 +20,7 @@ class TestZuulBuildSet(DatabaseTestCase):
         expected = datetime(2018, 2, 23, 22, 0, 0)
         assert buildset.start_datetime == expected
 
-    @pytest.mark.parametrize("start_time, end_time ,expected", [
+    @pytest.mark.parametrize("start_time, end_time, expected", [
         ('2018-02-23 22:00:00', None, None),
         (None, '2018-02-23 23:55:00', None),
         (None, None, None)
@@ -35,7 +35,6 @@ class TestZuulBuildSet(DatabaseTestCase):
     def test_end_datetime_should_return_highest_time(self, make_buildset):
         buildset = make_buildset()
         expected = datetime(2018, 2, 23, 23, 55, 0)
-        print(buildset.end_datetime)
         assert buildset.end_datetime == expected
 
     @pytest.mark.parametrize("start_time, end_time ,expected", [

@@ -11,16 +11,14 @@ TIME_START = '2018-02-23 22:00:00'
 TIME_END = '2018-02-23 23:55:00'
 
 
-def date_to_epoch(t_stamp):
+def datetime_to_seconds(t_stamp):
     return int(t_stamp.strftime("%s")) if t_stamp else None
 
-
-def epoch_to_date(t_epoch):
+def seconds_to_datetime(t_epoch):
     return datetime.datetime.fromtimestamp(t_epoch).strftime(
         '%Y-%m-%d %H:%M:%S') if t_epoch else None
 
-
-def validate_timestamp(timestamp):
+def convert_to_timestamp(timestamp):
     if isinstance(timestamp, datetime.datetime):
         return timestamp
     else:
@@ -30,26 +28,37 @@ def validate_timestamp(timestamp):
         except (TypeError, ValueError):
             return None
 
-
-def epoch_table_between_epochs(start_e, end_e, n):
-    if (n > 1 and (start_e and end_e)):
-        epoch_d = int((end_e - start_e) / (3 + 2 * (n - 2)))
-        epoch_list = [e for e in
-                      range(start_e + epoch_d, end_e, epoch_d)][1:]
-        return sorted(epoch_list)
+def seconds_table_between_range(start_e, end_e, n):
+    if n > 1:
+        if start_e and end_e:
+            # calculating step value to generate n-1 elements. We gonna
+            # add end_time in the end, that's why n-1. This is math thats
+            # calculate needed step for range to get n-1 elements.
+            epoch_d = int((end_e - start_e) / (2*(n-1)+1))
+            epoch_list = [e for e in
+                          range(start_e, end_e, epoch_d)]
+            # drop last elements if range return even number of elements
+            # we need odd elements
+            if end_e - epoch_list[-1] < epoch_d:
+                epoch_list = epoch_list[:-1]
+            return sorted(epoch_list)
+        else:
+            return [None] * (2*(n - 1) +1)
     else:
-        return [None] * (n - 1) * 2
-
+        return [start_e]
 
 def return_starting_and_ending_times(start_time, end_time, no_of_builds):
 
-    start_time, end_time = map(validate_timestamp, (start_time, end_time))
-    start_time, end_time = map(date_to_epoch, (start_time, end_time))
+    if no_of_builds < 1:
+        return [],[]
 
-    all_epoch_times = epoch_table_between_epochs(start_time, end_time,
-                                                 no_of_builds)
-    all_epoch_times = [start_time] + all_epoch_times + [end_time]
-    all_epoch_times = list(map(epoch_to_date, all_epoch_times))
+    start_time, end_time = map(convert_to_timestamp, (start_time, end_time))
+    start_time, end_time = map(datetime_to_seconds, (start_time, end_time))
+
+    all_epoch_times = seconds_table_between_range(start_time, end_time,
+                                                  no_of_builds)
+    all_epoch_times = all_epoch_times + [end_time]
+    all_epoch_times = list(map(seconds_to_datetime, all_epoch_times))
 
     starting_times = all_epoch_times[:no_of_builds]
     ending_times = all_epoch_times[no_of_builds:]
