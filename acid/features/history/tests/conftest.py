@@ -31,28 +31,28 @@ def convert_to_timestamp(timestamp):
             return None
 
 
-def seconds_table_between_range(start_e, end_e, n):
-    if n > 1:
-        if start_e and end_e:
-            # calculating step value to generate n-1 elements. We gonna
-            # add end_time in the end, that's why n-1. This is math thats
-            # calculate needed step for range to get n-1 elements.
-            epoch_d = int((end_e - start_e) / (2 * (n - 1) + 1))
-            epoch_list = [e for e in
-                          range(start_e, end_e, epoch_d)]
-            # drop last elements if range return even number of elements
-            # we need odd elements
-            if end_e - epoch_list[-1] < epoch_d:
-                epoch_list = epoch_list[:-1]
-            return sorted(epoch_list)
-        else:
-            return [None] * (2 * (n - 1) + 1)
+def seconds_table_between_range(start_sec, end_sec, n):
+    if n < 2:
+        return [start_sec]
+
+    if start_sec and end_sec:
+        # calculating step value to generate n-1 elements. We gonna
+        # add end_time in the end, that's why n-1. This is math thats
+        # calculate needed step for range to get n-1 elements.
+        step = 2 * (n - 1) + 1
+        epoch_delta = int((end_sec - start_sec) / step)
+        epoch_list = [e for e in
+                      range(start_sec, end_sec, epoch_delta)]
+        # drop last elements if range return even number of elements
+        # we need odd elements
+        if end_sec - epoch_list[-1] < epoch_delta:
+            epoch_list = epoch_list[:-1]
+        return sorted(epoch_list)
     else:
-        return [start_e]
+        return [None] * (2 * (n - 1) + 1)
 
 
 def return_starting_and_ending_times(start_time, end_time, no_of_builds):
-
     if no_of_builds < 1:
         return [], []
 
