@@ -60,7 +60,7 @@ def _return_starting_and_ending_times(start_time, end_time, no_of_builds):
     start_time, end_time = map(_datetime_to_seconds, (start_time, end_time))
 
     all_epoch_times = _seconds_table_between_range(start_time, end_time,
-                                                  no_of_builds)
+                                                   no_of_builds)
     all_epoch_times = all_epoch_times + [end_time]
     all_epoch_times = list(map(_seconds_to_datetime, all_epoch_times))
 
