@@ -11,16 +11,16 @@ TIME_START = '2018-02-23 22:00:00'
 TIME_END = '2018-02-23 23:55:00'
 
 
-def datetime_to_seconds(t_stamp):
+def _datetime_to_seconds(t_stamp):
     return int(t_stamp.strftime("%s")) if t_stamp else None
 
 
-def seconds_to_datetime(t_epoch):
+def _seconds_to_datetime(t_epoch):
     return datetime.datetime.fromtimestamp(t_epoch).strftime(
         '%Y-%m-%d %H:%M:%S') if t_epoch else None
 
 
-def convert_to_timestamp(timestamp):
+def _convert_to_timestamp(timestamp):
     if isinstance(timestamp, datetime.datetime):
         return timestamp
     else:
@@ -31,7 +31,7 @@ def convert_to_timestamp(timestamp):
             return None
 
 
-def seconds_table_between_range(start_sec, end_sec, n):
+def _seconds_table_between_range(start_sec, end_sec, n):
     if n < 2:
         return [start_sec]
 
@@ -52,17 +52,17 @@ def seconds_table_between_range(start_sec, end_sec, n):
         return [None] * (2 * (n - 1) + 1)
 
 
-def return_starting_and_ending_times(start_time, end_time, no_of_builds):
+def _return_starting_and_ending_times(start_time, end_time, no_of_builds):
     if no_of_builds < 1:
         return [], []
 
-    start_time, end_time = map(convert_to_timestamp, (start_time, end_time))
-    start_time, end_time = map(datetime_to_seconds, (start_time, end_time))
+    start_time, end_time = map(_convert_to_timestamp, (start_time, end_time))
+    start_time, end_time = map(_datetime_to_seconds, (start_time, end_time))
 
-    all_epoch_times = seconds_table_between_range(start_time, end_time,
+    all_epoch_times = _seconds_table_between_range(start_time, end_time,
                                                   no_of_builds)
     all_epoch_times = all_epoch_times + [end_time]
-    all_epoch_times = list(map(seconds_to_datetime, all_epoch_times))
+    all_epoch_times = list(map(_seconds_to_datetime, all_epoch_times))
 
     starting_times = all_epoch_times[:no_of_builds]
     ending_times = all_epoch_times[no_of_builds:]
@@ -100,7 +100,7 @@ def make_buildset():
                                 oldrev='', newrev='')
         commit()
 
-        start_times, end_times = return_starting_and_ending_times(
+        start_times, end_times = _return_starting_and_ending_times(
             start_time=start_time, end_time=end_time,
             no_of_builds=number_of_builds)
 
