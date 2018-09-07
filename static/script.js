@@ -13,7 +13,18 @@ $(function () {
   $('.clickable').click(function () {
     $(this).toggleClass('unfold')
     $(this).parent().toggleClass('active-border')
+    let row_id = $(this).attr('id')
+    let urlParams = new URLSearchParams(window.location.search);
+
+    let row_id_flag = urlParams.get(row_id)
+    jQuery.query.set("chuj", 10)
+    if (row_id_flag === 'true'){
+      alert('yes')
+    }
   })
+
+
+
 })
 
 function enableAutoRefresh () { // eslint-disable-line no-unused-vars
