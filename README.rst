@@ -31,7 +31,7 @@ Run vagrant for remote services like Zuul and Gerrit for development purposes.
 
     $ make dev-run
 
-After starting up Vagrant machine wait arount 30-40 seconds for Zuul and Gerrit services to properly load.
+After starting up Vagrant machine wait around 40 seconds for Zuul and Gerrit services to properly load.
 
 RUN ACID
 --------
