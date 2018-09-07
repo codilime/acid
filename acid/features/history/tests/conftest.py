@@ -35,21 +35,22 @@ def _seconds_table_between_range(start_sec, end_sec, n):
     if n < 2:
         return [start_sec]
 
+    # calculating step value to generate n-1 elements. We gonna
+    # add end_time in the end, that's why n-1. This is math thats
+    # calculate needed step for range to get n-1 elements.
+    step = 2 * (n - 1) + 1
+
     if start_sec and end_sec:
-        # calculating step value to generate n-1 elements. We gonna
-        # add end_time in the end, that's why n-1. This is math thats
-        # calculate needed step for range to get n-1 elements.
-        step = 2 * (n - 1) + 1
-        epoch_delta = int((end_sec - start_sec) / step)
+        epoch_seconds = int((end_sec - start_sec) / step)
         epoch_list = [e for e in
-                      range(start_sec, end_sec, epoch_delta)]
+                      range(start_sec, end_sec, epoch_seconds)]
         # drop last elements if range return even number of elements
         # we need odd elements
-        if end_sec - epoch_list[-1] < epoch_delta:
+        if end_sec - epoch_list[-1] < epoch_seconds:
             epoch_list = epoch_list[:-1]
         return sorted(epoch_list)
     else:
-        return [None] * (2 * (n - 1) + 1)
+        return [None] * step
 
 
 def _return_starting_and_ending_times(start_time, end_time, no_of_builds):
@@ -59,13 +60,13 @@ def _return_starting_and_ending_times(start_time, end_time, no_of_builds):
     start_time, end_time = map(_convert_to_timestamp, (start_time, end_time))
     start_time, end_time = map(_datetime_to_seconds, (start_time, end_time))
 
-    all_epoch_times = _seconds_table_between_range(start_time, end_time,
-                                                   no_of_builds)
-    all_epoch_times = all_epoch_times + [end_time]
-    all_epoch_times = list(map(_seconds_to_datetime, all_epoch_times))
+    all_times = _seconds_table_between_range(start_time, end_time,
+                                             no_of_builds)
+    all_times = all_times + [end_time]
+    all_times = list(map(_seconds_to_datetime, all_times))
 
-    starting_times = all_epoch_times[:no_of_builds]
-    ending_times = all_epoch_times[no_of_builds:]
+    starting_times = all_times[:no_of_builds]
+    ending_times = all_times[no_of_builds:]
 
     return starting_times, ending_times
 
