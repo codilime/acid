@@ -31,6 +31,7 @@ Run vagrant for remote services like Zuul and Gerrit for development purposes.
 
     $ make dev-run
 
+After starting up Vagrant machine wait around 40 seconds for Zuul and Gerrit services to properly load.
 
 RUN ACID
 --------
@@ -74,9 +75,3 @@ You can also use tox to run tests against Python 3.6 and 3.7
     $ . .venv/bin/activate
     $ tox
 
-KNOWN ISSUES
-------------
-
-After running :code:`$ make dev-run` integration test (and possibly all connections to ZUUL) will fail.
-
-Current fix is to add read permissions for file :code:`/etc/zuul/zuul.conf` and manually start :code:`zuul-scheduler` service inside 'vagrant'.
