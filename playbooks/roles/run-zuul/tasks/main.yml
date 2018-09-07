@@ -13,4 +13,5 @@
     chdir: /opt/app/playbooks
     executable: /bin/bash
 
+- include_tasks: service.yml
 - include_tasks: website.yml

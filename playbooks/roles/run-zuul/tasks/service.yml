@@ -1,0 +1,24 @@
+---
+- name: Change permissions for zuul.conf
+  become: yes
+  file:
+    path: "/etc/zuul/zuul.conf"
+    mode: 0644
+
+- name: Add restart loop for scheduler service
+  become: yes
+  lineinfile:
+          path: /etc/systemd/system/zuul-scheduler.service
+          insertafter: "^\\[Service\\]"
+          line: "{{ item.comm }}={{ item.var}}"
+  with_items:
+          - { comm: "Restart", var: "on-failure" }
+          - { comm: "RestartSec", var: "5" }
+
+- name: Set parameter for restarting scheduler service
+  become: yes
+  lineinfile:
+          path: /etc/systemd/system/zuul-scheduler.service
+          insertafter: "^\\[Unit\\]"
+          line: "StartLimitIntervalSec=0"
+
