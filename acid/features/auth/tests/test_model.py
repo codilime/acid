@@ -5,7 +5,7 @@ from flask import current_app
 
 from acid.tests import TestWithAppContext
 
-from ..model import User
+from ..model import User, get_current_user
 
 
 @pytest.mark.unit
@@ -28,3 +28,12 @@ class TestUserModel(TestWithAppContext):
                           'users_file': 'nofile'})
         with pytest.raises(FileNotFoundError):
             user_guest.is_admin()
+
+    def test_get_current_user_return_none_when_session_not_exist(self, mocker):
+        mocker.patch('acid.features.auth.model.session', None)
+        assert get_current_user() is None
+
+    def test_get_current_user_return_proper_user_when_session_exist(self,
+                                                                    mocker):
+        mocker.patch('acid.features.auth.model.session', {'user': 'test_user'})
+        assert get_current_user() == 'test_user'
