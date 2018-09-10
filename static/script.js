@@ -11,18 +11,32 @@ $(function () {
   })
 
   $('.clickable').click(function () {
+    let all_unfold_ids = sessionStorage.getItem('unfolded_rows')
+    let row_id = $(this).attr('id')
     $(this).toggleClass('unfold')
     $(this).parent().toggleClass('active-border')
-    let row_id = $(this).attr('id')
-    let urlParams = new URLSearchParams(window.location.search);
-
-    let row_id_flag = urlParams.get(row_id)
-    jQuery.query.set("chuj", 10)
-    if (row_id_flag === 'true'){
-      alert('yes')
+    row_id = row_id.replace("heading", "collapse")
+    if (all_unfold_ids === null) {
+      sessionStorage.setItem('unfolded_rows', row_id + ",")
+    } else {
+      ids = all_unfold_ids.split(',')
+      current_id_index = ids.indexOf(row_id)
+      if ( current_id_index === - 1) {
+        sessionStorage.setItem('unfolded_rows', all_unfold_ids + row_id + ",")
+      } else {
+        ids.splice(current_id_index,1)
+        sessionStorage.setItem('unfolded_rows', ids)
+      }
     }
   })
 
+  $(window).ready(function() {
+    let all_unfold_ids = sessionStorage.getItem('unfolded_rows')
+    ids_to_unfold = all_unfold_ids.split(',')
+    for (id of ids_to_unfold){
+        $('#'+id).addClass('show')
+    }
+})
 
 
 })
