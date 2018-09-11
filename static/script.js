@@ -11,34 +11,38 @@ $(function () {
   })
 
   $('.clickable').click(function () {
-    let all_unfold_ids = sessionStorage.getItem('unfolded_rows')
-    let row_id = $(this).attr('id')
-    $(this).toggleClass('unfold')
-    $(this).parent().toggleClass('active-border')
-    row_id = row_id.replace("heading", "collapse")
-    if (all_unfold_ids === null) {
-      sessionStorage.setItem('unfolded_rows', row_id + ",")
+    let $item = $(this)
+
+    let allUnfoldIds = sessionStorage.getItem('unfoldedRows')
+    let rowId = $item.attr('id')
+    let newSessionStorageValue = ''
+
+    $item.toggleClass('unfold')
+    $item.parent().toggleClass('active-border')
+
+    rowId = rowId.replace('heading', 'collapse')
+
+    if (allUnfoldIds === null) {
+      newSessionStorageValue = rowId + ','
     } else {
-      ids = all_unfold_ids.split(',')
-      current_id_index = ids.indexOf(row_id)
-      if ( current_id_index === - 1) {
-        sessionStorage.setItem('unfolded_rows', all_unfold_ids + row_id + ",")
+      let ids = allUnfoldIds.split(',')
+      let currentIdIndex = ids.indexOf(rowId)
+      if (currentIdIndex === -1) {
+        newSessionStorageValue = allUnfoldIds + rowId + ','
       } else {
-        ids.splice(current_id_index,1)
-        sessionStorage.setItem('unfolded_rows', ids)
+        ids.splice(currentIdIndex, 1)
+        newSessionStorageValue = ids
       }
     }
+    sessionStorage.setItem('unfoldedRows', newSessionStorageValue)
   })
-
-  $(window).ready(function() {
-    let all_unfold_ids = sessionStorage.getItem('unfolded_rows')
-    ids_to_unfold = all_unfold_ids.split(',')
-    for (id of ids_to_unfold){
-        $('#'+id).addClass('show')
+  $(window).ready(function () {
+    let allUnfoldIds = sessionStorage.getItem('unfoldedRows')
+    let idsToUnfold = allUnfoldIds.split(',')
+    for (let id of idsToUnfold) {
+      $('#' + id).addClass('show')
     }
-})
-
-
+  })
 })
 
 function enableAutoRefresh () { // eslint-disable-line no-unused-vars
