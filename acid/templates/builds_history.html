@@ -10,8 +10,8 @@
 
     <div class="container mb-5">
         <div class="row justify-content-center">
-                <form class="form-inline" action="{{ url_for('builds.show_builds_history') }}">
-                    <div class="form-group mr-sm-2">
+                <form class="form-inline col-10" action="{{ url_for('builds.show_builds_history') }}">
+                    <div class="form-group mr-sm-2 col-10">
                         <select class="custom-select form-control mb-2 mr-sm-2" multiple="multiple" name="branch" style="width: 50%">
                             {% for branch in buildsets.branches %}
                                 <option {% if branch in branches %} selected="selected" {% endif %}>{{ branch }}</option>
