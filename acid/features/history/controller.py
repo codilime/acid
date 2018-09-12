@@ -21,11 +21,10 @@ def show_builds_history(page=1):
 
     db.connect()
 
-    branch = request.args.get('branch')
     branches =  request.args.getlist('branch')
     build = request.args.get('build')
 
-    if branch or build:
+    if branches or build:
         buildsets = BuildSetsFiltered(pipeline, per_page, branches, build)
     else:
         buildsets = BuildSetsPaginated(pipeline, per_page)
