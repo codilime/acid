@@ -108,7 +108,7 @@ class TestZuulBuildSet(DatabaseTestCase):
             buildset.ref = 'refs/heads/gimp'
         filtered_buildsets = list(ZuulBuildSet.get_filtered(
             pipeline='periodic-nightly',
-            branch='master',
+            branches=['master'],
             build='105'))
         expected = [database[0]]
         assert filtered_buildsets == expected
@@ -119,7 +119,7 @@ class TestZuulBuildSet(DatabaseTestCase):
         buildsets = database_with_buildsets()
         filtered_buildsets = list(ZuulBuildSet.get_filtered(
             pipeline='periodic-nightly',
-            branch='master',
+            branches=['master'],
             build=None))
         expected = buildsets[::-1]
         assert filtered_buildsets == expected

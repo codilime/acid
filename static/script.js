@@ -14,6 +14,13 @@ $(function () {
     $(this).toggleClass('unfold')
     $(this).parent().toggleClass('active-border')
   })
+
+$(document).ready(function() {
+    $('.custom-select').select2({
+    placeholder: 'Select branch'
+    });
+});
+
 })
 
 function enableAutoRefresh () { // eslint-disable-line no-unused-vars
