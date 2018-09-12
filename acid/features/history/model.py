@@ -87,7 +87,7 @@ class ZuulBuildSet(db.Entity):
 
         return select(
             bs for bs in cls if
-            bs.pipeline == pipeline and bs.ref.endswith(branch) and
+            bs.pipeline == pipeline and bs.branch == branch and
             len(select(b for b in bs.builds if
                        build in b.log_url)) > 0).sort_by(desc(cls.id))
 
