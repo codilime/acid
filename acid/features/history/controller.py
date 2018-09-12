@@ -21,7 +21,7 @@ def show_builds_history(page=1):
 
     db.connect()
 
-    branches =  request.args.getlist('branch')
+    branches = request.args.getlist('branch')
     build = request.args.get('build')
 
     if branches or build:

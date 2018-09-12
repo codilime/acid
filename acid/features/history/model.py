@@ -76,7 +76,7 @@ class ZuulBuildSet(db.Entity):
             len(select(b for b in bs.builds)) > 0).sort_by(desc(cls.id))
 
     @classmethod
-    def get_filtered(cls, pipeline, branches=[], build=''):
+    def get_filtered(cls, pipeline, branches, build=''):
         for index, branch in enumerate(branches):
             if branch not in cls.get_branches():
                 branches.pop(index)
