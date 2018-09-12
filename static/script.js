@@ -15,7 +15,7 @@ $(function () {
 
     let allUnfoldIds = sessionStorage.getItem('unfoldedRows')
     let rowId = $item.attr('id')
-    let newSessionStorageValue = ''
+    let newSessionStorageValue = []
 
     $item.toggleClass('unfold')
     $item.parent().toggleClass('active-border')
@@ -23,17 +23,17 @@ $(function () {
     rowId = rowId.replace('heading', 'collapse')
 
     if (allUnfoldIds === null) {
-      newSessionStorageValue = rowId + ','
+      newSessionStorageValue.push(rowId)
     } else {
       let ids = allUnfoldIds.split(',')
-      let currentIdIndex = ids.indexOf(rowId)
-      if (currentIdIndex === -1) {
-        newSessionStorageValue = allUnfoldIds + rowId + ','
+      newSessionStorageValue = ids
+      if (ids.indexOf(rowId) === -1) {
+        newSessionStorageValue.push(rowId)
       } else {
-        ids.splice(currentIdIndex, 1)
-        newSessionStorageValue = ids
+        newSessionStorageValue = ids.filter(item => item !== rowId)
       }
     }
+    newSessionStorageValue = newSessionStorageValue.filter(function(e){return e})
     sessionStorage.setItem('unfoldedRows', newSessionStorageValue)
   })
   $(window).ready(function () {
