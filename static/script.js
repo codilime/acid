@@ -33,7 +33,7 @@ $(function () {
         newSessionStorageValue = ids.filter(item => item !== rowId)
       }
     }
-    newSessionStorageValue = newSessionStorageValue.filter(function (e) { return e })
+    newSessionStorageValue = newSessionStorageValue.filter(item => item !== '')
     sessionStorage.setItem('unfoldedRows', newSessionStorageValue)
   })
   $(window).ready(function () {
