@@ -37,10 +37,10 @@ clean-session: ## remove flask_session files
 lint: ## check code style and formatting with flake8
 	flake8
 
-test-unit: ## run all unit tests
+test-unit: missing-conf ## run all unit tests
 	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_APP=$(APP) pytest -m unit
 
-test-integration: ## run all integration tests
+test-integration: missing-conf ## run all integration tests
 	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_APP=$(APP) pytest -m integration
 
 test: test-unit test-integration ## run all tests
