@@ -75,3 +75,9 @@ function enableAutoRefresh () { // eslint-disable-line no-unused-vars
     }
   }
 }
+
+function unfoldAll () { // eslint-disable-line no-unused-vars
+  let allUnfoldIds = sessionStorage.getItem('unfoldedRows')
+  let unfoldedFlag = true
+  $('#unfold-all-li').removeClass('d-none')
+}
