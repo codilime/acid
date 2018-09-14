@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Status{% endblock %}
 {% block content %}
+    <meta id="refs_list" content="{{refs_list}}">
     <div class="mb-2 text-center">
         <h1>Zuul status <small>{{ pipename }}</small></h1>
     </div>
