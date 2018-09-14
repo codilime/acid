@@ -11,8 +11,37 @@ $(function () {
   })
 
   $('.clickable').click(function () {
-    $(this).toggleClass('unfold')
-    $(this).parent().toggleClass('active-border')
+    let $item = $(this)
+
+    let allUnfoldIds = sessionStorage.getItem('unfoldedRows')
+    let rowId = $item.attr('id')
+    let newSessionStorageValue = []
+
+    $item.toggleClass('unfold')
+    $item.parent().toggleClass('active-border')
+
+    rowId = rowId.replace('heading', 'collapse')
+
+    if (allUnfoldIds === null) {
+      newSessionStorageValue.push(rowId)
+    } else {
+      let ids = allUnfoldIds.split(',')
+      newSessionStorageValue = ids
+      if (ids.indexOf(rowId) === -1) {
+        newSessionStorageValue.push(rowId)
+      } else {
+        newSessionStorageValue = ids.filter(item => item !== rowId)
+      }
+    }
+    newSessionStorageValue = newSessionStorageValue.filter(item => item !== '')
+    sessionStorage.setItem('unfoldedRows', newSessionStorageValue)
+  })
+  $(window).ready(function () {
+    let allUnfoldIds = sessionStorage.getItem('unfoldedRows')
+    let idsToUnfold = allUnfoldIds.split(',')
+    for (let id of idsToUnfold) {
+      $('#' + id).addClass('show')
+    }
   })
 })
 
