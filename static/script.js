@@ -35,6 +35,7 @@ $(function () {
     }
     newSessionStorageValue = newSessionStorageValue.filter(item => item !== '')
     sessionStorage.setItem('unfoldedRows', newSessionStorageValue)
+    $('#unfold-all').prop('checked', false)
   })
   $(window).ready(function () {
     let allUnfoldIds = sessionStorage.getItem('unfoldedRows')
@@ -80,6 +81,14 @@ function unfoldAll () { // eslint-disable-line no-unused-vars
   window.setInterval(unfoldButton, 100)
   $('#unfold-all-li').removeClass('d-none')
   let allUnfoldIds = $('#refs_list').attr("content").replace(/[\[\]'"\ ]/gm, '').split(',').sort().toString()
+
+  $('#unfold-all').on('click', function(event) {
+    if(document.getElementById('unfold-all').checked == false){
+      sessionStorage.setItem('unfoldedRows', '')
+      window.location.reload()
+    }
+
+  })
 
   function unfoldButton() {
     let currentUnfoldedRows = sessionStorage.getItem('unfoldedRows').split(',').sort()

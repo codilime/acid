@@ -21,7 +21,7 @@ def show_status(pipename=None):
     refs_list = []
     for queue in queues:
         for buildset in queue.buildsets:
-            refs_list.append("collapse"+buildset.ref)
+            refs_list.append("collapse" + buildset.ref)
 
     return render_template('status.html', queues=queues, pipename=pipename,
                            refs_list=refs_list)
