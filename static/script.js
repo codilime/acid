@@ -77,7 +77,18 @@ function enableAutoRefresh () { // eslint-disable-line no-unused-vars
 }
 
 function unfoldAll () { // eslint-disable-line no-unused-vars
+  window.setInterval(unfoldButton, 100)
   $('#unfold-all-li').removeClass('d-none')
-  var aa = $('#refs_list').attr("content")
-  console.log(aa)
+  let allUnfoldIds = $('#refs_list').attr("content").replace(/[\[\]'"\ ]/gm, '').split(',').sort().toString()
+
+  function unfoldButton() {
+    let currentUnfoldedRows = sessionStorage.getItem('unfoldedRows').split(',').sort()
+    let currentUnfoldedRowsString = currentUnfoldedRows.toString()
+    if (allUnfoldIds != currentUnfoldedRowsString) {
+      if ($('#unfold-all').is(':checked')) {
+        sessionStorage.setItem('unfoldedRows', allUnfoldIds)
+        window.location.reload()
+      }
+    }
+  }
 }
