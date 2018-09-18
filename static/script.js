@@ -1,4 +1,7 @@
 $(function () {
+  if (sessionStorage.getItem('unfoldedRows') === null){
+    sessionStorage.setItem('unfoldedRows', '')
+  }
   $('[data-localtime="true"]').each(function () {
     let $element = $(this)
     let dateTime = moment.utc($element.text().trim())
@@ -35,7 +38,6 @@ $(function () {
     }
     newSessionStorageValue = newSessionStorageValue.filter(item => item !== '')
     sessionStorage.setItem('unfoldedRows', newSessionStorageValue)
-    $('#unfold-all').prop('checked', false)
   })
   $(window).ready(function () {
     let allUnfoldIds = sessionStorage.getItem('unfoldedRows')
@@ -52,7 +54,7 @@ $(function () {
   })
 })
 
-function enableAutoRefresh () {                                                 // eslint-disable-line no-unused-vars
+function enableAutoRefresh () { // eslint-disable-line no-unused-vars
   let refreshFlag = sessionStorage.getItem('refreshTag')
   $('#auto-refresh-li').removeClass('d-none')
   window.setInterval(refresh, 15000)
@@ -77,33 +79,38 @@ function enableAutoRefresh () {                                                 
   }
 }
 
-function unfoldAll () {                                                         // eslint-disable-line no-unused-vars
+function unfoldAll () { // eslint-disable-line no-unused-vars
   $('#unfold-all-li').removeClass('d-none')
   let allIds = $('#refs_list').attr('content')                                  // eslint-disable-line
                               .replace(/[\[\]'"\ ]/gm, '')                      // eslint-disable-line
                               .split(',')                                       // eslint-disable-line
                               .sort()                                           // eslint-disable-line
                               .toString()                                       // eslint-disable-line
+  let idsToUnfold = allIds.split(',')
   let newSessionStorageValue = ''
+
   $('#unfold-all').on('click', function (event) {
-    let currentUnfoldedRows = sessionStorage.getItem('unfoldedRows')
-    if (document.getElementById('unfold-all').checked === true) {
+    currentUnfoldedRowsArray = sessionStorage.getItem('unfoldedRows').split(',')
+    if ($(this)[0].checked) {
       newSessionStorageValue = allIds
     } else {
-      if (currentUnfoldedRows === allIds) {
-        newSessionStorageValue = ''
-      } else {
-        newSessionStorageValue = currentUnfoldedRows
-      }
+      newSessionStorageValue = ''
+    }
+    let diffArray = idsToUnfold.filter(x => !currentUnfoldedRowsArray.includes(x));
+    if (diffArray.length == 0){
+      diffArray = idsToUnfold
+    }
+    for (let id of diffArray){
+      $('#' + id).parent().toggleClass('active-border')
+      $('#' + id).toggleClass('show')
+      id = id.replace('collapse','heading')
+      $('#' + id).toggleClass('unfold')
+      $('#' + id).toggleClass('collapsed')
     }
     sessionStorage.setItem('unfoldedRows', newSessionStorageValue)
-    let idsToUnfold = allIds.split(',')
-    if (newSessionStorageValue === allIds || newSessionStorageValue === ''){
-      for (let id of idsToUnfold) {
-        $('#' + id).toggleClass('unfold')
-        $('#' + id).parent().toggleClass('active-border')
-        $('#' + id).toggleClass('show')
-      }
-    }
+  })
+
+  $('.clickable').click(function () {
+    $('#unfold-all').prop('checked', false)
   })
 }
