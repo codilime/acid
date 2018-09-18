@@ -1,5 +1,5 @@
 $(function () {
-  if (sessionStorage.getItem('unfoldedRows') === null){
+  if (sessionStorage.getItem('unfoldedRows') === null) {
     sessionStorage.setItem('unfoldedRows', '')
   }
   $('[data-localtime="true"]').each(function () {
@@ -90,20 +90,20 @@ function unfoldAll () { // eslint-disable-line no-unused-vars
   let newSessionStorageValue = ''
 
   $('#unfold-all').on('click', function (event) {
-    currentUnfoldedRowsArray = sessionStorage.getItem('unfoldedRows').split(',')
+    let currentUnfoldedRowsArray = sessionStorage.getItem('unfoldedRows').split(',')
     if ($(this)[0].checked) {
       newSessionStorageValue = allIds
     } else {
       newSessionStorageValue = ''
     }
-    let diffArray = idsToUnfold.filter(x => !currentUnfoldedRowsArray.includes(x));
-    if (diffArray.length == 0){
+    let diffArray = idsToUnfold.filter(x => !currentUnfoldedRowsArray.includes(x))
+    if (diffArray.length === 0) {
       diffArray = idsToUnfold
     }
-    for (let id of diffArray){
+    for (let id of diffArray) {
       $('#' + id).parent().toggleClass('active-border')
       $('#' + id).toggleClass('show')
-      id = id.replace('collapse','heading')
+      id = id.replace('collapse', 'heading')
       $('#' + id).toggleClass('unfold')
       $('#' + id).toggleClass('collapsed')
     }
