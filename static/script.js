@@ -52,7 +52,7 @@ $(function () {
   })
 })
 
-function enableAutoRefresh () { // eslint-disable-line no-unused-vars
+function enableAutoRefresh () {                                                 // eslint-disable-line no-unused-vars
   let refreshFlag = sessionStorage.getItem('refreshTag')
   $('#auto-refresh-li').removeClass('d-none')
   window.setInterval(refresh, 15000)
@@ -77,25 +77,33 @@ function enableAutoRefresh () { // eslint-disable-line no-unused-vars
   }
 }
 
-function unfoldAll () { // eslint-disable-line no-unused-vars
-  window.setInterval(unfoldButton, 100)
+function unfoldAll () {                                                         // eslint-disable-line no-unused-vars
   $('#unfold-all-li').removeClass('d-none')
-  let allUnfoldIds = $('#refs_list').attr('content').replace(/[\[\]'"\ ]/gm, '').split(',').sort().toString() // eslint-disable-line
-
+  let allIds = $('#refs_list').attr('content')                                  // eslint-disable-line
+                              .replace(/[\[\]'"\ ]/gm, '')                      // eslint-disable-line
+                              .split(',')                                       // eslint-disable-line
+                              .sort()                                           // eslint-disable-line
+                              .toString()                                       // eslint-disable-line
+  let newSessionStorageValue = ''
   $('#unfold-all').on('click', function (event) {
-    if (document.getElementById('unfold-all').checked === false) {
-      sessionStorage.setItem('unfoldedRows', '')
-      window.location.reload()
-    }
-  })
-  function unfoldButton () {
-    let currentUnfoldedRows = sessionStorage.getItem('unfoldedRows').split(',').sort()
-    let currentUnfoldedRowsString = currentUnfoldedRows.toString()
-    if (allUnfoldIds !== currentUnfoldedRowsString) {
-      if ($('#unfold-all').is(':checked')) {
-        sessionStorage.setItem('unfoldedRows', allUnfoldIds)
-        window.location.reload()
+    let currentUnfoldedRows = sessionStorage.getItem('unfoldedRows')
+    if (document.getElementById('unfold-all').checked === true) {
+      newSessionStorageValue = allIds
+    } else {
+      if (currentUnfoldedRows === allIds) {
+        newSessionStorageValue = ''
+      } else {
+        newSessionStorageValue = currentUnfoldedRows
       }
     }
-  }
+    sessionStorage.setItem('unfoldedRows', newSessionStorageValue)
+    let idsToUnfold = allIds.split(',')
+    if (newSessionStorageValue === allIds || newSessionStorageValue === ''){
+      for (let id of idsToUnfold) {
+        $('#' + id).toggleClass('unfold')
+        $('#' + id).parent().toggleClass('active-border')
+        $('#' + id).toggleClass('show')
+      }
+    }
+  })
 }
