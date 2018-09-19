@@ -81,3 +81,4 @@ venv: clean-venv ## create basic virtual environment
 missing-conf: ## create missing configuration files from samples
 	find . -type f -not -path "./.*" -name "*.sample" -exec sh -c \
 		'for f; do if ! [ -e "$${f%.sample}" ]; then cp "$$f" "$${f%.sample}"; fi; done' _ {} +
+
