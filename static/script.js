@@ -43,7 +43,9 @@ $(function () {
     let allUnfoldIds = sessionStorage.getItem('unfoldedRows')
     let idsToUnfold = allUnfoldIds.split(',')
     for (let id of idsToUnfold) {
-      $('#' + id).addClass('show')
+      $('#' + id).toggleClass('show').parent().toggleClass('active-border')
+      id = id.replace('collapse', 'heading')
+      $('#' + id).toggleClass('unfold').toggleClass('collapsed')
     }
   })
 
@@ -100,13 +102,11 @@ function unfoldAll () { // eslint-disable-line no-unused-vars
     if (diffArray.length === 0) {
       diffArray = idsToUnfold
     }
-    for (let id of diffArray) {
-      $('#' + id).parent().toggleClass('active-border')
-      $('#' + id).toggleClass('show')
+    diffArray.forEach(function (id) {
+      $('#' + id).toggleClass('show').parent().toggleClass('active-border')
       id = id.replace('collapse', 'heading')
-      $('#' + id).toggleClass('unfold')
-      $('#' + id).toggleClass('collapsed')
-    }
+      $('#' + id).toggleClass('unfold').toggleClass('collapsed')
+    })
     sessionStorage.setItem('unfoldedRows', newSessionStorageValue)
   })
 
