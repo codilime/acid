@@ -31,8 +31,7 @@ class TestReadYaml:
         assert hasattr(settings, 'get')
 
         expected = {'pipename': 'periodic-nightly',
-                    'users_file': 'config/test/users_test.yml',
-                    'secret_key': 'thisisverysecret',
-                    'openid_provider': 'https://login.launchpad.net/+openid'}
+                    'users_file': 'users_test.yml',
+                    'secret_key': 'thisisverysecret'}
         # check only subset of config file to avoid bloating test source code
-        assert settings['default'] == expected
+        assert settings['default'] == expected  

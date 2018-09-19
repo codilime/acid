@@ -3,20 +3,20 @@ default:
   pipename: 'periodic-nightly'
   users_file: 'config/test/users_test.yml'
   secret_key: 'thisisverysecret'
-  openid_provider: 'https://login.launchpad.net/+openid'
-database:
-  provider: 'mysql'
-  host: '10.10.10.5'
-  user: 'root'
-  password: 'root'
-  port: 3306
-  name: 'zuul'
-buildset:
-  per_page: 20
-  page_links: 4
-  log_url: 'http://logs.opencontrail.org'
+
+authentication:
+  openid_providers:
+    launchpad:
+      url: 'https://login.launchpad.net/+openid'
+
+history:
+  log_server: 'http://logs.opencontrail.org/'
+  pagination:
+    per_page: 20
+    page_links: 4
+
 zuul:
-  url: 'http://10.10.10.5/'
+  zuul_server: 'http://10.10.10.5/'
   status_endpoint: 'status.json'
   pipelines:
     - check
@@ -25,17 +25,25 @@ zuul:
     - periodic-sanity
     - experimental
     - experimental-provision
+    - some-weird-pipeline
   build_enqueue:
     pipelines:
       - periodic-nightly:
           - master
           - R5.0
+  database:
+    provider: 'mysql'
+    host: '10.10.10.5'
+    user: 'root'
+    password: 'root'
+    port: 3306
+    name: 'zuul'
   manager:
     host: '10.10.10.5'
     username: 'vagrant'
-    user_key_file: 'acid/features/zuul_manager/tests/static/insecure_user_key' # ssh client key
-    host_key_file: 'acid/features/zuul_manager/tests/static/host_key.pub' # file with fingerprint from host with zuul
+    user_key_file: 'acid/features/zuul_manager/tests/static/insecure_user_key'
+    host_key_file: 'acid/features/zuul_manager/tests/static/host_key.pub'
     tenant: 'acid'
-    trigger: 'timer'
     project: 'acid-test-dev'
+    trigger: 'timer'
     policy: 'RejectPolicy'

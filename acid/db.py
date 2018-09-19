@@ -12,7 +12,7 @@ db = Database()
 
 
 def connect():
-    config = current_app.config['database']
+    config = current_app.config['zuul']['database']
     try:
         db.bind(provider=config['provider'],
                 host=os.getenv('DBHOST', config['host']),
