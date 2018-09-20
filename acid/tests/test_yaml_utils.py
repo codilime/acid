@@ -34,4 +34,4 @@ class TestReadYaml:
                     'users_file': 'users_test.yml',
                     'secret_key': 'thisisverysecret'}
         # check only subset of config file to avoid bloating test source code
-        assert settings['default'] == expected  
+        assert settings['default'] == expected
