@@ -42,7 +42,7 @@ $(function () {
   $(window).ready(function () {
     let allUnfoldIds = sessionStorage.getItem('unfoldedRows')
     let idsToUnfold = allUnfoldIds.split(',')
-    expandRow(idsToUnfold)
+    idsToUnfold.forEach(expand)
   })
 
   $(document).ready(function () {
@@ -98,7 +98,7 @@ function unfoldAll () { // eslint-disable-line no-unused-vars
     if (diffArray.length === 0) {
       diffArray = idsToUnfold
     }
-    expandRow(diffArray)
+    diffArray.forEach(expand)
     sessionStorage.setItem('unfoldedRows', newSessionStorageValue)
   })
 
@@ -107,10 +107,8 @@ function unfoldAll () { // eslint-disable-line no-unused-vars
   })
 }
 
-function expandRow (rowListID) {
-  rowListID.forEach(function (id) {
-    $('#' + id).toggleClass('show').parent().toggleClass('active-border')
-    id = id.replace('collapse', 'heading')
-    $('#' + id).toggleClass('unfold').toggleClass('collapsed')
-  })
+function expand (id) {
+  $('#' + id).toggleClass('show').parent().toggleClass('active-border')
+  id = id.replace('collapse', 'heading')
+  $('#' + id).toggleClass('unfold').toggleClass('collapsed')
 }
