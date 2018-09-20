@@ -1,0 +1,6 @@
+templates:
+  #variables used for Docker daemon configuration (daemon.json)
+  daemon:
+    bip: "192.168.1.5/24"
+    fixed_cidr: "192.168.1.5/25"
+    mtu: 1500
