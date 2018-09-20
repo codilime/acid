@@ -2,8 +2,8 @@
 .DEFAULT_GOAL := help
 
 APP=acid/app.py
-SETTINGS_DEV=settings.yml
-SETTINGS_TEST=settings_test.yml
+SETTINGS_DEV=config/settings.yml
+SETTINGS_TEST=config/test/settings_test.yml
 
 help:
 	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-25s\033[0m %s\n", $$1, $$2}'
@@ -37,10 +37,10 @@ clean-session: ## remove flask_session files
 lint: ## check code style and formatting with flake8
 	flake8
 
-test-unit: ## run all unit tests
+test-unit: missing-conf ## run all unit tests
 	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_APP=$(APP) pytest -m unit
 
-test-integration: ## run all integration tests
+test-integration: missing-conf ## run all integration tests
 	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_APP=$(APP) pytest -m integration
 
 test: test-unit test-integration ## run all tests
@@ -77,3 +77,8 @@ venv: clean-venv ## create basic virtual environment
 	pip install --upgrade pip; \
 	pip install setuptools wheel; \
 	$(MAKE) install-dev; \
+
+missing-conf: ## create missing configuration files from samples
+	find . -type f -not -path "./.*" -name "*.sample" -exec sh -c \
+		'for f; do if ! [ -e "$${f%.sample}" ]; then cp "$$f" "$${f%.sample}"; fi; done' _ {} +
+

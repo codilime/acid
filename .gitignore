@@ -232,3 +232,6 @@ typings/
 
 # vagrant
 .vagrant/
+
+# ACID configuration files
+config/**/*.yml
