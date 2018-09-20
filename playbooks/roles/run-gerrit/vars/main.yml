@@ -1,0 +1,6 @@
+templates:
+  #variables used in docker-compose.yaml for gerrit
+  gerrit_compose:
+    subnet: "192.168.2.5/24"
+
+

@@ -15,5 +15,12 @@ services:
       - "8080:8080"
     restart: always
 
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: "{{ templates.gerrit_compose.subnet }}"
+
 volumes:
   cache-volume:
