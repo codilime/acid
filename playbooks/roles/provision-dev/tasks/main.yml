@@ -42,6 +42,19 @@
   args:
     executable: /bin/bash
 
+- name: "Create directory: /etc/docker"
+  become: yes
+  file:
+    path: "/etc/docker"
+    state: directory
+    mode: a+rwx
+
+- name: Copy daemon.json file
+  become: yes
+  template:
+    src: "daemon.json.j2"
+    dest: "/etc/docker/daemon.json"
+
 - name: Install docker-ce
   shell: |
     set -e
