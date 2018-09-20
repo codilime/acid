@@ -41,7 +41,7 @@ class ZuulManager:
 
     def _sanitize_args(self, pipeline, branch):
         sanitized_pipeline = shlex.quote(pipeline)
-        sanitized_ref = shlex.quote(f'refs/head/{branch}')
+        sanitized_ref = shlex.quote(f'refs/heads/{branch}')
         return sanitized_pipeline, sanitized_ref
 
     def _prepare_client(self):
