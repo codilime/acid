@@ -1,9 +1,9 @@
 ---
 default:
-  # Default pipename for status controller, used when pipename is not provided.
+  # Default pipeline name for status controller.
   pipename: 'periodic-nightly'
 
-  # YAML file where admins emails are stored.
+  # YAML file where admin emails are stored.
   # Necessary for admin authorization. 
   users_file: 'users.yml'
 
@@ -12,7 +12,7 @@ default:
   secret_key: b'\x8f\xa6gL\xc7\xc8\xe7\xf4v\xe8\xfc\xef\x85\xd3\xa6\x142\xc1\xc3\x12\xcc\xcfp['
 
 
-# Configuration of authentication.
+# Configuration of authentication
 authentication:
   # Specify providers of open id authentication system.
   # Every provider must have an url attribute.
@@ -21,10 +21,10 @@ authentication:
       url: 'https://login.launchpad.net/+openid'
 
 
-# Configuration of history feature.
+# Configuration of history feature
 history:
   # <protocol>://<host> for server which store logs.
-  log_server: 'http://logs.opencontrail.org/'
+  log_server_url: 'http://logs.opencontrail.org/'
 
   pagination:
     # Number of elements displayed on page.
@@ -33,10 +33,10 @@ history:
     # Number of links displayed before or after current page link.
     page_links: 4
 
-
+# Zuul configuration
 zuul:
   # <protocol>://<host> for zuul server.
-  zuul_server: 'http://10.10.10.5/'
+  url: 'http://10.10.10.5/'
 
   # Pathname for fetching status data in json format.
   status_endpoint: 'status.json'
@@ -50,7 +50,6 @@ zuul:
     - periodic-sanity
     - experimental
     - experimental-provision
-    - some-weird-pipeline
 
   build_enqueue:
     # Specify pipelines and branches which can be managed from UI.
@@ -69,27 +68,27 @@ zuul:
     # Name of database provider, which is a module of pony.orm.dbproviders package.
     provider: 'mysql'
 
-    # IP address of database server.
+    # IP address of database server
     host: '10.10.10.5'
 
-    # Database username.
+    # Database username
     user: 'root'
 
-    # Database password.
+    # Database password
     password: 'root'
 
-    # TCP port of database server.
+    # TCP port of database server
     port: 3306
 
-    # Database name.
+    # Database name
     name: 'zuul'
   
-  # Configuration of ZuulManager.
+  # Configuration of ZuulManager
   manager:
-    # IP address of zuul server.
+    # IP address of zuul server
     host: '10.10.10.5'
 
-    # Username for authentication.
+    # Username for authentication
     username: 'vagrant'
 
     # Path to the file which contains ssh client key.
@@ -100,15 +99,15 @@ zuul:
     # Path should be relative.
     host_key_file: 'acid/features/zuul_manager/tests/static/host_key.pub'
 
-    # Tenant name.
+    # Tenant name
     # Tenant has to exist at zuul server.
     tenant: 'acid'
 
-    # Project name.
+    # Project name
     # Projext has to exist at zuul server.
     project: 'acid-test-dev'
 
-    # Trigger event.
+    # Trigger event
     trigger: 'timer'
 
     # Policy to use when connecting to server without host key.

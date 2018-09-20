@@ -10,13 +10,13 @@ authentication:
       url: 'https://login.launchpad.net/+openid'
 
 history:
-  log_server: 'http://logs.opencontrail.org/'
+  log_server_url: 'http://logs.opencontrail.org/'
   pagination:
     per_page: 20
     page_links: 4
 
 zuul:
-  zuul_server: 'http://10.10.10.5/'
+  url: 'http://10.10.10.5/'
   status_endpoint: 'status.json'
   pipelines:
     - check
@@ -25,7 +25,6 @@ zuul:
     - periodic-sanity
     - experimental
     - experimental-provision
-    - some-weird-pipeline
   build_enqueue:
     pipelines:
       - periodic-nightly:
