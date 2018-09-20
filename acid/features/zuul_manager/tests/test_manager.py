@@ -74,7 +74,7 @@ class TestZuulConnector:
 
         run_command.assert_called_with(
             'zuul enqueue-ref --tenant tenant --trigger trigger --pipeline '
-            'periodic-nightly --project project --ref refs/head/master '
+            'periodic-nightly --project project --ref refs/heads/master '
             '> /dev/null 2>&1 &')
 
     def test_dequeue_generate_correct_command(self, path_to_test_file, mocker):
@@ -91,7 +91,7 @@ class TestZuulConnector:
 
         run_command.assert_called_with(
             'zuul dequeue --tenant tenant --pipeline periodic-nightly '
-            '--project project --ref refs/head/master > /dev/null 2>&1 &')
+            '--project project --ref refs/heads/master > /dev/null 2>&1 &')
 
     def test_enqueue_correct_escape_insecure_args(self, path_to_test_file,
                                                   mocker):
@@ -109,7 +109,7 @@ class TestZuulConnector:
         run_command.assert_called_with(
             'zuul enqueue-ref --tenant TENANT '
             '--trigger TRIGGER --pipeline \'periodic`who`\' --project PROJECT '
-            '--ref \'refs/head/master???*\' > /dev/null 2>&1 &')
+            '--ref \'refs/heads/master???*\' > /dev/null 2>&1 &')
 
     def test_dequeue_correct_escape_insecure_args(self, path_to_test_file,
                                                   mocker):
@@ -126,4 +126,4 @@ class TestZuulConnector:
 
         run_command.assert_called_with(
             'zuul dequeue --tenant TENANT --pipeline \'rm -r /\' --project '
-            'PROJECT --ref \'refs/head/master*/~\' > /dev/null 2>&1 &')
+            'PROJECT --ref \'refs/heads/master*/~\' > /dev/null 2>&1 &')
