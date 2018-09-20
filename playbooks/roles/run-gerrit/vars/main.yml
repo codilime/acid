@@ -1,0 +1,5 @@
+templates:
+  gerrit_compose:
+    subnet: "192.168.2.5/24"
+
+
