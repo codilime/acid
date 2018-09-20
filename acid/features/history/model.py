@@ -77,7 +77,7 @@ class ZuulBuildSet(db.Entity):
 
     @classmethod
     def get_filtered(cls, pipeline, branches, build=''):
-        all_branches = cls.get_branches()
+        all_branches = list(cls.get_branches())
         branches = [x for x in branches if x in all_branches]
 
         if (len(branches) == 0):
