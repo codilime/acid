@@ -77,12 +77,11 @@ class ZuulBuildSet(db.Entity):
 
     @classmethod
     def get_filtered(cls, pipeline, branches, build=''):
-        for index, branch in enumerate(branches):
-            if branch not in cls.get_branches():
-                branches.pop(index)
+        all_branches = cls.get_branches()
+        branches = [x for x in branches if x in all_branches]
 
         if (len(branches) == 0):
-            branches = [branch for branch in cls.get_branches()]
+            branches = all_branches
 
         if build is None or not build.isnumeric():
             build = ''
