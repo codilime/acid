@@ -1,4 +1,7 @@
 $(function () {
+  if (sessionStorage.getItem('unfoldedRows') === null) {
+    sessionStorage.setItem('unfoldedRows', '')
+  }
   $('[data-localtime="true"]').each(function () {
     let $element = $(this)
     let dateTime = moment.utc($element.text().trim())
@@ -39,9 +42,7 @@ $(function () {
   $(window).ready(function () {
     let allUnfoldIds = sessionStorage.getItem('unfoldedRows')
     let idsToUnfold = allUnfoldIds.split(',')
-    for (let id of idsToUnfold) {
-      $('#' + id).addClass('show')
-    }
+    idsToUnfold.forEach(expand)
   })
 
   $(document).ready(function () {
@@ -74,4 +75,40 @@ function enableAutoRefresh () { // eslint-disable-line no-unused-vars
       window.location.reload()
     }
   }
+}
+
+function unfoldAll () { // eslint-disable-line no-unused-vars
+  $('#unfold-all-li').removeClass('d-none')
+  let allIds = $('#refs_list').attr('content')                                  // eslint-disable-line
+                              .replace(/[\[\]'"\ ]/gm, '')                      // eslint-disable-line
+                              .split(',')                                       // eslint-disable-line
+                              .sort()                                           // eslint-disable-line
+                              .toString()                                       // eslint-disable-line
+  let idsToUnfold = allIds.split(',')
+  let newSessionStorageValue = ''
+
+  $('#unfold-all').on('click', function (event) {
+    let currentUnfoldedRowsArray = sessionStorage.getItem('unfoldedRows').split(',')
+    if ($(this)[0].checked) {
+      newSessionStorageValue = allIds
+    } else {
+      newSessionStorageValue = ''
+    }
+    let diffArray = idsToUnfold.filter(x => !currentUnfoldedRowsArray.includes(x))
+    if (diffArray.length === 0) {
+      diffArray = idsToUnfold
+    }
+    diffArray.forEach(expand)
+    sessionStorage.setItem('unfoldedRows', newSessionStorageValue)
+  })
+
+  $('.clickable').click(function () {
+    $('#unfold-all').prop('checked', false)
+  })
+}
+
+function expand (id) {
+  $('#' + id).toggleClass('show').parent().toggleClass('active-border')
+  id = id.replace('collapse', 'heading')
+  $('#' + id).toggleClass('unfold').toggleClass('collapsed')
 }
