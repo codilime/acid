@@ -5,7 +5,7 @@ default:
 
   # YAML file where admin emails are stored.
   # Necessary for admin authorization. 
-  users_file: 'users.yml'
+  users_file: 'config/users.yml'
 
   # Flask attribute needed for secure signing session cookies.
   # Read more: http://flask.pocoo.org/docs/1.0/config/#SECRET_KEY
