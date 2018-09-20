@@ -28,15 +28,13 @@ class ZuulManager:
 
     def enqueue(self, pipeline, branch):
         pipeline, ref = self._sanitize_args(pipeline, branch)
-
-        conf_path = current_app.config.get("gearman_conf", None) #f"/home/vagrant/gearman_conf/gear.conf"
-
+        conf_path = current_app.config.get("gearman_conf", None)
         if conf_path and len(conf_path) > 0:
-            c = f"-c {conf_path}"
+            c = f" -c {conf_path}"
         else:
             c = ""
 
-        command = str(f"zuul {c} enqueue-ref --tenant {self.tenant} "
+        command = str(f"zuul{c} enqueue-ref --tenant {self.tenant} "
                       f"--trigger {self.trigger} --pipeline {pipeline} "
                       f"--project {self.project} --ref {ref} "
                       "> /dev/null 2>&1 &")
@@ -44,15 +42,13 @@ class ZuulManager:
 
     def dequeue(self, pipeline, branch):
         pipeline, ref = self._sanitize_args(pipeline, branch)
-
-        conf_path = current_app.config.get("gearman_conf", None)  # f"/home/vagrant/gearman_conf/gear.conf"
-
+        conf_path = current_app.config.get("gearman_conf", None)
         if conf_path and len(conf_path) > 0:
-            c = f"-c {conf_path}"
+            c = f" -c {conf_path}"
         else:
             c = ""
 
-        command = str(f"zuul {c} dequeue --tenant {self.tenant} "
+        command = str(f"zuul{c} dequeue --tenant {self.tenant} "
                       f"--pipeline {pipeline} --project {self.project} "
                       f"--ref {ref} > /dev/null 2>&1 &")
         self._run_command(command)

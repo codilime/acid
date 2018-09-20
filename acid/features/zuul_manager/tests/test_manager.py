@@ -3,10 +3,11 @@ import pytest
 
 from ..manager import ZuulManager
 from ..exceptions import ZuulManagerConfig
+from acid.tests import IntegrationTestCase
 
 
 @pytest.mark.unit
-class TestZuulConnector:
+class TestZuulConnector(IntegrationTestCase):
     def test_raise_when_no_user_key_file(self, path_to_test_file):
         with pytest.raises(ZuulManagerConfig):
             ZuulManager(host="host",
