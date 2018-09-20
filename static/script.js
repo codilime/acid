@@ -43,6 +43,12 @@ $(function () {
       $('#' + id).addClass('show')
     }
   })
+
+  $(document).ready(function () {
+    $('.custom-select').select2({
+      placeholder: 'Select branch'
+    })
+  })
 })
 
 function enableAutoRefresh () { // eslint-disable-line no-unused-vars

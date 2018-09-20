@@ -76,9 +76,12 @@ class ZuulBuildSet(db.Entity):
             len(select(b for b in bs.builds)) > 0).sort_by(desc(cls.id))
 
     @classmethod
-    def get_filtered(cls, pipeline, branch='', build=''):
-        if branch not in cls.get_branches():
-            branch = ''
+    def get_filtered(cls, pipeline, branches, build=''):
+        all_branches = list(cls.get_branches())
+        branches = [x for x in branches if x in all_branches]
+
+        if (len(branches) == 0):
+            branches = all_branches
 
         if build is None or not build.isnumeric():
             build = ''
@@ -87,7 +90,7 @@ class ZuulBuildSet(db.Entity):
 
         return select(
             bs for bs in cls if
-            bs.pipeline == pipeline and bs.ref.endswith(branch) and
+            bs.pipeline == pipeline and bs.branch in branches and
             len(select(b for b in bs.builds if
                        build in b.log_url)) > 0).sort_by(desc(cls.id))
 
