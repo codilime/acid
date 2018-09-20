@@ -19,8 +19,7 @@
     <link rel="stylesheet"
           href="{{ url_for('static', filename='main.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-    {% block meta_content %}{% endblock %}
-    {% block extra_magic_content %}{% endblock %}
+    {% block head_extension %}{% endblock %}
 </head>
 <body>
 {% block navbar %}

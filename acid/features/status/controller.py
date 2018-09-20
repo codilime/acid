@@ -18,10 +18,8 @@ def show_status(pipename=None):
     url = service.status_endpoint(zuul_url, zuul_endpoint)
     resource = service.fetch_json_data(endpoint=url)
     queues = service.make_queues(resource['pipelines'], pipename, zuul_url)
-    refs_list = []
-    for queue in queues:
-        for buildset in queue.buildsets:
-            refs_list.append("collapse" + buildset.ref)
+    refs_list = ["collapse" + buildset.ref for queue in queues
+                 for buildset in queue.buildsets]
 
     return render_template('status.html', queues=queues, pipename=pipename,
                            refs_list=refs_list)
