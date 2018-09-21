@@ -3,6 +3,7 @@ import pytest
 
 from ..manager import ZuulManager
 from ..exceptions import ZuulManagerConfig
+
 from acid.tests import IntegrationTestCase
 
 

@@ -28,7 +28,9 @@ class ZuulManager:
 
     def enqueue(self, pipeline, branch):
         pipeline, ref = self._sanitize_args(pipeline, branch)
-        conf_path = current_app.config.get("gearman_conf", None)
+        config = current_app.config
+        conf_path = config.get("gearman_conf", None)
+
         if conf_path and len(conf_path) > 0:
             c = f" -c {conf_path}"
         else:
@@ -42,7 +44,9 @@ class ZuulManager:
 
     def dequeue(self, pipeline, branch):
         pipeline, ref = self._sanitize_args(pipeline, branch)
-        conf_path = current_app.config.get("gearman_conf", None)
+        config = current_app.config
+        conf_path = config.get("gearman_conf", None)
+
         if conf_path and len(conf_path) > 0:
             c = f" -c {conf_path}"
         else:
