@@ -32,7 +32,6 @@ class TestReadYaml:
 
         expected = {'pipename': 'periodic-nightly',
                     'users_file': 'config/test/users_test.yml',
-                    'secret_key': 'thisisverysecret',
-                    'openid_provider': 'https://login.launchpad.net/+openid'}
+                    'secret_key': 'thisisverysecret'}
         # check only subset of config file to avoid bloating test source code
         assert settings['default'] == expected

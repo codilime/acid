@@ -1,23 +1,48 @@
 ---
 default:
+  # Default pipeline name for status controller.
   pipename: 'periodic-nightly'
-  users_file: 'users.yml'
+
+  # YAML file where admin emails are stored.
+  # Necessary for admin authorization. 
+  users_file: 'config/users.yml'
+
+  # Flask attribute needed for secure signing session cookies.
+  # Read more: http://flask.pocoo.org/docs/1.0/config/#SECRET_KEY
   secret_key: b'\x8f\xa6gL\xc7\xc8\xe7\xf4v\xe8\xfc\xef\x85\xd3\xa6\x142\xc1\xc3\x12\xcc\xcfp['
-  openid_provider: 'https://login.launchpad.net/+openid'
-database:
-  provider: 'mysql'
-  host: '10.10.10.5'
-  user: 'root'
-  password: 'root'
-  port: 3306
-  name: 'zuul'
-buildset:
-  per_page: 20
-  page_links: 4
-  log_url: 'http://logs.opencontrail.org'
+
+
+# Configuration of authentication
+authentication:
+  # Specify providers of open id authentication system.
+  # Every provider must have an url attribute.
+  openid_providers:
+    launchpad:
+      url: 'https://login.launchpad.net/+openid'
+
+
+# Configuration of history feature
+history:
+  # <protocol>://<host> for server which store logs.
+  log_server_url: 'http://logs.opencontrail.org/'
+
+  pagination:
+    # Number of elements displayed on page.
+    per_page: 20
+
+    # Number of links displayed before or after current page link.
+    page_links: 4
+
+# Zuul configuration
 zuul:
+  # <protocol>://<host> for zuul server.
   url: 'http://10.10.10.5/'
+
+  # Pathname for fetching status data in json format.
   status_endpoint: 'status.json'
+
+  # Specify pipelines which will be visible in UI.
+  # If a pipeline listed here does not exist in zuul, it will not show up.
   pipelines:
     - check
     - gate
@@ -25,17 +50,65 @@ zuul:
     - periodic-sanity
     - experimental
     - experimental-provision
+
   build_enqueue:
+    # Specify pipelines and branches which can be managed from UI.
+    # Format:
+    # - <pipeline name>:
+    #   - <branch>
+    #   - <branch> 
     pipelines:
       - periodic-nightly:
           - master
           - R5.0
-  manager:
+
+  # Data used by PonyORM to bind database object with specyfic database
+  # Read more: https://docs.ponyorm.com/database.html#binding-the-database-object-to-a-specific-database 
+  database:
+    # Name of database provider, which is a module of pony.orm.dbproviders package.
+    provider: 'mysql'
+
+    # IP address of database server
     host: '10.10.10.5'
+
+    # Database username
+    user: 'root'
+
+    # Database password
+    password: 'root'
+
+    # TCP port of database server
+    port: 3306
+
+    # Database name
+    name: 'zuul'
+  
+  # Configuration of ZuulManager
+  manager:
+    # IP address of zuul server
+    host: '10.10.10.5'
+
+    # Username for authentication
     username: 'vagrant'
-    user_key_file: 'acid/features/zuul_manager/tests/static/insecure_user_key' # ssh client key
-    host_key_file: 'acid/features/zuul_manager/tests/static/host_key.pub' # file with fingerprint from host with zuul
+
+    # Path to the file which contains ssh client key.
+    # Path should be relative.
+    user_key_file: 'acid/features/zuul_manager/tests/static/insecure_user_key'
+
+    # Path to the file which contains fingerprint from zuul server.
+    # Path should be relative.
+    host_key_file: 'acid/features/zuul_manager/tests/static/host_key.pub'
+
+    # Tenant name
+    # Tenant has to exist at zuul server.
     tenant: 'acid'
-    trigger: 'timer'
+
+    # Project name
+    # Projext has to exist at zuul server.
     project: 'acid-test-dev'
+
+    # Trigger event
+    trigger: 'timer'
+
+    # Policy to use when connecting to server without host key.
     policy: 'RejectPolicy'
