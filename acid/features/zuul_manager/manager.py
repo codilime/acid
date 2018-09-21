@@ -29,7 +29,7 @@ class ZuulManager:
     def enqueue(self, pipeline, branch):
         pipeline, ref = self._sanitize_args(pipeline, branch)
 
-        c = self._get_gearman_conf_arg()
+        c = self._gearman_conf_arg()
 
         command = str(f"zuul{c} enqueue-ref --tenant {self.tenant} "
                       f"--trigger {self.trigger} --pipeline {pipeline} "
@@ -40,7 +40,7 @@ class ZuulManager:
     def dequeue(self, pipeline, branch):
         pipeline, ref = self._sanitize_args(pipeline, branch)
 
-        c = self._get_gearman_conf_arg()
+        c = self._gearman_conf_arg()
 
         command = str(f"zuul{c} dequeue --tenant {self.tenant} "
                       f"--pipeline {pipeline} --project {self.project} "
@@ -52,21 +52,21 @@ class ZuulManager:
         sanitized_ref = shlex.quote(f'refs/heads/{branch}')
         return sanitized_pipeline, sanitized_ref
 
-    def _get_gearman_conf_arg(self, conf_path=None):
+    def _gearman_conf_arg(self, conf_path=None):
         if conf_path is None:
             config = current_app.config
-            conf_path = config.get('gearman_conf', None)
+            conf_path = config['zuul'].get('gearman_conf', None)
 
         c = ""
         # check if path isn't empty
         if conf_path and len(str(conf_path)) > 0:
             # simple path validation
-            # format: /path/to/config.conf
+            # format: /path/to/file.conf
             if conf_path[0] == '/' and conf_path.endswith('.conf'):
                 c = f" -c {conf_path}"
             else:
                 print(f" * Invalid path to gearman configuration file!\n"
-                      f" * Path should be in format: /path/to/config/file.conf\n"
+                      f" * Path should be in format: /path/to/file.conf\n"
                       f" * Given path: {conf_path}")
         return c
 
