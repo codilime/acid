@@ -11,7 +11,7 @@ status = Blueprint('status', __name__, template_folder='../../templates')
 @status.route('/status/<string:pipename>')
 def show_status(pipename=None):
     config = current_app.config
-    zuul_url = config["zuul"]["url"]
+    zuul_url = config['zuul']['url']
     zuul_endpoint = config['zuul']['status_endpoint']
 
     pipename = (pipename if pipename is not None else
@@ -29,7 +29,7 @@ def show_status(pipename=None):
 @status.route('/')
 def show_dashboard():
     config = current_app.config
-    zuul_url = config["zuul"]["url"]
+    zuul_url = config['zuul']['url']
     zuul_endpoint = config['zuul']['status_endpoint']
 
     url = service.status_endpoint(zuul_url, zuul_endpoint)
