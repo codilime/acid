@@ -18,7 +18,7 @@ def fetch_json_data(endpoint):
 
 
 def pipelines_stats(pipelines, showed_pipelines):
-    if not showed_pipelines:
+    if not pipelines or not showed_pipelines:
         return []
 
     pipeline_stats = []
@@ -40,7 +40,7 @@ def get_zuul_pipelines():
     zuul_endpoint = config['zuul']['status_endpoint']
 
     url = status_endpoint(zuul_url, zuul_endpoint)
-    return fetch_json_data(endpoint=url)['pipelines']
+    return fetch_json_data(endpoint=url).get('pipelines')
 
 
 def pipe_intersect(pipelines_config, pipelines_json):
