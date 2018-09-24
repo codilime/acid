@@ -43,7 +43,7 @@ def get_zuul_pipelines():
     return fetch_json_data(endpoint=url)['pipelines']
 
 
-def pipelines_intersection(pipelines_config, pipelines_json):
+def pipe_intersect(pipelines_config, pipelines_json):
     if not pipelines_config or not pipelines_json:
         return []
 
