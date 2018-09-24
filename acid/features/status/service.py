@@ -52,11 +52,6 @@ def pipelines_intersection(pipelines_config, pipelines_json):
     return pipelines_to_show
 
 
-def get_pipelines():
-    config = current_app.config
-    return pipelines_intersection(config['zuul']['pipelines'], get_zuul_pipelines())
-
-
 def make_queues(pipelines, pipename, zuul_url):
     for pipeline in pipelines:
         if pipeline['name'] == pipename:

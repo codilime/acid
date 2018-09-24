@@ -11,7 +11,7 @@ from acid.features.auth.controller import auth
 from acid.features.auth.model import get_current_user
 from acid.features.history.controller import builds
 from acid.features.status.controller import status
-from acid.features.status.service import get_pipelines
+from acid.features.status.service import pipelines_intersection, get_zuul_pipelines
 from acid.features.zuul_manager.controller import zuul_manager
 
 if os.getenv('FLASK_ENV') == 'production' and not os.getenv('SECRET_KEY'):
@@ -40,5 +40,6 @@ app.register_blueprint(zuul_manager)
 
 @app.context_processor
 def template_context():
-    return {'pipeline_names': get_pipelines(),
+    return {'pipeline_names': pipelines_intersection(app.config['zuul']['pipelines'],
+                                                     get_zuul_pipelines()),
             'current_user': get_current_user()}
