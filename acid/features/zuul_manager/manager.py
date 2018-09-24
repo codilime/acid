@@ -57,7 +57,7 @@ class ZuulManager:
             config = current_app.config
             conf_path = config['zuul'].get('gearman_conf', None)
 
-            conf_arg = ""
+        conf_arg = ""
         # check if path isn't empty
         if conf_path and len(str(conf_path)) > 0:
             # simple path validation
