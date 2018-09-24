@@ -29,9 +29,9 @@ class ZuulManager:
     def enqueue(self, pipeline, branch):
         pipeline, ref = self._sanitize_args(pipeline, branch)
 
-        c = self._gearman_conf_arg()
+        conf_arg = self._gearman_conf_arg()
 
-        command = str(f"zuul{c} enqueue-ref --tenant {self.tenant} "
+        command = str(f"zuul{conf_arg} enqueue-ref --tenant {self.tenant} "
                       f"--trigger {self.trigger} --pipeline {pipeline} "
                       f"--project {self.project} --ref {ref} "
                       "> /dev/null 2>&1 &")
@@ -40,9 +40,9 @@ class ZuulManager:
     def dequeue(self, pipeline, branch):
         pipeline, ref = self._sanitize_args(pipeline, branch)
 
-        c = self._gearman_conf_arg()
+        conf_arg = self._gearman_conf_arg()
 
-        command = str(f"zuul{c} dequeue --tenant {self.tenant} "
+        command = str(f"zuul{conf_arg} dequeue --tenant {self.tenant} "
                       f"--pipeline {pipeline} --project {self.project} "
                       f"--ref {ref} > /dev/null 2>&1 &")
         self._run_command(command)
@@ -57,18 +57,18 @@ class ZuulManager:
             config = current_app.config
             conf_path = config['zuul'].get('gearman_conf', None)
 
-        c = ""
+            conf_arg = ""
         # check if path isn't empty
         if conf_path and len(str(conf_path)) > 0:
             # simple path validation
             # format: /path/to/file.conf
             if conf_path[0] == '/' and conf_path.endswith('.conf'):
-                c = f" -c {conf_path}"
+                conf_arg = f" -c {conf_path}"
             else:
                 print(f" * Invalid path to gearman configuration file!\n"
                       f" * Path should be in format: /path/to/file.conf\n"
                       f" * Given path: {conf_path}")
-        return c
+        return conf_arg
 
     def _prepare_client(self):
         client = paramiko.SSHClient()
