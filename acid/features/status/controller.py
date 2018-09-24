@@ -15,7 +15,8 @@ def show_status(pipename=None):
 
     pipename = (pipename if pipename is not None else
                 config['default']['pipename'])
-    queues = service.make_queues(service.get_zuul_pipelines(), pipename, zuul_url)
+    queues = service.make_queues(service.get_zuul_pipelines(),
+                                 pipename, zuul_url)
     refs_list = ["collapse" + buildset.ref for queue in queues
                  for buildset in queue.buildsets]
 
