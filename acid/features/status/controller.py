@@ -29,11 +29,6 @@ def show_status(pipename=None):
 @status.route('/')
 def show_dashboard():
     config = current_app.config
-    zuul_url = config['zuul']['url']
-    zuul_endpoint = config['zuul']['status_endpoint']
-
-    url = service.status_endpoint(zuul_url, zuul_endpoint)
-    resource = service.fetch_json_data(endpoint=url)
     pipeline_stats = service.pipelines_stats(
-        resource['pipelines'], config['zuul']['pipelines'])
+        service.get_zuul_pipelines(), config['zuul']['pipelines'])
     return render_template('dashboard.html', pipeline_stats=pipeline_stats)
