@@ -5,12 +5,10 @@ import paramiko
 
 from .exceptions import ZuulManagerConfig, ZuulManagerConn
 
-from flask import current_app
-
 
 class ZuulManager:
     def __init__(self, host, username, user_key_file, host_key_file,
-                 tenant, trigger, project, policy):
+                 tenant, trigger, project, policy, gearman_conf):
         self.host = host
         self.username = username
         self.host_pub_key = host_key_file
@@ -19,6 +17,8 @@ class ZuulManager:
         self.tenant = tenant
         self.trigger = trigger
         self.project = project
+
+        self.gearman_conf = gearman_conf
 
         try:
             self.user_key = paramiko.RSAKey.from_private_key_file(user_key_file)
@@ -31,10 +31,11 @@ class ZuulManager:
 
         conf_arg = self._gearman_conf_arg()
 
-        command = str(f"zuul{conf_arg} enqueue-ref --tenant {self.tenant} "
+        command = str(f"zuul {conf_arg} enqueue-ref --tenant {self.tenant} "
                       f"--trigger {self.trigger} --pipeline {pipeline} "
                       f"--project {self.project} --ref {ref} "
                       "> /dev/null 2>&1 &")
+        print(command)
         self._run_command(command)
 
     def dequeue(self, pipeline, branch):
@@ -42,7 +43,7 @@ class ZuulManager:
 
         conf_arg = self._gearman_conf_arg()
 
-        command = str(f"zuul{conf_arg} dequeue --tenant {self.tenant} "
+        command = str(f"zuul {conf_arg} dequeue --tenant {self.tenant} "
                       f"--pipeline {pipeline} --project {self.project} "
                       f"--ref {ref} > /dev/null 2>&1 &")
         self._run_command(command)
@@ -54,16 +55,13 @@ class ZuulManager:
 
     def _gearman_conf_arg(self, conf_path=None):
         if conf_path is None:
-            config = current_app.config
-            conf_path = config['zuul'].get('gearman_conf', None)
+            conf_path = self.gearman_conf
 
-        conf_arg = ""
-        # check if path isn't empty
-        if conf_path and len(str(conf_path)) > 0:
-            # simple path validation
-            # format: /path/to/file.conf
-            if conf_path[0] == '/' and conf_path.endswith('.conf'):
-                conf_arg = f" -c {conf_path}"
+        conf_arg = ''
+
+        if conf_path:
+            if conf_path.startswith('/') and conf_path.endswith('.conf'):
+                conf_arg = f"-c {conf_path}"
             else:
                 print(f" * Invalid path to gearman configuration file!\n"
                       f" * Path should be in format: /path/to/file.conf\n"
