@@ -52,38 +52,30 @@ $(function () {
   })
 })
 
-function enableAutoRefresh () { // eslint-disable-line no-unused-vars
-  let refreshFlag = sessionStorage.getItem('refreshTag')
-  $('#auto-refresh-li').removeClass('d-none')
+function enableAutoRefresh() { // eslint-disable-line no-unused-vars
   window.setInterval(refresh, 15000)
-  if (refreshFlag == null) {
-    sessionStorage.setItem('refreshTag', 'is_off')
-  }
-  if (refreshFlag === 'is_on' && !$('#auto-refresh').is(':checked')) {
-    $('#auto-refresh').click()
-  }
-  $('#auto-refresh').on('change', function (event) {
+  function refresh() {
     if (sessionStorage.getItem('refreshTag') === 'is_on') {
-      sessionStorage.setItem('refreshTag', 'is_off')
-    } else {
-      sessionStorage.setItem('refreshTag', 'is_on')
-    }
-  })
-
-  function refresh () {
-    if ($('#auto-refresh').is(':checked')) {
       window.location.reload()
     }
   }
 }
 
-function unfoldAll () { // eslint-disable-line no-unused-vars
+function turnOnAutoRefresh() { // eslint-disable-line no-unused-vars
+  sessionStorage.setItem('refreshTag', 'is_on')
+}
+
+function turnOffAutoRefresh() { // eslint-disable-line no-unused-vars
+  sessionStorage.setItem('refreshTag', 'is_off')
+}
+
+function unfoldAll() { // eslint-disable-line no-unused-vars
   $('#unfold-all-li').removeClass('d-none')
-  let allIds = $('#refs_list').attr('content')                                  // eslint-disable-line
-                              .replace(/[\[\]'"\ ]/gm, '')                      // eslint-disable-line
-                              .split(',')                                       // eslint-disable-line
-                              .sort()                                           // eslint-disable-line
-                              .toString()                                       // eslint-disable-line
+  let allIds = $('#refs_list').attr('content')
+    .replace(/[\[\]'"\ ]/gm, '')
+    .split(',')
+    .sort()
+    .toString()
   let idsToUnfold = allIds.split(',')
   let newSessionStorageValue = ''
 
@@ -107,7 +99,7 @@ function unfoldAll () { // eslint-disable-line no-unused-vars
   })
 }
 
-function expand (id) {
+function expand(id) {
   $('#' + id).toggleClass('show').parent().toggleClass('active-border')
   id = id.replace('collapse', 'heading')
   $('#' + id).toggleClass('unfold').toggleClass('collapsed')

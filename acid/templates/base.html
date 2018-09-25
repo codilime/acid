@@ -61,18 +61,6 @@
                 <li>
                     <div class="ml-5"></div>
                 </li>
-                <li id="auto-refresh-li" class="nav-itemn d-none">
-                    <div id="auto-refresh-div" class="row text disable">
-                        <span class="mr-2 navbar-text ">auto refresh</span>
-                        <label class="switch mt-2">
-                            <input id="auto-refresh" type="checkbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                </li>
-                <li>
-                    <div class="ml-5"></div>
-                </li>
                 <li id="unfold-all-li" class="nav-itemn d-none">
                     <div id="unfold-all-div" class="row text disable">
                         <span class="mr-2 navbar-text ">unfold all</span>
@@ -103,6 +91,9 @@
 <div class="container-fluid">
     {% block content %}{% endblock %}
 </div>
+<script>
+    turnOffAutoRefresh()
+</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>
