@@ -104,3 +104,12 @@ function expand(id) {
   id = id.replace('collapse', 'heading')
   $('#' + id).toggleClass('unfold').toggleClass('collapsed')
 }
+
+function displayFlash() { // eslint-disable-line no-unused-vars
+  setTimeout(() => {
+    $('.flashes').addClass('flashes-active')
+  }, 100)
+  setTimeout(() => {
+    $('.flashes').removeClass('flashes-active')
+  }, 5000)
+}

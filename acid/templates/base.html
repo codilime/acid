@@ -29,6 +29,21 @@
     {% block head_extension %}{% endblock %}
 </head>
 <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flashes">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+            <script>
+                displayFlash()
+            </script>
+        {% endif %}
+    {% endwith %}
+
 {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/">
