@@ -4,8 +4,6 @@ import pytest
 from ..manager import ZuulManager
 from ..exceptions import ZuulManagerConfig
 
-from acid.tests import IntegrationTestCase
-
 
 @pytest.mark.unit
 class TestZuulConnector():
@@ -81,9 +79,9 @@ class TestZuulConnector():
         zuul.enqueue(pipeline="periodic-nightly", branch="master")
 
         run_command.assert_called_with(
-            'zuul -c /path/to/file/.conf enqueue-ref --tenant tenant --trigger trigger --pipeline '
-            'periodic-nightly --project project --ref refs/heads/master '
-            '> /dev/null 2>&1 &')
+            'zuul -c /path/to/file/.conf enqueue-ref --tenant tenant --trigger '
+            'trigger --pipeline periodic-nightly --project project '
+            '--ref refs/heads/master > /dev/null 2>&1 &')
 
     def test_dequeue_generate_correct_command(self, path_to_test_file, mocker):
         run_command = mocker.patch.object(ZuulManager, '_run_command')
@@ -99,8 +97,9 @@ class TestZuulConnector():
         zuul.dequeue(pipeline="periodic-nightly", branch="master")
 
         run_command.assert_called_with(
-            'zuul -c /path/to/file/.conf dequeue --tenant tenant --pipeline periodic-nightly '
-            '--project project --ref refs/heads/master > /dev/null 2>&1 &')
+            'zuul -c /path/to/file/.conf dequeue --tenant tenant '
+            '--pipeline periodic-nightly --project project '
+            '--ref refs/heads/master > /dev/null 2>&1 &')
 
     def test_enqueue_correct_escape_insecure_args(self, path_to_test_file,
                                                   mocker):
@@ -136,8 +135,9 @@ class TestZuulConnector():
         zuul.dequeue(pipeline="rm -r /", branch="master*/~")
 
         run_command.assert_called_with(
-            'zuul -c /path/to/file/.conf dequeue --tenant TENANT --pipeline \'rm -r /\' --project '
-            'PROJECT --ref \'refs/heads/master*/~\' > /dev/null 2>&1 &')
+            'zuul -c /path/to/file/.conf dequeue --tenant TENANT '
+            '--pipeline \'rm -r /\' --project PROJECT '
+            '--ref \'refs/heads/master*/~\' > /dev/null 2>&1 &')
 
     def test_enqueue_incorect_gearman_conf(self, path_to_test_file,
                                            mocker):
