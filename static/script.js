@@ -52,27 +52,27 @@ $(function () {
   })
 })
 
-function enableAutoRefresh() { // eslint-disable-line no-unused-vars
+function enableAutoRefresh () { // eslint-disable-line no-unused-vars
   window.setInterval(refresh, 15000)
-  function refresh() {
+  function refresh () {
     if (sessionStorage.getItem('refreshTag') === 'is_on') {
       window.location.reload()
     }
   }
 }
 
-function turnOnAutoRefresh() { // eslint-disable-line no-unused-vars
+function turnOnAutoRefresh () { // eslint-disable-line no-unused-vars
   sessionStorage.setItem('refreshTag', 'is_on')
 }
 
-function turnOffAutoRefresh() { // eslint-disable-line no-unused-vars
+function turnOffAutoRefresh () { // eslint-disable-line no-unused-vars
   sessionStorage.setItem('refreshTag', 'is_off')
 }
 
-function unfoldAll() { // eslint-disable-line no-unused-vars
+function unfoldAll () { // eslint-disable-line no-unused-vars
   $('#unfold-all-li').removeClass('d-none')
   let allIds = $('#refs_list').attr('content')
-    .replace(/[\[\]'"\ ]/gm, '')
+    .replace(/[\[\]'"\ ]/gm, '') // eslint-disable-line
     .split(',')
     .sort()
     .toString()
@@ -99,13 +99,13 @@ function unfoldAll() { // eslint-disable-line no-unused-vars
   })
 }
 
-function expand(id) {
+function expand (id) {
   $('#' + id).toggleClass('show').parent().toggleClass('active-border')
   id = id.replace('collapse', 'heading')
   $('#' + id).toggleClass('unfold').toggleClass('collapsed')
 }
 
-function displayFlash() { // eslint-disable-line no-unused-vars
+function displayFlash () { // eslint-disable-line no-unused-vars
   setTimeout(() => {
     $('.flashes').addClass('flashes-active')
   }, 100)
