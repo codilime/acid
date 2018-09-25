@@ -11,7 +11,8 @@ from acid.features.auth.controller import auth
 from acid.features.auth.model import get_current_user
 from acid.features.history.controller import builds
 from acid.features.status.controller import status
-from acid.features.status.service import get_zuul_pipelines, pipe_intersect
+from acid.features.status.service import get_zuul_pipelines
+from acid.utils import pipe_intersect
 from acid.features.zuul_manager.controller import zuul_manager
 
 if os.getenv('FLASK_ENV') == 'production' and not os.getenv('SECRET_KEY'):

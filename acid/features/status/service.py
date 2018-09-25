@@ -35,21 +35,17 @@ def pipelines_stats(pipelines, showed_pipelines):
 
 
 def get_zuul_pipelines():
-    config = current_app.config
-    zuul_url = config['zuul']['url']
-    zuul_endpoint = config['zuul']['status_endpoint']
-
+    config = current_app.config['zuul']
+    zuul_url = config['url']
+    zuul_endpoint = config['status_endpoint']
     url = status_endpoint(zuul_url, zuul_endpoint)
-    return fetch_json_data(endpoint=url).get('pipelines')
 
-
-def pipe_intersect(pipelines_config, pipelines_json):
-    if not pipelines_config or not pipelines_json:
-        return []
-
-    pipelines_to_show = [pipeline['name'] for pipeline in pipelines_json
-                         if pipeline['name'] in pipelines_config]
-    return pipelines_to_show
+    result = []
+    try:
+        result = fetch_json_data(endpoint=url).get('pipelines')
+    except RemoteServerError:
+        print("Couldn't fetch .json file")
+    return result
 
 
 def make_queues(pipelines, pipename, zuul_url):
