@@ -40,11 +40,11 @@ def get_zuul_pipelines():
     zuul_endpoint = config['status_endpoint']
     url = status_endpoint(zuul_url, zuul_endpoint)
 
-    result = []
     try:
         result = fetch_json_data(endpoint=url).get('pipelines')
     except RemoteServerError:
         print("Couldn't fetch .json file")
+        result = []
     return result
 
 
