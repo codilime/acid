@@ -6,7 +6,8 @@ from ..exceptions import ZuulManagerConfig
 
 
 @pytest.mark.unit
-class TestZuulConnector():
+@pytest.mark.zuul_manager
+class TestZuulConnector:
     def test_raise_when_no_user_key_file(self, path_to_test_file):
         with pytest.raises(ZuulManagerConfig):
             ZuulManager(host="host",

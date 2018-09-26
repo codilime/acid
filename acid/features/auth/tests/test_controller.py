@@ -7,6 +7,7 @@ from .. import service
 
 
 @pytest.mark.integration
+@pytest.mark.auth
 class TestSignInAndOut:
     def run_scenario(self):
         client = app.test_client()
@@ -32,6 +33,7 @@ class TestSignInAndOut:
 
 
 @pytest.mark.integration
+@pytest.mark.auth
 def test_redirect_to_launchpad_to_sign_in():
     with app.test_request_context():
         client = app.test_client()

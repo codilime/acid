@@ -10,6 +10,7 @@ from ..model import PipelineStat
 
 
 @pytest.mark.unit
+@pytest.mark.status
 class TestServicePipelineStats:
     def test_pipelines_stats_returns_empty_when_no_pipelines(self,
                                                              load_status_data):
@@ -48,6 +49,7 @@ class TestServicePipelineStats:
 
 
 @pytest.mark.unit
+@pytest.mark.status
 class TestServiceEndpointStatus:
     def test_status_endpoint_returns_expected_when_no_slashes(self):
         result = service.status_endpoint(zuul_url='http://fake.url',
@@ -69,6 +71,7 @@ class TestServiceEndpointStatus:
 
 
 @pytest.mark.unit
+@pytest.mark.status
 class TestServiceFetchData(TestWithAppContext):
     def test_fetch_raise_when_cant_download(self, mocker):
         requests = mocker.patch.object(service, 'requests')
@@ -89,6 +92,7 @@ class TestServiceFetchData(TestWithAppContext):
 
 
 @pytest.mark.unit
+@pytest.mark.status
 class TestServiceMakeQueues(TestWithAppContext):
     def test_raises_when_no_queues(self, load_status_data):
         resources = load_status_data(name='status_no_queues')

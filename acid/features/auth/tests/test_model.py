@@ -9,6 +9,7 @@ from ..model import User, get_current_user
 
 
 @pytest.mark.unit
+@pytest.mark.auth
 class TestUserModel(TestWithAppContext):
     def test_create_user_obj(self):
         User(full_name="Test User", email="test.user@acid.test")
