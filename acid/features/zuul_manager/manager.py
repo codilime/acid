@@ -35,7 +35,6 @@ class ZuulManager:
                       f"--trigger {self.trigger} --pipeline {pipeline} "
                       f"--project {self.project} --ref {ref} "
                       "> /dev/null 2>&1 &")
-        print(command)
         self._run_command(command)
 
     def dequeue(self, pipeline, branch):
