@@ -38,10 +38,18 @@ lint: ## check code style and formatting with flake8
 	flake8
 
 test-unit: missing-conf ## run all unit tests
-	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_APP=$(APP) pytest -m unit
+ifndef FEATURE
+	-SETTINGS_PATH=$(SETTINGS_TEST) FLASK_APP=$(APP) pytest -m unit
+else
+	-SETTINGS_PATH=$(SETTINGS_TEST) FLASK_APP=$(APP) pytest -m 'unit and $(FEATURE)'
+endif
 
 test-integration: missing-conf ## run all integration tests
-	SETTINGS_PATH=$(SETTINGS_TEST) FLASK_APP=$(APP) pytest -m integration
+ifndef FEATURE
+	-SETTINGS_PATH=$(SETTINGS_TEST) FLASK_APP=$(APP) pytest -m integration
+else
+	-SETTINGS_PATH=$(SETTINGS_TEST) FLASK_APP=$(APP) pytest -m 'integration and $(FEATURE)'
+endif
 
 test: test-unit test-integration ## run all tests
 
