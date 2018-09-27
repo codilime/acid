@@ -30,7 +30,6 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
 
 logging.config.fileConfig('config/logging.conf')
-
 Session(app)
 
 app.url_map.strict_slashes = False
