@@ -18,6 +18,9 @@ def fetch_json_data(endpoint):
 
 
 def pipelines_stats(pipelines, showed_pipelines):
+    if not pipelines or not showed_pipelines:
+        return []
+
     pipeline_stats = []
     for pipeline in pipelines:
         if pipeline['name'] in showed_pipelines:
@@ -29,6 +32,20 @@ def pipelines_stats(pipelines, showed_pipelines):
             pipeline_stats.append(PipelineStat(name=pipeline['name'],
                                                buildsets_count=buildsets_count))
     return pipeline_stats
+
+
+def get_zuul_pipelines():
+    config = current_app.config['zuul']
+    zuul_url = config['url']
+    zuul_endpoint = config['status_endpoint']
+    url = status_endpoint(zuul_url, zuul_endpoint)
+
+    try:
+        result = fetch_json_data(endpoint=url).get('pipelines')
+    except RemoteServerError:
+        print("Couldn't fetch .json file")
+        result = []
+    return result
 
 
 def make_queues(pipelines, pipename, zuul_url):
