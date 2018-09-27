@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import requests
 
-from flask import (Blueprint, abort, current_app, redirect,
+from flask import (Blueprint, abort, current_app, flash, redirect,
                    render_template, request, url_for)
 
 from ..auth.service import admin_required
@@ -40,5 +40,6 @@ def manage():
         else:
             abort(requests.codes.bad_request)
 
+        flash('Job started. It might take a while for zuul to update', 'info')
         return redirect(url_for('status.show_status', pipename=pipeline_name))
     abort(requests.codes.bad_request)
