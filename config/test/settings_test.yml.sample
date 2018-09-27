@@ -46,3 +46,4 @@ zuul:
     project: 'acid-test-dev'
     trigger: 'timer'
     policy: 'RejectPolicy'
+  gearman_conf: ''

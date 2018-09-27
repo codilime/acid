@@ -112,3 +112,8 @@ zuul:
 
     # Policy to use when connecting to server without host key.
     policy: 'RejectPolicy'
+
+    # Path to file which contains configuration for gearman connection
+    # Path should be absolute and lead to .conf file
+    # In case of empty path default zuul configuration file is used
+    gearman_conf: ''
