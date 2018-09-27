@@ -53,28 +53,20 @@ $(function () {
 })
 
 function enableAutoRefresh () { // eslint-disable-line no-unused-vars
-  let refreshFlag = sessionStorage.getItem('refreshTag')
-  $('#auto-refresh-li').removeClass('d-none')
   window.setInterval(refresh, 15000)
-  if (refreshFlag == null) {
-    sessionStorage.setItem('refreshTag', 'is_off')
-  }
-  if (refreshFlag === 'is_on' && !$('#auto-refresh').is(':checked')) {
-    $('#auto-refresh').click()
-  }
-  $('#auto-refresh').on('change', function (event) {
-    if (sessionStorage.getItem('refreshTag') === 'is_on') {
-      sessionStorage.setItem('refreshTag', 'is_off')
-    } else {
-      sessionStorage.setItem('refreshTag', 'is_on')
-    }
-  })
-
   function refresh () {
-    if ($('#auto-refresh').is(':checked')) {
+    if (sessionStorage.getItem('refreshTag') === 'is_on') {
       window.location.reload()
     }
   }
+}
+
+function turnOnAutoRefresh () { // eslint-disable-line no-unused-vars
+  sessionStorage.setItem('refreshTag', 'is_on')
+}
+
+function turnOffAutoRefresh () { // eslint-disable-line no-unused-vars
+  sessionStorage.setItem('refreshTag', 'is_off')
 }
 
 function unfoldAll () { // eslint-disable-line no-unused-vars
