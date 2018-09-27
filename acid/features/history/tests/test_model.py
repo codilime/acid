@@ -13,6 +13,7 @@ from ..model import ZuulBuildSet
 
 
 @pytest.mark.unit
+@pytest.mark.history
 class TestZuulBuildSet(DatabaseTestCase):
     @db_session
     def test_start_datetime_should_return_lowest_time(self, make_buildset):
@@ -148,6 +149,7 @@ class TestZuulBuildSet(DatabaseTestCase):
 
 
 @pytest.mark.unit
+@pytest.mark.history
 class TestBuildSetPaginated:
     def test_create_buildsets_history_object(self, mocker):
         mocker.patch.object(ZuulBuildSet, 'get_for_pipeline')

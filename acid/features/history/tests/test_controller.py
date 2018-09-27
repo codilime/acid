@@ -13,6 +13,7 @@ from acid.tests import DatabaseTestCase
 
 @db_session
 @pytest.mark.integration
+@pytest.mark.history
 class TestBuildHistory(DatabaseTestCase):
     client = app.test_client()
 

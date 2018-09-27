@@ -6,6 +6,7 @@ from ..time_utils import (epoch_to_datetime, milliseconds_to_seconds,
 
 
 @pytest.mark.unit
+@pytest.mark.status
 class TestTimeUtils:
     def test_empty_epoch_to_datetime_should_raise_exception(self):
         with pytest.raises(TypeError):

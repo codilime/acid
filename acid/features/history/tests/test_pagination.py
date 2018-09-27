@@ -5,6 +5,7 @@ from ..service import Paginator, pagination
 
 
 @pytest.mark.unit
+@pytest.mark.history
 class TestPagination:
     def test_zero_buildsets_should_return_empty_paginator(self):
         paginator = pagination(number_of_buildsets=0,

@@ -14,6 +14,7 @@ from ...auth import service as auth_service
 
 
 @pytest.mark.integration
+@pytest.mark.zuul_manager
 class TestControlPanel(IntegrationTestCase):
     def test_guest_user_cant_see_zuul_management(self, get_user, mocker):
         user = get_user('admin')

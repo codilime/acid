@@ -7,6 +7,7 @@ from ..time_utils import (epoch_to_datetime, milliseconds_to_seconds,
 
 
 @pytest.mark.unit
+@pytest.mark.status
 class TestTimeTracker:
     def test_none_start_to_datetime_should_return_none(self, time_tracker):
         time_tracker.start = None
@@ -41,6 +42,7 @@ class TestTimeTracker:
 
 
 @pytest.mark.unit
+@pytest.mark.status
 class TestJob:
     def test_create_should_return_expected_data(self):
         job_data = {"url": "http://fake_url",
@@ -111,6 +113,7 @@ class TestJob:
 
 
 @pytest.mark.unit
+@pytest.mark.status
 class TestBuildset:
     def _assert_buildset_equal(self, buildset1, buildset2):
         # assumes buildset has empty job list
@@ -299,6 +302,7 @@ class TestBuildset:
 
 
 @pytest.mark.unit
+@pytest.mark.status
 class TestQueue:
     def test_queue_should_return_valid_queue(self, queue):
         test_queue = queue
