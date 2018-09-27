@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 
 
 def pipe_intersect(pipelines_config, pipelines_json):
@@ -7,3 +8,10 @@ def pipe_intersect(pipelines_config, pipelines_json):
 
     return [pipeline['name'] for pipeline in pipelines_json
             if pipeline['name'] in pipelines_config]
+
+
+def get_feature_logger(feature_name=None):
+    if feature_name:
+        return logging.getLogger(feature_name.replace('acid.features.', ''))
+    else:
+        return logging.getLogger(None)
