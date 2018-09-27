@@ -167,3 +167,17 @@ input:checked + .slider:before {
     height: 28px !important;
 }
 
+.flashes {
+    position: absolute;
+    right: 5%;
+    bottom: 5%;
+    width: 350px;
+    opacity: 0;
+    transition: 0.5s;
+    transform: translateY(200px);
+    z-index: 10;
+}
+.flashes-active {
+    opacity: 1;
+    transform: translateY(0);
+}
