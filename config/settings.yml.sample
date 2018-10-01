@@ -117,3 +117,27 @@ zuul:
     # Path should be absolute and lead to .conf file
     # In case of empty path default zuul configuration file is used
     gearman_conf: ''
+
+  # Configuration of ZuulManager using the REST API
+  manager_v2:
+    # IP address of zuul server
+    host: '10.10.10.5'
+
+    # Tenant name
+    # Tenant has to exist at zuul server.
+    tenant: 'acid'
+
+    # Project name
+    # Projext has to exist at zuul server.
+    project: 'acid-test-dev'
+
+    # Trigger event
+    trigger: 'timer'
+
+    # Secret key to use when encrypting JWT
+    # This must be the same as in /playbooks/roles/run-zuul/templates/zuul.conf.j2
+    jwt_secret: 'secret'
+
+    # Algorithm to use when encrypting JWT
+    # This must be the same as in /playbooks/roles/run-zuul/templates/zuul.conf.j2
+    jwt_algorithm: 'HS256'
