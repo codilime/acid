@@ -7,6 +7,16 @@
     owner: zuul
     mode: u+rwx,g+rwx,o+rw
 
+# Temporary Workaround because "Run ansible-role-zuul" task removes npm
+- name: Install npm
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - npm
+
 - name: Install YARN npm package
   become: yes
   npm:
