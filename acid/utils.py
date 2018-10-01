@@ -12,6 +12,6 @@ def pipe_intersect(pipelines_config, pipelines_json):
 
 def get_feature_logger(feature_name=None):
     if feature_name:
-        return logging.getLogger(feature_name.replace('acid.features.', ''))
+        return logging.getLogger(feature_name)
     else:
-        return logging.getLogger(None)
+        return logging.getLogger('acid')
