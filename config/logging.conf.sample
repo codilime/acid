@@ -28,13 +28,13 @@ formatter=simple
 args=(sys.stdout,)
 
 [handler_fileHandler]
-class=FileHandler
+class=acid.utils.FileCreatorHandler
 level=INFO
 formatter=simple
 args=('logs/acid.log', 'a')
 
 [handler_fileDebugHandler]
-class=FileHandler
+class=acid.utils.FileCreatorHandler
 level=DEBUG
 formatter=simple
 args=('logs/acid.log.debug', 'a')

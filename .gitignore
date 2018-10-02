@@ -238,3 +238,6 @@ typings/
 
 # ACID configuration files
 config/**/*.yml
+
+# logger configuration file
+config/logging.conf

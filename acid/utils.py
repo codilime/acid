@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import logging
+import logging.handlers
+import os
 
 
 def pipe_intersect(pipelines_config, pipelines_json):
@@ -15,3 +16,9 @@ def get_feature_logger(feature_name=None):
         return logging.getLogger(feature_name)
     else:
         return logging.getLogger('acid')
+
+
+class FileCreatorHandler(logging.handlers.WatchedFileHandler):
+    def __init__(self, filename, mode='a', encoding=None, delay=0):
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        super().__init__(filename, mode, encoding, delay)
