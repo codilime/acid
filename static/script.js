@@ -50,6 +50,18 @@ $(function () {
       placeholder: 'Select branch'
     })
   })
+
+  $(document).ready(function () {
+    $('.custom-select-pipeline').select2({
+      placeholder: 'Select pipeline'
+    })
+  })
+
+    $(document).ready(function () {
+    $('.custom-select-branch').select2({
+      placeholder: 'Select branch'
+    })
+  })
 })
 
 function enableAutoRefresh () { // eslint-disable-line no-unused-vars

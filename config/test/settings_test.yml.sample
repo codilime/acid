@@ -27,9 +27,9 @@ zuul:
     - experimental-provision
   build_enqueue:
     pipelines:
-      - periodic-nightly:
-          - master
-          - R5.0
+      periodic-nightly:
+        - master
+        - R5.0
   database:
     provider: 'mysql'
     host: '10.10.10.5'
