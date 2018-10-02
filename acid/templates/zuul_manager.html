@@ -14,12 +14,12 @@
                         <div class="form-group sm-2" style="width: 100%">
                             <select class="custom-select-pipeline form-control mb-2 mr-sm-2" multiple="multiple" name="pipeline" style="width: 40%">
                                 {%  for pipename in pipelines_list %}
-                                    <option>{{ pipename }}</option>
+                                    <option {% if pipename in pipelines_arg %} selected="selected" {% endif %}>{{ pipename }}</option>
                                 {%  endfor %}
                             </select>
                             <select class="custom-select-branch form-control mb-2 mr-sm-2" multiple="multiple" name="branch" style="width: 40%">
                                 {%  for branch in branches_list %}
-                                    <option>{{ branch }}</option>
+                                    <option {% if branch in branches_arg %} selected="selected" {% endif %}>{{ branch }}</option>
                                 {%  endfor %}
                             </select>
                             <button type="submit" class="btn btn-primary">Filter</button>

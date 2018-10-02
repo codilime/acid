@@ -21,19 +21,21 @@ def show_panel():
 
     pipelines = config_pipelines
 
-    # add pipeline filtering
     if pipelines_arg:
-        pipelines = {pipeline: branches for pipeline, branches
-                     in pipelines.items() if pipeline in pipelines_arg}
+        pipelines = {pipe: branches for pipe, branches
+                     in pipelines.items() if pipe in pipelines_arg}
 
-    # add branch filtering
     if branches_arg:
-        pipelines = {k: [v2 for v2 in v if v2 in branches_arg]
-                     for k, v in pipelines.items()}
+        pipelines = {pipe: [branch for branch in branches
+                            if branch in branches_arg]
+                     for pipe, branches in pipelines.items()}
 
-    branches_list = set([i for v in config_pipelines.values() for i in v])
+    branches_list = set([branch for branches in config_pipelines.values()
+                         for branch in branches])
 
     return render_template('zuul_manager.html', pipelines=pipelines,
+                           pipelines_arg=pipelines_arg,
+                           branches_arg=branches_arg,
                            pipelines_list=config_pipelines,
                            branches_list=branches_list)
 
