@@ -9,13 +9,16 @@ from flask import current_app
 
 from .exceptions import RemoteServerError
 
+
 class ZuulManager:
-    def __init__(self, host, tenant, project, trigger, jwt_secret, jwt_algorithm):
+    def __init__(self, host, tenant, project,
+                 trigger, jwt_secret, jwt_algorithm):
         self.tenant = tenant
         self.trigger = trigger
         self.project = project
 
-        self.endpoint = f"http://{host}/api/tenant/{self.tenant}/project/{self.project}/"
+        self.endpoint = \
+            f"http://{host}/api/tenant/{self.tenant}/project/{self.project}/"
         token = self.generate_jwt(jwt_secret, jwt_algorithm)
         self.auth_header = {"Authorization": f"Bearer {token}"}
 
@@ -26,7 +29,8 @@ class ZuulManager:
             "exp": datetime.datetime.utcnow() + datetime.timedelta(days=7),
             "zuul.tenants": tenants_field
         }
-        return jwt.encode(message, jwt_secret, algorithm=jwt_algorithm).decode('utf-8')
+        token = jwt.encode(message, jwt_secret, algorithm=jwt_algorithm)
+        return token.decode('utf-8')
 
     def post_request(self, endpoint, body):
         res = requests.post(endpoint, headers=self.auth_header, json=body)

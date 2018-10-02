@@ -8,7 +8,7 @@ from ..auth.service import admin_required
 from .manager import ZuulManager
 
 zuul_manager_v2 = Blueprint('zuul_manager_v2', __name__,
-                         template_folder='../../templates')
+                            template_folder='../../templates')
 
 
 @zuul_manager_v2.route('/zuul_manager_v2')
