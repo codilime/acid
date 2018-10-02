@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging.handlers
 import os
+import errno
 
 
 def pipe_intersect(pipelines_config, pipelines_json):
@@ -11,7 +12,7 @@ def pipe_intersect(pipelines_config, pipelines_json):
             if pipeline['name'] in pipelines_config]
 
 
-def get_feature_logger(feature_name=None):
+def get_logger(feature_name=None):
     if feature_name:
         return logging.getLogger(feature_name)
     else:
@@ -20,5 +21,9 @@ def get_feature_logger(feature_name=None):
 
 class FileCreatorHandler(logging.handlers.WatchedFileHandler):
     def __init__(self, filename, mode='a', encoding=None, delay=0):
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        try:
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
         super().__init__(filename, mode, encoding, delay)

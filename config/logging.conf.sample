@@ -1,3 +1,5 @@
+# lists of used loggers, handlers and formatters
+# if key is declared but no definition is found config parser will throw error
 [loggers]
 keys=root,console,acid
 
@@ -11,28 +13,37 @@ keys=simple
 level=WARNING
 handlers=
 
+# logger for console display
 [logger_console]
 level=INFO
 handlers=consoleHandler
 qualname=console
 
+# top level logger for acid
+# by default all child loggers pass logs to this logger
+# user can define child loggers in addition to this one
+# qualname is hierarchical name used to get the logger
 [logger_acid]
 level=DEBUG
 handlers=consoleHandler,fileHandler,fileDebugHandler
 qualname=acid
 
+# handler for displaying console logs
 [handler_consoleHandler]
 class=StreamHandler
 level=INFO
 formatter=simple
 args=(sys.stdout,)
 
+# handler for logging to file
+# class FileCreatorHandler creates log directory in case it's missing
 [handler_fileHandler]
 class=acid.utils.FileCreatorHandler
 level=INFO
 formatter=simple
 args=('logs/acid.log', 'a')
 
+# handler for detailed logging to file
 [handler_fileDebugHandler]
 class=acid.utils.FileCreatorHandler
 level=DEBUG
