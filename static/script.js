@@ -57,7 +57,7 @@ $(function () {
     })
   })
 
-    $(document).ready(function () {
+  $(document).ready(function () {
     $('.custom-select-branch').select2({
       placeholder: 'Select branch'
     })
