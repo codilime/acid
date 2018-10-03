@@ -30,8 +30,8 @@ def show_panel():
                             if branch in branches_arg]
                      for pipe, branches in pipelines.items()}
 
-    branches_list = set([branch for branches in config_pipelines.values()
-                         for branch in branches])
+    branches_list = {branch for branches in config_pipelines.values()
+                     for branch in branches}
 
     return render_template('zuul_manager.html', pipelines=pipelines,
                            pipelines_arg=pipelines_arg,
