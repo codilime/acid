@@ -12,22 +12,24 @@ zuul_manager = Blueprint('zuul_manager', __name__,
 
 
 @zuul_manager.route('/zuul_manager')
+@zuul_manager.route('/zuul_manager/<int:zid>')
 @admin_required
-def show_panel():
-    pipelines = current_app.config['zuul']['build_enqueue']['pipelines']
+def show_panel(zid=0):
+    pipelines = current_app.config['manager'][zid]['pipelines']
     return render_template('zuul_manager.html', pipelines=pipelines)
 
 
 @zuul_manager.route('/zuul_manager/manage', methods=['POST'])
+@zuul_manager.route('/zuul_manager/<int:zid>/manage', methods=['POST'])
 @admin_required
-def manage():
+def manage(zid=0):
     pipeline_name = request.form.get('pipeline_name')
     branch = request.form.get('branch')
     action = request.form.get('action')
 
-    zuul_manager = ZuulManager(**current_app.config['zuul']['manager'])
+    zuul_manager = ZuulManager(**current_app.config['manager'][zid])
 
-    for pipeline in current_app.config['zuul']['build_enqueue']['pipelines']:
+    for pipeline in current_app.config['manager'][zid]['pipelines']:
         if pipeline_name not in pipeline.keys():
             continue
         if branch not in pipeline[pipeline_name]:
