@@ -3,7 +3,6 @@ version: '3'
 services:
   gerrit:
     image: gerritcodereview/gerrit
-    entrypoint: java -jar /var/gerrit/bin/gerrit.war init -d /var/gerrit
     volumes:
       - {{ gerrit.home }}/etc:/var/gerrit/etc
       - {{ gerrit.home }}/git:/var/gerrit/git

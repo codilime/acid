@@ -1,0 +1,11 @@
+---
+- name: "Create directory for zuul"
+  file:
+    path: "{{ zuul.home }}"
+    state: directory
+    mode: a+rwx
+    recurse: true
+
+- include_tasks: history-db.yml
+- include_tasks: zookeeper.yml
+- include_tasks: gearman.yml

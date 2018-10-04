@@ -1,0 +1,11 @@
+---
+- name: Run mariadb container
+  become: yes
+  docker_container:
+    name: zuul_zoo
+    published_ports: 
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+    image: "zookeeper:3.4"
+    restart_policy: always

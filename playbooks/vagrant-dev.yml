@@ -8,24 +8,7 @@
 # Usage:
 # 1. install Vagrant and VirtualBox
 # 2. run command: vagrant up
-- hosts: all
-  vars:
-    host_ip: "{{ ansible_enp0s8.ipv4.address }}"
-    gerrit:
-      baseurl: "http://{{ ansible_enp0s8.ipv4.address }}/"
-      home: "/home/vagrant/gerrit"
-      # should we import database fixtures
-      # or initialize empty gerrit from scratch
-      from_scratch: false
-    zuul:
-      home: "/home/vagrant/zuul"
-      history_db:
-        name: zuul_db
-        user: root
-        pass: root
-        # migrate example fixtures
-        # or start with empty database
-        migrate: true
+- hosts: gerrit-server
   gather_facts: no
   pre_tasks:
     # Ubuntu/bionic64 ships without python2 which causes Ansible to fail on gather_facts
@@ -35,14 +18,24 @@
     - action: setup
   roles:
     - provision-dev
+    - install-docker
     - run-gerrit
+
+- hosts: localhost
+  connection: local
+  roles:
+    - provision-zuul
+
+- hosts: zuul-server
+  gather_facts: no
+  pre_tasks:
+    # Ubuntu/bionic64 ships without python2 which causes Ansible to fail on gather_facts
+    - name: Install python2 for Ansible
+      raw: test -e /usr/bin/python || (sudo apt -y update && sudo apt install -y python-minimal)
+    # "Setup" action will gather facts after python2 has been installed
+    - action: setup
+  roles:
+    - provision-dev
+    - install-docker
+    - pre-zuul
     - run-zuul
-  tasks:
-    - name: Set environments for GIT
-      # git user.name and user.email comes from Gerrit configuration.
-      shell: |
-        set -e
-        set -x
-        echo "export GIT_SSH_COMMAND='ssh -i {{ gerrit.home }}/.ssh/admin_id_rsa'" >> /home/vagrant/.bashrc
-        git config --global user.name "Administrator"
-        git config --global user.email "admin@example.com"

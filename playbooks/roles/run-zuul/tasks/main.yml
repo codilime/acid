@@ -1,17 +1,68 @@
 ---
-- include_tasks: history-db.yml
-- include_tasks: zookeeper.yml
-- include_tasks: gearman.yml
-- include_tasks: config.yml
+- name: Install pip3 for openstack role
+  become: yes
+  apt:
+    name: python3-pip
+    state: present
+    update_cache: yes
+
+- name: Check if src folder exists
+  stat:
+    path: "~/src"
+  register: openstack_zuul_src
+
+- name: Delete openstack zuul role if it exist
+  file: 
+    state: absent
+    path: "~/src"
+  when: openstack_zuul_src.stat.exists == True
 
 - name: Run ansible-role-zuul
-  shell: |
-    set -e
-    set -x
-    ansible-playbook -vv -i vagrant-inventory.yml install-zuul.yml
-  args:
-    chdir: /opt/app/playbooks
-    executable: /bin/bash
+  include_role:
+    name: openstack.zuul
+
+- set_fact:
+    zuul_ssh_dir: "/var/lib/zuul/.ssh"
+
+- name: Create zuul/.ssh directory
+  become: yes
+  file:
+    path: "{{ zuul_ssh_dir }}"
+    recurse: yes
+    state: directory
+    owner: zuul
+
+- name: Copy Gerrit host ssh key
+  become: yes
+  copy:
+    src: gerrit_admin_id_rsa
+    dest: "{{ zuul_ssh_dir }}/id_rsa"
+
+- name: Set permissions for gerrit ssh key
+  become: yes
+  file:
+    path: "{{ zuul_ssh_dir }}/id_rsa"
+    owner: zuul
+    group: zuul
+    mode: 0600
+
+- name: Create known_hosts file
+  become: yes
+  file:
+    path: "{{ zuul_ssh_dir }}/known_hosts"
+    mode: u+rw,g+r
+    owner: zuul
+    state: touch
+
+- name: restart Zuul services
+  become: yes
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - zuul-scheduler
+    - zuul-merger
+    - zuul-web
 
 - include_tasks: zuul-scheduler-service.yml
 - include_tasks: website.yml

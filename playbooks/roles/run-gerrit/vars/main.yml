@@ -3,4 +3,7 @@ templates:
   gerrit_compose:
     subnet: "192.168.2.5/24"
 
+gerrit:
+  home: "/home/{{ ansible_user }}/gerrit"
+  from_scratch: false
 
