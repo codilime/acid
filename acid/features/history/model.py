@@ -40,12 +40,7 @@ class ZuulBuildSet(db.Entity):
 
     @property
     def branch(self):
-        # cannot declarate lenght of string using variable due to ponyORM
-        # limitation. It must be a int inside string slice (for pony 0.7.4
-        # and 0.7.5). We can take branch name only from ref. Each ref string
-        # starts with refs/heads/. Number 11 cuts ref and leave only branch
-        # name. PLEASE CHANGE FOR OTHER PIPELINES
-        return self.ref[11:]
+        return '/'.join(self.ref.split('/')[2:])
 
     @property
     def duration(self):
@@ -65,7 +60,7 @@ class ZuulBuildSet(db.Entity):
 
     @classmethod
     def get_branches(cls):
-        branches = select(b.branch for b in cls)
+        branches = select(b.ref for b in cls)
         return branches
 
     @classmethod
@@ -79,7 +74,6 @@ class ZuulBuildSet(db.Entity):
     def get_filtered(cls, pipeline, branches, build=''):
         all_branches = list(cls.get_branches())
         branches = [x for x in branches if x in all_branches]
-
         if (len(branches) == 0):
             branches = all_branches
 
@@ -90,7 +84,7 @@ class ZuulBuildSet(db.Entity):
 
         return select(
             bs for bs in cls if
-            bs.pipeline == pipeline and bs.branch in branches and
+            bs.pipeline == pipeline and bs.ref in branches and
             len(select(b for b in bs.builds if
                        build in b.log_url)) > 0).sort_by(desc(cls.id))
 
