@@ -29,6 +29,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "ansible" do |ansible|
     ansible.compatibility_mode = "2.0"
     ansible.verbose = "vv"
+    ansible.inventory_path = "playbooks/vagrant-inventory"
+    ansible.limit = "host, local"
     ansible.playbook = "playbooks/vagrant-dev.yml"
   end
 

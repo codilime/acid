@@ -1,0 +1,2 @@
+web_src: "/home/{{ ansible_user }}/src/git.openstack.org/openstack-infra/zuul/web"
+zuul_api_url: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"

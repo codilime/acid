@@ -1,17 +1,14 @@
 ---
 - name: Run mariadb container
   become: yes
-  shell: |
-    set -e
-    set -x
-    docker run -d \
-               -p 3306:3306 \
-               --restart always \
-               --name {{ zuul.history_db.name }} \
-               -e MYSQL_ROOT_PASSWORD={{ zuul.history_db.pass }} \
-               mariadb:10.3
-  args:
-    executable: /bin/bash
+  docker_container:
+    name: "{{ zuul.history_db.name }}"
+    published_ports: 
+      - 3306:3306
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ zuul.history_db.pass }}"
+    image: "mariadb:10.3"
+    restart_policy: always
 
 - name: Wait until MariaDB comes up (naive)
   pause:

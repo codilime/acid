@@ -1,13 +1,17 @@
 ---
 - set_fact:
-    galaxy_path: /home/vagrant/.ansible/roles
+    galaxy_path: ~/.ansible/roles
 
-- name: Create ~/.ansible/roles directory
-  file:
-    path: "{{ galaxy_path }}"
-    state: directory
-    recurse: true
-    owner: vagrant
+- name: Check if zuul role exist
+  stat:
+    path: "{{ galaxy_path }}/openstack.zuul"
+  register: openstack_role
+
+- name: Delete openstack zuul role if it exist
+  file: 
+    state: absent
+    path: "{{ galaxy_path }}/openstack.zuul"
+  when: openstack_role.stat.exists == True
 
 - name: Install zuul role from ansible galaxy
   shell: |
@@ -23,13 +27,11 @@
     dest: "{{ galaxy_path }}/openstack.zuul/templates/etc/zuul/zuul.conf"
 
 - name: Deploy main.yaml file
-  become: yes
   template:
     src: main.yaml.j2
     dest: "{{ galaxy_path }}/openstack.zuul/templates/etc/zuul/main.yaml"
 
 - name: Change deploy method from PIP to GIT
-  become: yes
   lineinfile:
     path: "{{ galaxy_path }}/openstack.zuul/defaults/main.yaml"
     regexp: "^zuul_install_method: pip"

@@ -1,0 +1,9 @@
+zuul:
+  home: "/home/{{ ansible_user }}/zuul"
+  history_db:
+    name: zuul_db
+    user: root
+    pass: root
+    # migrate example fixtures
+    # or start with empty database
+    migrate: true

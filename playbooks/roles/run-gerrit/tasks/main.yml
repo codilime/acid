@@ -1,4 +1,11 @@
 ---
+- name: "Create gerrit directory"
+  file:
+    path: "{{ gerrit.home }}"
+    state: directory
+    mode: a+rwx
+    recurse: true
+
 - name: Create directories for Gerrit
   file:
     path: "{{ gerrit.home }}/{{ item }}"
@@ -48,36 +55,12 @@
     - db
     - index
     - git
-  when: gerrit.from_scratch == false
 
-- name: Initialize Gerrit container
+- name: Run gerrit container
   become: yes
-  shell: |
-    set -e
-    set -x
-    docker-compose up
-  args:
-    executable: /bin/bash
-    chdir: "{{ gerrit.home }}"
-  when: gerrit.from_scratch == true
-
-- name: Remove init entrypoint for Gerrit
-  # Entrypoint is used for running Gerrit from scratch.
-  # Either way it has to be removed at this point.
-  lineinfile:
-    path: "{{ gerrit.home }}/docker-compose.yaml"
-    state: absent
-    regexp: "entrypoint"
-
-- name: Run Gerrit container
-  become: yes
-  shell: |
-    set -e
-    set -x
-    docker-compose up -d
-  args:
-    executable: /bin/bash
-    chdir: "{{ gerrit.home }}"
+  docker_service:
+    project_src: "{{ gerrit.home }}"
+    state: present
 
 - name: Wait until gerrit comes up
   wait_for:

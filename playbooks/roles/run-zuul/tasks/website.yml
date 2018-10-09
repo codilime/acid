@@ -7,6 +7,16 @@
     owner: zuul
     mode: u+rwx,g+rwx,o+rw
 
+- name: Install npm and apache2
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - npm
+    - apache2
+
 - name: Install YARN npm package
   become: yes
   npm:
@@ -16,9 +26,6 @@
     - yarn
     - webpack@^4.4.0
     - webpack-cli@^2.0.11
-
-- set_fact:
-      web_src: /home/vagrant/src/git.openstack.org/openstack-infra/zuul
 
 - name: Install NPM Dependencies
   shell: |
@@ -32,7 +39,7 @@
   shell: |
     set -e
     set -x
-    npm run build:dist -- --define ZUUL_API_URL="'http://10.10.10.5'"
+    npm run build -- --define ZUUL_API_URL="'{{ zuul_api_url }}'"
   args:
     chdir: "{{ web_src }}"
 

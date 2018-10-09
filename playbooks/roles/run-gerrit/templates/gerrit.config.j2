@@ -1,6 +1,6 @@
 [gerrit]
   basePath = git
-  canonicalWebUrl = http://{{ host_ip }}:8080/
+  canonicalWebUrl = http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:8080/
 
 [database]
   type = H2
