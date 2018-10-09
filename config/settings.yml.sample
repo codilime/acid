@@ -54,13 +54,13 @@ zuul:
   build_enqueue:
     # Specify pipelines and branches which can be managed from UI.
     # Format:
-    # - <pipeline name>:
+    # <pipeline name>:
     #   - <branch>
     #   - <branch> 
     pipelines:
-      - periodic-nightly:
-          - master
-          - R5.0
+      periodic-nightly:
+        - master
+        - R5.0
 
   # Data used by PonyORM to bind database object with specyfic database
   # Read more: https://docs.ponyorm.com/database.html#binding-the-database-object-to-a-specific-database 

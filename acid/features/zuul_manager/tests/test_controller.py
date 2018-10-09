@@ -41,10 +41,10 @@ class TestControlPanel(IntegrationTestCase):
         # in config. Regex looks inside of body tag in order to ensure it's
         # displayed in specific site content and not in other elements.
         pattern = '<body>.*'
-        for pipes in current_app.config['zuul']['build_enqueue']['pipelines']:
-            for pipeline, branches in pipes.items():
-                for branch in branches:
-                    pattern += '.*'.join([pipeline, branch, 'START', 'STOP.*'])
+        pipes = current_app.config['zuul']['build_enqueue']['pipelines']
+        for pipeline, branches in pipes.items():
+            for branch in branches:
+                pattern += '.*'.join([pipeline, branch, 'START', 'STOP.*'])
         pattern += '</body>'
         pattern = str.encode(pattern)
         assert re.search(pattern, rendered_template) is not None
