@@ -15,7 +15,7 @@ zuul_manager = Blueprint('zuul_manager', __name__,
 @zuul_manager.route('/zuul_manager/<string:feature>')
 @admin_required
 def show_panel(feature=''):
-    pipelines = current_app.config['zuul_manager'][feature]['pipelines']
+    pipelines = current_app.config['plugin']['zuul_manager'][feature]['pipelines']
     return render_template('zuul_manager.html', pipelines=pipelines)
 
 
@@ -26,10 +26,11 @@ def manage(feature='my_manager'):
     pipeline_name = request.form.get('pipeline_name')
     branch = request.form.get('branch')
     action = request.form.get('action')
+    config = current_app.config['plugin']['zuul_manager'][feature]
 
-    zuul_manager = ZuulManager(**current_app.config['zuul_manager'][feature])
+    zuul_manager = ZuulManager(**config)
 
-    for pipeline in current_app.config['zuul_manager'][feature]['pipelines']:
+    for pipeline in config['pipelines']:
         if pipeline_name not in pipeline.keys():
             continue
         if branch not in pipeline[pipeline_name]:

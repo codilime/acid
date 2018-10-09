@@ -10,7 +10,7 @@
 
     <div class="container mb-5">
         <div class="row justify-content-center">
-                <form class="form-inline col-8" action="{{ url_for('builds.show_builds_history') }}">
+                <form class="form-inline col-8" action="{{ url_for('builds.show_builds_history', feature=feature) }}">
                     <div class="form-group sm-2" style="width: 100%">
                         <select class="custom-select form-control mb-2 mr-sm-2" multiple="multiple" name="branch" style="width: 40%">
                             {% for branch in buildsets.branches %}
@@ -58,7 +58,7 @@
                     </div>
                     <div class="col-1">
                         <span class="col text-center">
-                            <a class="no-collapsible" href="{{ url_for('builds.show_builds_history', branch=buildset.branch, build=buildset.build_number, unfold=true) }}"><i class="fas fa-link fa-2x"></i></a>
+                            <a class="no-collapsible" href="{{ url_for('builds.show_builds_history', feature=feature, branch=buildset.branch, build=buildset.build_number, unfold=true) }}"><i class="fas fa-link fa-2x"></i></a>
                         </span>
                     </div>
                 </div>
@@ -117,5 +117,5 @@
         There is no data to show
     </div>
     {% endif %}
-    {{ show_pagination(paginator) }}
+    {{ show_pagination(paginator, feature) }}
 {% endblock %}

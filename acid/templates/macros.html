@@ -14,13 +14,13 @@
     {% endif %}
 {% endmacro %}
 
-{% macro show_pagination(paginator) %}
+{% macro show_pagination(paginator, feature) %}
     {% if paginator.pages | length > 1 %}
     <nav>
         <ul class="pagination justify-content-center">
             {% if paginator.previous_page %}
             <li class=" page-item ">
-                <a class="page-link " href="{{ url_for('builds.show_builds_history', page=paginator.previous_page) }} ">
+                <a class="page-link " href="{{ url_for('builds.show_builds_history', feature=feature, page=paginator.previous_page) }} ">
                     <span>&laquo;</span>
                     <span class="sr-only ">Previous</span>
                 </a>
@@ -29,7 +29,7 @@
             {% for p in paginator.pages %}
                 {% if p %}
                 <li class="page-item {% if p == paginator.current_page %} active {% endif %}">
-                    <a class="page-link" href="{{ url_for('builds.show_builds_history', page=p, **request.args) }}">{{ p }}</a>
+                    <a class="page-link" href="{{ url_for('builds.show_builds_history', feature=feature, page=p, **request.args) }}">{{ p }}</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled">
@@ -39,7 +39,7 @@
             {% endfor %}
             {% if paginator.next_page %}
             <li class="page-item ">
-                <a class="page-link " href="{{ url_for('builds.show_builds_history', page=paginator.next_page) }}">
+                <a class="page-link " href="{{ url_for('builds.show_builds_history', feature=feature, page=paginator.next_page) }}">
                     <span>&raquo;</span>
                     <span class="sr-only ">Next</span>
                 </a>

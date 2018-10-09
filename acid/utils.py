@@ -17,54 +17,69 @@ def prepare_features(features, whole_config):
 
     for feature in features['ACID']:
         settings, plugin_name = load_feature_conf(feature, whole_config)
-        # settings = read_yaml(file_path=os.path.normpath(f'config/{_conf}'))
         try:
             config[plugin_name].update(settings)
         except KeyError:
             config[plugin_name] = settings
-    # for k, v in config.items():
-        # print(f'{k}: {v}')
-        # print()
     return config
 
 
-def load_configurations():
-    conf_dirs = ['auth.d', 'history.d', 'manager.d', 'status.d']
+# load features configuration from all files
+def load_plugin_configs():
+    conf_dirs = ['history.d', 'manager.d', 'status.d', 'auth.d']
     conf_root = 'config'
 
-    config = {'plugin': {}, 'core': {}}
+    config = {}
 
+    # iterate over directories
     for _dir in conf_dirs:
         _files = os.listdir('/'.join([conf_root, _dir]))
         _files = ['/'.join([conf_root, _dir, f]) for f in _files
                   if f.endswith('.yml')]
 
+        # iterate over files
         for _file in _files:
             try:
-                settings = read_yaml(file_path=os.path.normpath(_file))
-                print(f'Reading configuration file: {_file}')
-
-                for _type, _conf in settings.items():
-                    if _type == 'plugin':
-                        for _feature, _feat_conf in _conf.items():
-                            try:
-                                config[_type][_feature].update(settings[_type][_feature])
-                            except KeyError:
-                                config[_type].update(settings['plugin'])
+                # load configuration from file
+                settings = load_configuration_file(_file)
+                for _plugin in settings.keys():
+                    # create plugin key if it doesn't exist
+                    if _plugin not in config:
+                        config[_plugin] = {}
+                    # update features configuration in plugin
+                    config[_plugin].update(settings[_plugin])
             except IOError as e:
                 print(f'Can\'t read file {_file}')
                 print(e)
     return config
 
 
+# load configuration from one file
+def load_configuration_file(file):
+    # read yaml file
+    print(f'Reading configuration file: {file}')
+    settings = read_yaml(file_path=os.path.normpath(file))
+    # get plugins configs
+    settings = settings.get('plugin', {})
+
+    config = {}
+
+    # create entry for each plugin and feature in file
+    for _plugin, _features in settings.items():
+        for _feature, _feat_conf in _features.items():
+            if _plugin not in config:
+                config[_plugin] = {}
+
+            config[_plugin][_feature] = _feat_conf
+
+    return config
+
+
 def load_feature_conf(name, whole_config):
-    # print(name)
-    for plugin, features in whole_config['plugin'].items():
+    for plugin, features in whole_config.items():
         for feature, configuration in features.items():
             if feature == name:
-                # print(f'Feature: {name} found in: {plugin}')
-                config = {name: whole_config['plugin'][plugin][name]}
-                # print(config)
+                config = {feature: configuration}
                 return config, plugin
 
     print(f'Couldn\'t find configuration for feature: {name}')

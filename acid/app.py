@@ -12,7 +12,7 @@ from acid.features.auth.model import get_current_user
 from acid.features.history.controller import builds
 from acid.features.status.controller import status
 from acid.features.status.service import get_zuul_pipelines
-from acid.utils import pipe_intersect, prepare_features, load_configurations
+from acid.utils import load_plugin_configs, pipe_intersect, prepare_features
 from acid.features.zuul_manager.controller import zuul_manager
 
 if os.getenv('FLASK_ENV') == 'production' and not os.getenv('SECRET_KEY'):
@@ -28,9 +28,10 @@ app.config.update(settings)
 
 feats = read_yaml(file_path=os.path.normpath(f'config/feature_conf.yml'))
 
-all_configs = load_configurations()
+all_configs = load_plugin_configs()
 settings = prepare_features(feats, all_configs)
-app.config.update(settings)
+app.config['plugin'] = {}
+app.config['plugin'].update(settings)
 
 
 features = {}
@@ -39,8 +40,6 @@ for plugin, feature in settings.items():
         features[feat_name] = {'plugin': plugin, 'nav_text': feat['nav_text']}
         if plugin == 'status':
             features[feat_name]['pipelines'] = feat['pipelines']
-
-print(features)
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY',
                                      app.config['default']['secret_key'])
@@ -61,6 +60,6 @@ app.register_blueprint(zuul_manager)
 @app.context_processor
 def template_context():
     return {'pipeline_names': pipe_intersect(app.config['default']['pipelines'],
-                                             get_zuul_pipelines()),
+                                             get_zuul_pipelines('status')),
             'current_user': get_current_user(),
             'features': features}

@@ -14,8 +14,8 @@ builds = Blueprint('builds', __name__, template_folder='../../templates')
 @builds.route('/builds/<string:feature>')
 @builds.route('/builds/<string:feature>/<int:page>')
 @db_session
-def show_builds_history(feature='',page=1):
-    config = current_app.config['builds'][feature]
+def show_builds_history(feature='', page=1):
+    config = current_app.config['plugin']['builds'][feature]
     per_page = config['pagination']['per_page']
     pipeline = config['pipename']
     page_links = config['pagination']['page_links']
@@ -35,4 +35,4 @@ def show_builds_history(feature='',page=1):
     return render_template('builds_history.html', buildsets=buildsets,
                            paginator=paginator,
                            buildsets_log_url=buildset_log_url,
-                           branches=branches)
+                           branches=branches, feature=feature)
