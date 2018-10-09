@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import logging.config
 
 from flask import Flask
 
@@ -28,6 +29,7 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY',
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
 
+logging.config.fileConfig('config/logging.conf')
 Session(app)
 
 app.url_map.strict_slashes = False

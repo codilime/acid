@@ -1,0 +1,72 @@
+# Lists of used loggers
+# If key is declared but no definition is found config parser will throw error.
+[loggers]
+keys=root,console,acid
+
+# List of logging handlers
+[handlers]
+keys=consoleHandler,fileHandler,fileDebugHandler
+
+# List of logging formatters
+[formatters]
+keys=simple
+
+[logger_root]
+level=WARNING
+handlers=
+
+# Logger for console display
+[logger_console]
+level=INFO
+handlers=consoleHandler
+qualname=console
+
+# Top level logger for ACID
+# By default all child loggers will pass their logs to this logger.
+# In addition to this logger user can define own child loggers.
+# qualname parameter is hierarchical name used to get the logger.
+[logger_acid]
+level=DEBUG
+handlers=consoleHandler,fileHandler,fileDebugHandler
+qualname=acid
+
+# Handler for displaying console logs
+[handler_consoleHandler]
+class=StreamHandler
+level=INFO
+formatter=simple
+args=(sys.stdout,)
+
+# Handler for logging everythin to a single file
+# Class FileCreatorHandler creates log file directory in case it's missing.
+[handler_fileHandler]
+class=acid.utils.FileCreatorHandler
+level=INFO
+formatter=simple
+args=('logs/acid.log', 'a')
+
+# Handler for detailed logging to a single file
+[handler_fileDebugHandler]
+class=acid.utils.FileCreatorHandler
+level=DEBUG
+formatter=simple
+args=('logs/acid.log.debug', 'a')
+
+[formatter_simple]
+format=%(asctime)s - %(name)s - %(levelname)s - %(message)s
+datefmt=
+
+# Example of status logger that will additionally log information
+# from status feature to a different file.
+# Remember to add names of logger and handler to their keys field.
+#
+# [logger_status]
+# level=DEBUG
+# handlers=statusHandler
+# qualname=acid.features.status
+#
+# [handler_statusHandler]
+# class=acid.utils.FileCreatorHandler
+# level=DEBUG
+# formatter=simple
+# args('logs/status.log.debug', 'a')
