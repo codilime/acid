@@ -12,7 +12,7 @@ from acid.features.auth.model import get_current_user
 from acid.features.history.controller import builds
 from acid.features.status.controller import status
 from acid.features.status.service import get_zuul_pipelines
-from acid.utils import pipe_intersect
+from acid.utils import pipe_intersect, prepare_features, load_configurations
 from acid.features.zuul_manager.controller import zuul_manager
 
 if os.getenv('FLASK_ENV') == 'production' and not os.getenv('SECRET_KEY'):
@@ -23,20 +23,24 @@ app = Flask(__name__, static_folder='../static')
 settings = read_yaml(file_path=os.path.normpath(f'config/core_settings.yml'))
 app.config.update(settings)
 
+settings = read_yaml(file_path=os.path.normpath(f'config/auth.d/auth_settings.yml'))
+app.config.update(settings)
+
 feats = read_yaml(file_path=os.path.normpath(f'config/feature_conf.yml'))
 
-for feature in feats['ACID']:
-    for _type, _conf in feature.items():
-        try:
-            settings = read_yaml(file_path=os.path.normpath(f'config/{_conf}'))
-            print(f'Reading configuration file: {_conf}')
-            try:
-                app.config[_type].update(settings[_type])
-            except KeyError as e:
-                app.config.update(settings)
-        except FileNotFoundError as e:
-            print(f'Can\'t read file {_conf}')
-            print(e)
+all_configs = load_configurations()
+settings = prepare_features(feats, all_configs)
+app.config.update(settings)
+
+
+features = {}
+for plugin, feature in settings.items():
+    for feat_name, feat in feature.items():
+        features[feat_name] = {'plugin': plugin, 'nav_text': feat['nav_text']}
+        if plugin == 'status':
+            features[feat_name]['pipelines'] = feat['pipelines']
+
+print(features)
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY',
                                      app.config['default']['secret_key'])
@@ -56,6 +60,7 @@ app.register_blueprint(zuul_manager)
 
 @app.context_processor
 def template_context():
-    return {'pipeline_names': pipe_intersect(app.config['status']['pipelines'],
+    return {'pipeline_names': pipe_intersect(app.config['default']['pipelines'],
                                              get_zuul_pipelines()),
-            'current_user': get_current_user()}
+            'current_user': get_current_user(),
+            'features': features}

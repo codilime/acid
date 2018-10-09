@@ -11,14 +11,15 @@ builds = Blueprint('builds', __name__, template_folder='../../templates')
 
 
 @builds.route('/builds')
-@builds.route('/builds/<int:page>')
+@builds.route('/builds/<string:feature>')
+@builds.route('/builds/<string:feature>/<int:page>')
 @db_session
-def show_builds_history(page=1):
-    config = current_app.config
-    per_page = config['history']['pagination']['per_page']
-    pipeline = config['default']['pipename']
-    page_links = config['history']['pagination']['page_links']
-    buildset_log_url = config['history']['log_server_url']
+def show_builds_history(feature='',page=1):
+    config = current_app.config['builds'][feature]
+    per_page = config['pagination']['per_page']
+    pipeline = config['pipename']
+    page_links = config['pagination']['page_links']
+    buildset_log_url = config['log_server_url']
 
     db.connect()
 

@@ -1,0 +1,37 @@
+{% macro create_nav_button(feature, properties) %}
+        {% if properties['plugin'] == 'builds' %}
+            {{ builds_button(feature, properties) }}
+        {% elif properties['plugin'] == 'zuul_manager' %}
+            {{ zuul_manager_button(feature, properties) }}
+        {% elif properties['plugin'] == 'status' %}
+            {{ status_button(feature, properties) }}
+        {% else %}
+            <a class="nav-link" href="{{ url_for(plugin+'.show_page', feature=feature) }}">{{ properties['nav_text'] }}</a>
+        {% endif %}
+{% endmacro %}
+
+{% macro builds_button(feature, properties) %}
+    <li class="nav-item dropdown {% if request.path.startswith('/builds/'+feature) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('builds.show_builds_history', feature=feature) }}">{{ properties['nav_text'] }}</a>
+    </li>
+{% endmacro %}
+
+{% macro zuul_manager_button(feature, properties) %}
+    {% if current_user and current_user.is_admin() %}
+    <li class="nav-item dropdown {% if request.path.startswith('/zuul_manager/'+feature) %}active{% endif %}">
+        <a class="nav-link" href="{{ url_for('zuul_manager.show_panel', feature=feature) }}">{{ properties['nav_text'] }}</a>
+    </li>
+    {% endif %}
+{% endmacro %}
+
+{% macro status_button(feature, properties) %}
+    <li class="nav-item dropdown {% if request.path.startswith('/status/'+feature) %}active{% endif %}">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">{{ properties['nav_text'] }}</a>
+        <div class="dropdown-menu" style="width:auto">
+            {% for pipeline in properties['pipelines'] %}
+                <a class="dropdown-item"
+                   href="{{ url_for('status.show_status', feature=feature, pipename=pipeline) }}">{{ pipeline }}</a>
+            {% endfor %}
+        </div>
+    </li>
+{% endmacro %}

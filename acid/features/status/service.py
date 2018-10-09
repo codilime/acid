@@ -35,7 +35,7 @@ def pipelines_stats(pipelines, showed_pipelines):
 
 
 def get_zuul_pipelines():
-    config = current_app.config['status']
+    config = current_app.config['status']['status']
     zuul_url = config['url']
     zuul_endpoint = config['status_endpoint']
     url = status_endpoint(zuul_url, zuul_endpoint)

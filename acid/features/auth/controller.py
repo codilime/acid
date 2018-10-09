@@ -14,7 +14,7 @@ auth = Blueprint('auth', __name__, template_folder='../../templates')
 
 @auth.route('/sign_in')
 def sign_in():
-    config = current_app.config['authentication']
+    config = current_app.config['core']['authentication']
     redirect_url = service.start_openid_auth(
         config['openid_providers']['launchpad']['url'])
     return redirect(redirect_url)
