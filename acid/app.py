@@ -20,10 +20,12 @@ if os.getenv('FLASK_ENV') == 'production' and not os.getenv('SECRET_KEY'):
 
 app = Flask(__name__, static_folder='../static')
 
+# this is very prototype
 settings = read_yaml(file_path=os.path.normpath(f'config/core_settings.yml'))
 app.config.update(settings)
 
-settings = read_yaml(file_path=os.path.normpath(f'config/auth.d/auth_settings.yml'))
+settings = read_yaml(file_path=os.path.normpath(
+                     f'config/auth.d/auth_settings.yml'))
 app.config.update(settings)
 
 feats = read_yaml(file_path=os.path.normpath(f'config/feature_conf.yml'))
@@ -33,7 +35,7 @@ settings = prepare_features(feats, all_configs)
 app.config['plugin'] = {}
 app.config['plugin'].update(settings)
 
-
+# this is very very prototype
 features = {}
 for plugin, feature in settings.items():
     for feat_name, feat in feature.items():
@@ -41,6 +43,7 @@ for plugin, feature in settings.items():
         if plugin == 'status':
             features[feat_name]['pipelines'] = feat['pipelines']
 
+# end of prototypes
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY',
                                      app.config['default']['secret_key'])
 app.config['SESSION_TYPE'] = 'filesystem'

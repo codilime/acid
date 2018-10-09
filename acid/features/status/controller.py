@@ -30,5 +30,6 @@ def show_status(feature='', pipename=None):
 def show_dashboard():
     config = current_app.config
     pipeline_stats = service.pipelines_stats(
-        service.get_zuul_pipelines('status'), config['plugin']['status']['status']['pipelines'])
+        service.get_zuul_pipelines('status'),
+        config['plugin']['status']['status']['pipelines'])  # temporary
     return render_template('dashboard.html', pipeline_stats=pipeline_stats)

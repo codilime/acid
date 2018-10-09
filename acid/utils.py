@@ -26,18 +26,16 @@ def prepare_features(features, whole_config):
 
 # load features configuration from all files
 def load_plugin_configs():
-    conf_dirs = ['history.d', 'manager.d', 'status.d', 'auth.d']
+    conf_dirs = ['history.d', 'manager.d', 'status.d']
     conf_root = 'config'
 
     config = {}
 
-    # iterate over directories
     for _dir in conf_dirs:
         _files = os.listdir('/'.join([conf_root, _dir]))
         _files = ['/'.join([conf_root, _dir, f]) for f in _files
                   if f.endswith('.yml')]
 
-        # iterate over files
         for _file in _files:
             try:
                 # load configuration from file
@@ -64,7 +62,7 @@ def load_configuration_file(file):
 
     config = {}
 
-    # create entry for each plugin and feature in file
+    # create dictionary entry for each plugin and feature in file
     for _plugin, _features in settings.items():
         for _feature, _feat_conf in _features.items():
             if _plugin not in config:

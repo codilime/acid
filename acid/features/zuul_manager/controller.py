@@ -15,7 +15,8 @@ zuul_manager = Blueprint('zuul_manager', __name__,
 @zuul_manager.route('/zuul_manager/<string:feature>')
 @admin_required
 def show_panel(feature=''):
-    pipelines = current_app.config['plugin']['zuul_manager'][feature]['pipelines']
+    config = current_app.config['plugin']['zuul_manager'][feature]
+    pipelines = config['pipelines']
     return render_template('zuul_manager.html', pipelines=pipelines)
 
 
@@ -28,6 +29,7 @@ def manage(feature='my_manager'):
     action = request.form.get('action')
     config = current_app.config['plugin']['zuul_manager'][feature]
 
+    # creating manager object doesn't work yet
     zuul_manager = ZuulManager(**config)
 
     for pipeline in config['pipelines']:
