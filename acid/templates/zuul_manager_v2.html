@@ -7,6 +7,27 @@
                 <h1>Zuul manager V2</h1>
             </div>
         </div>
+
+        <div class="container mb-5">
+            <div class="row justify-content-center">
+                    <form class="form-inline col-8" action="">
+                        <div class="form-group sm-2" style="width: 100%">
+                            <select class="custom-select-pipeline form-control mb-2 mr-sm-2" multiple="multiple" name="pipeline" style="width: 40%">
+                                {%  for pipename in pipelines_list %}
+                                    <option {% if pipename in pipelines_arg %} selected="selected" {% endif %}>{{ pipename }}</option>
+                                {%  endfor %}
+                            </select>
+                            <select class="custom-select-branch form-control mb-2 mr-sm-2" multiple="multiple" name="branch" style="width: 40%">
+                                {%  for branch in branches_list %}
+                                    <option {% if branch in branches_arg %} selected="selected" {% endif %}>{{ branch }}</option>
+                                {%  endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+
         <div class="row mt-5 mb-2">
             <div class="col-md-12 col-lg-6 offset-lg-3">
                 <div class="table-responsive">
@@ -19,9 +40,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                        {% for pipelines in pipelines %}
-                            {% for pipeline_name, branches in pipelines.items() %}
-                                {% for branch in branches %}
+                        {% for pipeline_name, branches in pipelines.items() %}
+                            {% for branch in branches %}
                                     <tr>
                                         <td> {{ pipeline_name }}</td>
                                         <td> {{ branch }}</td>
@@ -36,7 +56,6 @@
                                     </tr>
                                 {% endfor %}
                             {% endfor %}
-                        {% endfor %}
                         </tbody>
                     </table>
                 </div>

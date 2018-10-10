@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-import jwt
+from jwt import encode
 
 import requests
 
-from flask import current_app
-
 from .exceptions import RemoteServerError
+
+from acid.utils import get_logger
 
 
 class ZuulManager:
     def __init__(self, host, tenant, project,
                  trigger, jwt_secret, jwt_algorithm):
+        self.logger = get_logger()
         self.tenant = tenant
         self.trigger = trigger
         self.project = project
@@ -29,14 +30,14 @@ class ZuulManager:
             "exp": datetime.datetime.utcnow() + datetime.timedelta(days=7),
             "zuul.tenants": tenants_field
         }
-        token = jwt.encode(message, jwt_secret, algorithm=jwt_algorithm)
+        token = encode(message, jwt_secret, algorithm=jwt_algorithm)
         return token.decode('utf-8')
 
     def post_request(self, endpoint, body):
         res = requests.post(endpoint, headers=self.auth_header, json=body)
 
         if res.status_code not in [200, 304]:
-            current_app.logger.error(res.text)
+            self.logger.error(res.text)
             raise RemoteServerError('Request for zuul operation failed.')
 
     def enqueue(self, pipeline, branch):
