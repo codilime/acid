@@ -40,9 +40,9 @@ AUTH module will be middleware between ACID app and WSGI (e.g Gunicorn).
 -  WSGI  -  ----------->  -  AUTH  -  ------------------->  -  ACID  -
 -        -                -        -                        -        -
 ----------                ----------                        ----------
-                                   |                        ----------
-                                   |    [emails/users]      -        -
-                                    \ ___________________>  -   DB   -
+                                   |    [emails/users]      ----------
+                                   |      [endpoints]       -        -
+                                    \ ------------------->  -   DB   -
                                                             -        -
                                                             ----------
 
