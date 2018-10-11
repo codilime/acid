@@ -1,0 +1,168 @@
+==============================
+Blueprint for ACID AUTH module
+==============================
+
+Spec goal is to define technical aspect of AUTH module in new ACID blueprint.
+
+Main purpose of ACID AUTH module is to provide authorization and authentication
+for application requests.
+
+This blueprint is valid with new ACID architecture, and to be fully functional
+need to be run in new ACID architecture.
+
+Problem Description
+===================
+
+ACID as a modern application need to have authorization/authentication unit
+that's give proper level of security.
+Each request send to ACID application should be validate on server side.
+Now ACID application have very basic authentication/autorization functionality.
+
+Basic assumption for new AUTH module:
+- provide authentication
+- provide authorization based on roles for requests
+- handle request to front and backend part od ACID application
+- independent from ACID application
+- functional and lightweight
+
+
+Proposed Design
+===============
+
+
+Independed from ACID application
+--------------------------------
+
+AUTH module will be middleware between ACID app and WSGI (e.g Gunicorn).
+
+----------                ----------                        ----------
+-        -   [request]    -        -    [modify request]    -        -
+-  WSGI  -  ----------->  -  AUTH  -  ------------------->  -  ACID  -
+-        -                -        -                        -        -
+----------                ----------                        ----------
+                                   |                        ----------
+                                   |    [emails/users]      -        -
+                                    \ ------------------->  -   DB   -
+                                                            -        -
+                                                            ----------
+
+Each package get from WSGI firstly will be processed by AUTH module.
+
+In case of unauthorized/unwanted request, AUTH module will overwrite requests
+in way that ACID app return error, otherwise AUTH module add additional content
+to request - information about role.
+
+ACID app FRONT ENGINE based on role will customize menu bar, giving access only
+to features assigned to role.
+
+AUTH module will have own database - Redis, that's provide true isolation.
+
+AUTH module will have access to ACID database to get information about roles,
+emails
+
+
+Authentication
+--------------
+
+AUTH module will need authentication provider, this functionality gonna be serve
+by OpenID package.
+
+In case of needed authentication AUTH module will listen OpenID to get token/
+email pair. This information will be stored in AUTH database.
+Token will be a primary key, used in further process.
+
+
+Authorization and authentication based on roles:
+------------------------------------------------
+
+AUTH module will operate on unique token which will be taken from:
+- cookies for requests to frontend app
+- special header in request for requests to backend app
+
+Definition:
+API requests - each requests with '/api' beginning in address.
+FRONT requests - each requests to app content not being API request
+
+API requests:
+AUTH database will have pool of tokens assigned to roles valid for API requests,
+also in database will be info about which API endpoints are connected to roles.
+AUTH module will compare token from request header with database pool and get
+role. In case of match: endpoint from request - possible endpoints for role,
+AUTH module will forward request, otherwise overwrite requestin way that app
+return desire error.
+
+FRONT requests:
+AUTH module will store in own database pairs:
+  key - token
+  value - email in own database.
+New pairs will be added in authentication process.
+
+For each front request AUTH module will get token from cookies, and search own
+database looking for value. In case of missing will return "not_logged".
+
+ACID application in own database gonna store information about roles and emails
+assigned to them.
+After getting email (or not_logged) AUTH module will ask ACID database for
+information about role for that value.
+Role will be added ro request in header ROLE.
+
+
+Implementation
+==============
+
+AUTH module work as a middleware getting requests from WSGI and passing them
+to ACID app, so initiation for module should be like:
+
+  class AuthModule(object):
+      def __init__(self, app):
+          self.app = app
+      ....
+      ....
+      def __cal__(self, environ, start_response):
+          .... #adding header with role
+          .... #modifying request
+          return self.app(environ, start_response)
+      ....
+      ....
+
+  <flask_app_name>.wsgi_app = AuthModule(<flask_app_name>)
+
+AUTH module need model for ACID database, should be like:
+
+  <acid_db>.connect
+
+  class Endpoints(db.Entity):
+      _table_ = "endpoints"
+      role = Optional(str)
+      endpoints = Set("list_of_endpoints")
+
+  class Users(db.Entity):
+      _table_ = "users"
+      email = Optional(str)
+      role = Optional(str)
+
+AUTH module need model for own database, should be like:
+
+  <auth_db>.connect
+
+  class tokens(db.Entity):
+      _table_ = "tokens"
+      token = Optional(str)
+      email = Optional(str)
+
+AUTH gonna need service for models layer to serve method used in module:
+
+  def return_email_from_token():
+      ....
+      ....
+      return email
+
+  def return_role_for_email():
+      ....
+      ....
+      return role
+
+  def return_endpoints_for_role():
+      ....
+      ....
+      return endpoints_list
