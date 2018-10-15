@@ -15,6 +15,7 @@ from acid.features.status.controller import status
 from acid.features.status.service import get_zuul_pipelines
 from acid.utils import pipe_intersect
 from acid.features.zuul_manager.controller import zuul_manager
+from acid.features.zuul_manager_v2.controller import zuul_manager_v2
 
 if os.getenv('FLASK_ENV') == 'production' and not os.getenv('SECRET_KEY'):
     raise Exception("On production use environment variables")
@@ -39,6 +40,7 @@ app.register_blueprint(status)
 app.register_blueprint(builds)
 app.register_blueprint(auth)
 app.register_blueprint(zuul_manager)
+app.register_blueprint(zuul_manager_v2)
 
 
 @app.context_processor

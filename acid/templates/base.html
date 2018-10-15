@@ -71,6 +71,9 @@
                     <li class="nav-item {% if request.path.startswith('/control') %}active{% endif %}">
                         <a class="nav-link" href="{{ url_for('zuul_manager.show_panel') }}">Zuul manager</a>
                     </li>
+                    <li class="nav-item {% if request.path.startswith('/control') %}active{% endif %}">
+                        <a class="nav-link" href="{{ url_for('zuul_manager_v2.show_panel') }}">Zuul manager V2</a>
+                    </li>
                 {% endif %}
                 <li>
                     <div class="ml-5"></div>

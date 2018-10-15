@@ -34,3 +34,17 @@
     path: "{{ galaxy_path }}/openstack.zuul/defaults/main.yaml"
     regexp: "^zuul_install_method: pip"
     line: "zuul_install_method: git"
+
+- name: Add git operation to checkout to the right branch
+  become: yes
+  blockinfile:
+    path: "{{ galaxy_path }}/openstack.zuul/tasks/install/git.yaml"
+    insertafter: "^    version: *"
+    block: |
+      - name: Checkout to the correct commit
+        shell: |
+          set -e
+          set -x
+          git -C {{ '{{ zuul_git_dest }}' }} fetch https://git.openstack.org/openstack-infra/zuul refs/changes/07/576907/23 && git -C {{ '{{ zuul_git_dest }}' }} checkout FETCH_HEAD && git -C {{ '{{ zuul_git_dest }}' }} checkout -b newBranch
+        args:
+          executable: /bin/bash
