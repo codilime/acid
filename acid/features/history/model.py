@@ -104,7 +104,13 @@ class ZuulBuild(db.Entity):
     @property
     def build_number(self):
         try:
-            return int(self.log_url.split('/')[-3])
+            split_url = self.log_url.split('/')
+            # there is another log_url format (on logs.contrail.juniper.net)
+            # where element [-3] is never a int, but instead [-4] is
+            if split_url[-3].isdigit():
+                return int(split_url[-3])
+            else:
+                return int(split_url[-4])
         except (ValueError, IndexError):
             return None
 
