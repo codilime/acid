@@ -103,6 +103,15 @@ class ZuulBuild(db.Entity):
 
     @property
     def build_number(self):
+        return self._get_build_number_from_log_url()
+
+    @property
+    def duration(self):
+        if self.start_time and self.end_time:
+            return self.end_time - self.start_time
+        return None
+
+    def _get_build_number_from_log_url(self):
         try:
             split_url = self.log_url.split('/')
             # there is another log_url format (on logs.contrail.juniper.net)
@@ -113,9 +122,3 @@ class ZuulBuild(db.Entity):
                 return int(split_url[-4])
         except (ValueError, IndexError):
             return None
-
-    @property
-    def duration(self):
-        if self.start_time and self.end_time:
-            return self.end_time - self.start_time
-        return None
