@@ -59,34 +59,36 @@ class ZuulBuildSet(db.Entity):
         return None
 
     @classmethod
-    def get_branches(cls):
-        branches = select(b.ref for b in cls)
-        return branches
+    def get_refs_for_pipeline(cls, pipeline, max_ref_count=None):
+        query = select(b for b in cls if b.pipeline == pipeline)
+        query = query.order_by(desc(cls.id))
+        if max_ref_count is not None:
+            query = query.limit(max_ref_count)
+        return {b.ref for b in query}
 
     @classmethod
     def get_for_pipeline(cls, pipeline):
         return select(
             bs for bs in cls
             if bs.pipeline == pipeline and
-            len(select(b for b in bs.builds)) > 0).sort_by(desc(cls.id))
+            len(bs.builds) > 0).sort_by(desc(cls.id))
 
     @classmethod
-    def get_filtered(cls, pipeline, branches, build=''):
-        all_branches = list(cls.get_branches())
-        branches = [x for x in branches if x in all_branches]
-        if (len(branches) == 0):
-            branches = all_branches
-
+    def get_filtered(cls, pipeline, refs, build=''):
         if build is None or not build.isnumeric():
             build = ''
         else:
             build = f'/{build}/'
 
-        return select(
+        query = select(
             bs for bs in cls if
-            bs.pipeline == pipeline and bs.ref in branches and
+            bs.pipeline == pipeline and
             len(select(b for b in bs.builds if
                        build in b.log_url)) > 0).sort_by(desc(cls.id))
+        if len(refs) > 0:
+            query = query.where(lambda bs: bs.ref in refs)
+
+        return query
 
 
 class ZuulBuild(db.Entity):

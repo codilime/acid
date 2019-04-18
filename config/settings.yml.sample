@@ -33,6 +33,9 @@ history:
     # Number of links displayed before or after current page link.
     page_links: 4
 
+  # Maximum number of refs to be hinted in the ref filter
+  max_latest_ref_count: 1
+
 # Zuul configuration
 zuul:
   # <protocol>://<host> for zuul server.

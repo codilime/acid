@@ -34,9 +34,10 @@ def pagination(number_of_buildsets, page, per_page, page_links):
 
 
 class BuildSetsPaginated:
-    def __init__(self, pipeline, per_page):
+    def __init__(self, pipeline, max_latest_ref_count, per_page):
         self.pipeline = pipeline
         self.per_page = per_page
+        self.max_latest_ref_count = max_latest_ref_count
         self.query = self._create_query()
 
     def __len__(self):
@@ -54,15 +55,23 @@ class BuildSetsPaginated:
         return ZuulBuildSet.get_for_pipeline(self.pipeline)
 
     @property
-    def branches(self):
-        return ZuulBuildSet.get_branches()
+    def all_refs(self):
+        branches = ZuulBuildSet.get_refs_for_pipeline(self.pipeline)
+        return branches
+
+    @property
+    def latest_refs(self):
+        branches = ZuulBuildSet.get_refs_for_pipeline(
+            self.pipeline, self.max_latest_ref_count)
+        return branches
 
 
 class BuildSetsFiltered(BuildSetsPaginated):
-    def __init__(self, pipeline, per_page, branch, build):
+    def __init__(self, pipeline, max_latest_ref_count, per_page, branch,
+                 build):
         self.branch = branch
         self.build = build
-        super().__init__(pipeline, per_page)
+        super().__init__(pipeline, max_latest_ref_count, per_page)
 
     def _create_query(self):
         return ZuulBuildSet.get_filtered(self.pipeline, self.branch, self.build)
