@@ -88,9 +88,10 @@ def make_build(start_time, end_time, build_number=104, buildset_id=5010):
 @pytest.fixture
 def make_buildset():
     def _make_buildset(build_number=104, branch='master', number_of_builds=5,
+                       pipeline='periodic-nightly',
                        start_time=TIME_START, end_time=TIME_END):
         buildset = ZuulBuildSet(zuul_ref='Zef2180cdc7ff440daefe48d85ed91b48',
-                                pipeline='periodic-nightly',
+                                pipeline=pipeline,
                                 project='acid-test-dev',
                                 change=None, patchset=None,
                                 ref=f'refs/heads/{branch}',

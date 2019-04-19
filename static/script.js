@@ -47,7 +47,8 @@ $(function () {
 
   $(document).ready(function () {
     $('.custom-select').select2({
-      placeholder: 'Select branch'
+      placeholder: 'Select refs',
+      tags: true
     })
   })
 
@@ -59,7 +60,8 @@ $(function () {
 
   $(document).ready(function () {
     $('.custom-select-branch').select2({
-      placeholder: 'Select branch'
+      placeholder: 'Select refs',
+      tags: true
     })
   })
 })

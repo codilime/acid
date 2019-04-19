@@ -12,9 +12,9 @@
         <div class="row justify-content-center">
                 <form class="form-inline col-8" action="{{ url_for('builds.show_builds_history') }}">
                     <div class="form-group sm-2" style="width: 100%">
-                        <select class="custom-select form-control mb-2 mr-sm-2" multiple="multiple" name="branch" style="width: 40%">
-                            {% for branch in buildsets.branches %}
-                                <option {% if branch in branches %} selected="selected" {% endif %}>{{ branch }}</option>
+                        <select class="custom-select form-control mb-2 mr-sm-2" multiple="multiple" name="refs" style="width: 40%">
+                            {% for ref in buildsets.latest_refs %}
+                                <option {% if ref in refs %} selected="selected" {% endif %}>{{ ref }}</option>
                             {% endfor %}
                         </select>
                         <input type="text" name="build" class="form-control ml-2 mr-sm-2" id="buildFilter" placeholder="Build" value="{{ request.args.build or '' }}">

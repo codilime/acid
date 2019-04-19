@@ -19,19 +19,24 @@ def show_builds_history(page=1):
     pipeline = config['default']['pipename']
     page_links = config['history']['pagination']['page_links']
     buildset_log_url = config['history']['log_server_url']
+    max_latest_ref_count = config['history'].get(
+        'max_latest_ref_count', 200)
 
     db.connect()
 
-    branches = request.args.getlist('branch')
+    refs = request.args.getlist('refs')
     build = request.args.get('build')
 
-    if branches or build:
-        buildsets = BuildSetsFiltered(pipeline, per_page, branches, build)
+    if refs or build:
+        buildsets = BuildSetsFiltered(
+            pipeline, max_latest_ref_count, per_page, refs, build)
     else:
-        buildsets = BuildSetsPaginated(pipeline, per_page)
+        buildsets = BuildSetsPaginated(
+            pipeline, max_latest_ref_count, per_page)
     buildsets.fetch_page(page)
     paginator = pagination(len(buildsets), page, per_page, page_links)
-    return render_template('builds_history.html', buildsets=buildsets,
-                           paginator=paginator,
-                           buildsets_log_url=buildset_log_url,
-                           branches=branches)
+    template = render_template('builds_history.html', buildsets=buildsets,
+                               paginator=paginator,
+                               buildsets_log_url=buildset_log_url,
+                               refs=refs)
+    return template

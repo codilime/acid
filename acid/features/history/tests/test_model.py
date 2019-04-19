@@ -102,12 +102,30 @@ class TestZuulBuildSet(DatabaseTestCase):
 
     @pytest.mark.skip(reason="left broken by forced commit f8576399")
     @db_session
-    def test_get_branches_return_branches(self, make_buildset):
+    def test_get_refs_return_refs(self, make_buildset):
         make_buildset(branch='master')
         make_buildset(branch='gimp')
-        branches = list(ZuulBuildSet.get_branches())
-        expected = ['master', 'gimp']
-        assert branches == expected
+        refs = set(ZuulBuildSet.get_refs_for_pipeline('periodic-nightly'))
+        expected = {'refs/heads/master', 'refs/heads/gimp'}
+        assert refs == expected
+
+    @db_session
+    def test_get_max_latest_refs(self, make_buildset):
+        make_buildset(branch='master')
+        make_buildset(branch='gimp')
+        latest_refs = list(ZuulBuildSet.get_refs_for_pipeline(
+            pipeline='periodic-nightly', max_ref_count=1))
+        assert len(latest_refs) == 1
+
+    @db_session
+    def test_get_latest_refs_return_latest_refs(self, make_buildset):
+        make_buildset(branch='master')
+        make_buildset(branch='gimp')
+        make_buildset(branch='latest_sensei')
+        latest_refs = list(ZuulBuildSet.get_refs_for_pipeline(
+            pipeline='periodic-nightly', max_ref_count=1))
+        expected = ['refs/heads/latest_sensei']
+        assert latest_refs == expected
 
     @db_session
     def test_get_for_pipeline_return_pipelines(self,
@@ -119,17 +137,41 @@ class TestZuulBuildSet(DatabaseTestCase):
         assert return_buildsets == expected
 
     @db_session
-    def test_get_filtered_if_branch_is_not_in_branches(self,
-                                                       database_with_buildsets):
+    def test_get_filtered_if_ref_is_not_in_refs(self,
+                                                database_with_buildsets):
+        # This test was testing whether
         database = database_with_buildsets()
         for buildset in database:
             buildset.ref = 'refs/heads/gimp'
         filtered_buildsets = list(ZuulBuildSet.get_filtered(
             pipeline='periodic-nightly',
-            branches=['master'],
+            refs=['refs/heads/master'],
             build='105'))
-        expected = [database[0]]
+        expected = []
         assert filtered_buildsets == expected
+
+    @db_session
+    def test_get_filtered_if_ref_is_in_refs(self,
+                                            database_with_buildsets):
+        database = database_with_buildsets()
+        for buildset in database:
+            buildset.ref = 'refs/heads/gimp'
+        filtered_buildsets = list(ZuulBuildSet.get_filtered(
+            pipeline='periodic-nightly',
+            refs=['refs/heads/gimp']))
+        assert len(database) == len(filtered_buildsets)
+
+    @db_session
+    def test_get_filtered_if_no_ref_provided(self,
+                                             database_with_buildsets):
+        # This test was testing whether
+        database = database_with_buildsets()
+        for buildset in database:
+            buildset.ref = 'refs/heads/gimp'
+        filtered_buildsets = list(ZuulBuildSet.get_filtered(
+            pipeline='periodic-nightly',
+            refs=[]))
+        assert len(database) == len(filtered_buildsets)
 
     @db_session
     def test_get_filtered_if_build_is_none(self,
@@ -137,7 +179,7 @@ class TestZuulBuildSet(DatabaseTestCase):
         buildsets = database_with_buildsets()
         filtered_buildsets = list(ZuulBuildSet.get_filtered(
             pipeline='periodic-nightly',
-            branches=['master'],
+            refs=['refs/heads/master'],
             build=None))
         expected = buildsets[::-1]
         assert filtered_buildsets == expected
@@ -170,12 +212,14 @@ class TestZuulBuildSet(DatabaseTestCase):
 class TestBuildSetPaginated:
     def test_create_buildsets_history_object(self, mocker):
         mocker.patch.object(ZuulBuildSet, 'get_for_pipeline')
-        buildsets = BuildSetsPaginated(pipeline="foo", per_page=20)
+        buildsets = BuildSetsPaginated(
+            pipeline="foo", per_page=20, max_latest_ref_count=100)
         assert buildsets.per_page == 20
 
     def test_create_query(self, mocker):
         get_for_pipeline = mocker.patch.object(ZuulBuildSet, 'get_for_pipeline')
-        BuildSetsPaginated(pipeline="foo", per_page=20)
+        BuildSetsPaginated(
+            pipeline="foo", per_page=20, max_latest_ref_count=100)
         get_for_pipeline.assert_called_with("foo")
 
     def test_fetch_raises_when_page_is_out_of_range(self, mocker):
@@ -183,7 +227,8 @@ class TestBuildSetPaginated:
         get_for_pipeline.return_value = [
             'first_element', 'second_element', 'third_element']
 
-        buildsets = BuildSetsPaginated(pipeline="foo", per_page=20)
+        buildsets = BuildSetsPaginated(
+            pipeline="foo", per_page=20, max_latest_ref_count=100)
 
         with pytest.raises(PageOutOfRange):
             buildsets.fetch_page(2)
@@ -198,7 +243,8 @@ class TestBuildSetPaginated:
         query.page.return_value = data
         get_for_pipeline.return_value = query
 
-        buildset = BuildSetsPaginated(pipeline="foo", per_page=20)
+        buildset = BuildSetsPaginated(
+            pipeline="foo", per_page=20, max_latest_ref_count=100)
         buildset.fetch_page(page=1)
 
         assert buildset.page == data
