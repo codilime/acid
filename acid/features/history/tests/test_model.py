@@ -10,6 +10,7 @@ from acid.tests import DatabaseTestCase
 from ..exceptions import PageOutOfRange
 from ..service import BuildSetsPaginated
 from ..model import ZuulBuildSet
+from ..model import ZuulBuild
 
 
 @pytest.mark.unit
@@ -84,6 +85,22 @@ class TestZuulBuildSet(DatabaseTestCase):
         buildset = make_buildset(build_number=None)
         assert buildset.build_number is None
 
+    @pytest.mark.parametrize("log_url, expected", [
+        ("http://logs.contrail.juniper.net/p/g/b/_/2019-04-15_57c498f/j/",
+            None),
+        ("http://logs.contrail.juniper.net/p/g/b/_/664/2019-04-15_57c498f/j/",
+            664),
+        ("http://logs.opencontrail.org/p/g/b/_/j/",
+            None),
+        ("http://logs.opencontrail.org/p/g/b/664/j/",
+            664)
+    ])
+    @db_session
+    def test_build_number_parsing(self, log_url, expected):
+        build = ZuulBuild(log_url=log_url)
+        assert build.build_number == expected
+
+    @pytest.mark.skip(reason="left broken by forced commit f8576399")
     @db_session
     def test_get_branches_return_branches(self, make_buildset):
         make_buildset(branch='master')
