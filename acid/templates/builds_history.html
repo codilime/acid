@@ -9,18 +9,20 @@
     </div>
 
     <div class="container mb-5">
-        <div class="row justify-content-center">
-                <form class="form-inline col-8" action="{{ url_for('builds.show_builds_history') }}">
-                    <div class="form-group sm-2" style="width: 100%">
-                        <select class="custom-select form-control mb-2 mr-sm-2" multiple="multiple" name="refs" style="width: 40%">
-                            {% for ref in buildsets.latest_refs %}
-                                <option {% if ref in refs %} selected="selected" {% endif %}>{{ ref }}</option>
-                            {% endfor %}
-                        </select>
-                        <input type="text" name="build" class="form-control ml-2 mr-sm-2" id="buildFilter" placeholder="Build" value="{{ request.args.build or '' }}">
-                        <button type="submit" class="btn btn-primary">Filter</button>
-                    </div>
-                </form>
+        <div class="row vdivide justify-content-center">
+            <form class="form-inline" action="{{ url_for('builds.show_builds_history') }}">
+                <div class="form-group sm-2 justify-content-md-center">
+                    <select class="custom-select form-control mb-2 mr-sm-2 input-text-size w-25" multiple="multiple" name="refs">
+                        {% for ref in buildsets.latest_refs %}
+                            <option {% if ref in refs %} selected="selected" {% endif %}>{{ ref }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="text" name="build" class="form-control ml-2 input-text-size w-15" id="buildFilter" placeholder="Build number" value="{{ request.args.build or '' }}">
+                    <button type="submit" class="btn btn-primary ml-2">Filter</button>
+                    <input type="text" name="limit" class="form-control ml-4 input-text-size w-15" id="buildLimiter" placeholder="Buildset limit">
+                    <button type="submit" class="btn btn-primary ml-2" name="json" value="True">Download JSON</button>
+                </div>
+            </form>
         </div>
     </div>
     <table class="table col-12">

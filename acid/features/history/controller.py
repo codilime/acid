@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, current_app, render_template, request
+from datetime import datetime
+
+from flask import Blueprint, Response, current_app, render_template, request
 
 from pony.orm import db_session
 
 from acid import db
 
-from .service import BuildSetsFiltered, BuildSetsPaginated, pagination
+from .service import BuildSetsPaginated, pagination
 
 builds = Blueprint('builds', __name__, template_folder='../../templates')
 
@@ -25,16 +27,23 @@ def show_builds_history(page=1):
     db.connect()
 
     refs = request.args.getlist('refs')
-    build = request.args.get('build')
+    build = request.args.get('build', '')
+    download_json = request.args.get('json', '')
+    limit = request.args.get('limit', 0)
 
-    if refs or build:
-        buildsets = BuildSetsFiltered(
-            pipeline, max_latest_ref_count, per_page, refs, build)
-    else:
-        buildsets = BuildSetsPaginated(
-            pipeline, max_latest_ref_count, per_page)
+    buildsets = BuildSetsPaginated(
+        pipeline, max_latest_ref_count, per_page, refs, build)
+
+    if download_json == 'True':
+        json_result = buildsets.to_json(limit)
+        filename = f'builds_history_{datetime.now().isoformat()}.json'
+        disposition = f'attachment;filename={filename}'
+        return Response(json_result, mimetype='application/json',
+                        headers={'Content-Disposition': disposition})
+
+    buildsets_len = len(buildsets)
     buildsets.fetch_page(page)
-    paginator = pagination(len(buildsets), page, per_page, page_links)
+    paginator = pagination(buildsets_len, page, per_page, page_links)
     template = render_template('builds_history.html', buildsets=buildsets,
                                paginator=paginator,
                                buildsets_log_url=buildset_log_url,

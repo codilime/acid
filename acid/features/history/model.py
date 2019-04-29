@@ -67,27 +67,21 @@ class ZuulBuildSet(db.Entity):
         return {b.ref for b in query}
 
     @classmethod
-    def get_for_pipeline(cls, pipeline):
-        return select(
-            bs for bs in cls
-            if bs.pipeline == pipeline and
-            len(bs.builds) > 0).sort_by(desc(cls.id))
-
-    @classmethod
-    def get_filtered(cls, pipeline, refs, build=''):
-        if build is None or not build.isnumeric():
-            build = ''
-        else:
-            build = f'/{build}/'
-
+    def get_buildsets(cls, pipeline=None, refs=None, build=None):
         query = select(
-            bs for bs in cls if
-            bs.pipeline == pipeline and
-            len(select(b for b in bs.builds if
-                       build in b.log_url)) > 0).sort_by(desc(cls.id))
-        if len(refs) > 0:
+            bs for bs in cls
+            if len(bs.builds) > 0).sort_by(desc(cls.id))
+        if pipeline:
+            query = query.where(lambda bs: bs.pipeline == pipeline)
+        if refs and len(refs) > 0:
             query = query.where(lambda bs: bs.ref in refs)
-
+        if build and build.isnumeric():
+            build_str = f'/{build}/'
+            query = query.where(
+                lambda bs:
+                len(
+                    select(b for b in bs.builds if build_str in b.log_url)
+                ) > 0)
         return query
 
 
