@@ -181,3 +181,12 @@ input:checked + .slider:before {
     opacity: 1;
     transform: translateY(0);
 }
+
+.input-text-size {
+    font-size: 100%;
+}
+
+.w-15 {
+    width: 15% !important;
+}
+
